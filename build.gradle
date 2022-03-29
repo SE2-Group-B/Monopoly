@@ -9,6 +9,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+
 sonarqube {
     properties {
         property "sonar.projectKey", "SE2-Group-B_Monopoly"
