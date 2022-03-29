@@ -1,33 +1,28 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\yueli\\Documents\\GitHub\\Monopoly\\android\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\yueli\\Documents\\GitHub\\SE2_Monopoly\\android\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\yueli\\Documents\\GitHub\\Monopoly\\android\\res\\values\\strings.xml",
+                    "source": "C:\\Users\\yueli\\Documents\\GitHub\\SE2_Monopoly\\android\\res\\values\\strings.xml",
                     "from": {
                         "startLines": "3",
                         "startColumns": "4",
                         "startOffsets": "56",
-                        "endColumns": "45",
-                        "endOffsets": "97"
+                        "endColumns": "49",
+                        "endOffsets": "101"
                     },
                     "to": {
                         "startLines": "3",
                         "startColumns": "4",
                         "startOffsets": "111",
-                        "endColumns": "45",
-                        "endOffsets": "152"
+                        "endColumns": "49",
+                        "endOffsets": "156"
                     }
                 },
                 {
-                    "source": "C:\\Users\\yueli\\Documents\\GitHub\\Monopoly\\android\\res\\values\\color.xml",
+                    "source": "C:\\Users\\yueli\\Documents\\GitHub\\SE2_Monopoly\\android\\res\\values\\color.xml",
                     "from": {
-                        "startLines": "-1",
-                        "startColumns": "-1",
-                        "startOffsets": "-1"
-                    },
-                    "to": {
                         "startLines": "2",
                         "startColumns": "4",
                         "startOffsets": "55",
