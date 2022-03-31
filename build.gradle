@@ -15,5 +15,6 @@ sonarqube {
         property "sonar.projectKey", "SE2-Group-B_Monopoly"
         property "sonar.organization", "se2-group-b"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.projectVersion", "0.1"
     }
 }
