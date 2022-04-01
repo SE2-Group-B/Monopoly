@@ -34,7 +34,7 @@ ADDED from C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:
 	android:label
 		ADDED from C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:14:9-41
 	android:fullBackupContent
-		ADDED from C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:10:9-41
+		ADDED from C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:10:9-42
 	android:appCategory
 		ADDED from C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:13:9-35
 	tools:ignore

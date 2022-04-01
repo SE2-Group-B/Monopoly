@@ -24,8 +24,8 @@
 17        android:appCategory="game"
 17-->C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:13:9-35
 18        android:debuggable="true"
-19        android:fullBackupContent="true"
-19-->C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:10:9-41
+19        android:fullBackupContent="false"
+19-->C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:10:9-42
 20        android:icon="@drawable/ic_launcher"
 20-->C:\Users\yueli\Documents\GitHub\Monopoly\android\AndroidManifest.xml:11:9-45
 21        android:isGame="true"
