@@ -1,5 +1,5 @@
     
-    plugins {
+plugins {
     id 'com.android.application' version '7.1.2' apply false
     id 'com.android.library' version '7.1.2' apply false
     id 'org.sonarqube' version '3.3'
@@ -10,13 +10,7 @@ task clean(type: Delete) {
 }
 
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Group-B_Monopoly"
-        property "sonar.organization", "se2-group-b"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
-}
+
 
 buildscript {
 
@@ -36,7 +30,7 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "eclipse"
+    apply plugin: "idea"
 
     version = '1.0'
     ext {
@@ -89,5 +83,13 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-Group-B_Monopoly"
+        property "sonar.organization", "se2-group-b"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
