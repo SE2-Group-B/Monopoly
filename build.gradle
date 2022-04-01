@@ -1,3 +1,11 @@
+plugins {
+    id 'com.android.application' version '7.1.2' apply false
+    id 'com.android.library' version '7.1.2' apply false
+    id 'org.sonarqube' version '3.3'
+}
+
+
+
 
 buildscript {
     
@@ -16,28 +24,12 @@ buildscript {
     }
 }
 
-plugins {
-    id 'com.android.application' version '7.1.2' apply false
-    id 'com.android.library' version '7.1.2' apply false
-    id 'org.sonarqube' version '3.3'
-}
+
 
 allprojects {
     // Top-level build file where you can add configuration options common to all sub-projects/modules.
- apply plugin: "eclipse"
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Group-B_Monopoly"
-        property "sonar.organization", "se2-group-b"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
-}
+    
+ apply plugin: "idea"
 
     version = '1.0'
     ext {
@@ -90,6 +82,19 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-Group-B_Monopoly"
+        property "sonar.organization", "se2-group-b"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
 
