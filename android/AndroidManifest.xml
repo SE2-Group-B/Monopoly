@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="true"
-        android:fullBackupContent="true"
+        android:fullBackupContent="false"
         android:icon="@drawable/ic_launcher"
         android:isGame="true"
         android:appCategory="game"
