@@ -1,17 +1,3 @@
-    
-plugins {
-    id 'com.android.application' version '7.1.2' apply false
-    id 'com.android.library' version '7.1.2' apply false
-    id 'org.sonarqube' version '3.3'
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-
-
-
 buildscript {
 
 
@@ -24,15 +10,37 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
-        
+
 
     }
 }
 
+plugins {
+    //id 'com.android.application' version '7.1.2' apply false
+    //id 'com.android.library' version '7.1.2' apply false
+    id 'org.sonarqube' version '3.3'
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-Group-B_Monopoly"
+        property "sonar.organization", "se2-group-b"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+
 allprojects {
-    apply plugin: "idea"
+    apply plugin: "eclipse"
 
     version = '1.0'
+
+
+
     ext {
         appName = "SE2_Monopoly"
         gdxVersion = '1.10.0'
@@ -46,7 +54,7 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        google()
+        //google()
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -71,7 +79,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
-        
+
     }
 }
 
@@ -82,14 +90,6 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        
-    }
-}
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Group-B_Monopoly"
-        property "sonar.organization", "se2-group-b"
-        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
