@@ -17,7 +17,26 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "eclipse"
+    // Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.1.2' apply false
+    id 'com.android.library' version '7.1.2' apply false
+    id 'org.sonarqube' version '3.3'
+    "eclipse"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-Group-B_Monopoly"
+        property "sonar.organization", "se2-group-b"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
 
     version = '1.0'
     ext {
@@ -73,22 +92,4 @@ project(":core") {
     }
 }
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-plugins {
-    id 'com.android.application' version '7.1.2' apply false
-    id 'com.android.library' version '7.1.2' apply false
-    id 'org.sonarqube' version '3.3'
-}
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Group-B_Monopoly"
-        property "sonar.organization", "se2-group-b"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
-}
