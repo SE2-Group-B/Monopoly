@@ -30,9 +30,6 @@ public class Karte {
     public static void main(String[] args) {
 
 
-
-
-
     }
 
 }
