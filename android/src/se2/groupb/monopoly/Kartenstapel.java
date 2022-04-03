@@ -1,6 +1,7 @@
 package se2.groupb.monopoly;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Kartenstapel {
     ArrayList<Karte> kartenStapel;
@@ -10,6 +11,9 @@ public class Kartenstapel {
     }
     public void add(Karte k){
         kartenStapel.add(k);
+    }
+    public void shuffle(){
+        Collections.shuffle(kartenStapel);
     }
 
     public static void main(String[] args) {
@@ -98,7 +102,6 @@ public class Kartenstapel {
         gemeinschaftskarten.add(g15);
         Karte g16=new Karte(36, "Du hast ein gutes Herz und spendest an eine Hilfsorganisation 100€");
         gemeinschaftskarten.add(g16);
-
 
     }
 }
