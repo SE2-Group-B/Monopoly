@@ -98,7 +98,22 @@ public class Karte {
         gemeinschaftskarten.add(g8);
         Karte g9=new Karte(29, "Du hattest ein gutes Jahr und bekommst eine Bonuszahlung von 500€");
         gemeinschaftskarten.add(g9);
+        Karte g10=new Karte(30, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
+        gemeinschaftskarten.add(g10);
 
+        //negative
+        Karte g11=new Karte(31, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 200€ ein.");
+        gemeinschaftskarten.add(g11);
+        Karte g12=new Karte(32, "Steuernachzahlung. Bezahle 250€");
+        gemeinschaftskarten.add(g12);
+        Karte g13=new Karte(33, "Arzt Kosten: Zahle 100€");
+        gemeinschaftskarten.add(g13);
+        Karte g14=new Karte(34, "Dein Auto braucht ein Service. Zahle 250€");
+        gemeinschaftskarten.add(g14);
+        Karte g15=new Karte(35, "Du gehst Shoppen. Zahle 200€");
+        gemeinschaftskarten.add(g15);
+        Karte g16=new Karte(36, "Du hast ein gutes Herz und spendest an eine Hilfsorganisation 100€");
+        gemeinschaftskarten.add(g16);
 
 
 
