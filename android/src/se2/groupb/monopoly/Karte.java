@@ -79,6 +79,31 @@ public class Karte {
         Karte e20 = new Karte(20, "Betrunken Auto gefahren? Ab ins Gefängnis!");
         ereigniskarten.add(e20);
 
+        //positive Gemeinschaftskarten
+        Karte g1=new Karte(21, "Es ist dein Geburtstag. Ziehe von jedem Spieler 100€ ein.");
+        gemeinschaftskarten.add(g1);
+        Karte g2=new Karte(22, "Du verkaufst dein altes Zeug auf Spock. Du erhältst 170€");
+        gemeinschaftskarten.add(g2);
+        Karte g3=new Karte(23, "Du erbst 400€");
+        gemeinschaftskarten.add(g3);
+        Karte g4=new Karte(24, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
+        gemeinschaftskarten.add(g4);
+        Karte g5=new Karte(25, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 200€ ein.");
+        gemeinschaftskarten.add(g5);
+        Karte g6=new Karte(26, "Rücke vor bis auf Los!");
+        gemeinschaftskarten.add(g6);
+        Karte g7=new Karte(27, "Bank Irrtum zu deinem Gunsten. Ziehe 300€ ein.");
+        gemeinschaftskarten.add(g7);
+        Karte g8=new Karte(28, "Gehe vor bis zur xy Straße.");
+        gemeinschaftskarten.add(g8);
+        Karte g9=new Karte(29, "Du hattest ein gutes Jahr und bekommst eine Bonuszahlung von 500€");
+        gemeinschaftskarten.add(g9);
+
+
+
+
+
+
     }
 
 }
