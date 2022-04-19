@@ -6,9 +6,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 
+import java.util.ArrayList;
+
+import se2.groupb.monopoly.Grundstueck;
 import se2.groupb.monopoly.Monopoly;
 
 public class MonopolyScreen implements Screen {
@@ -16,6 +20,7 @@ public class MonopolyScreen implements Screen {
     Music music;
     private BitmapFont menuFont;
     private Monopoly monopoly;
+    private ArrayList<Grundstueck> spielfeld;
 
     public MonopolyScreen(Monopoly monopoly) {
         this.monopoly = monopoly;
@@ -27,6 +32,11 @@ public class MonopolyScreen implements Screen {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/OkLetsGOOO.mp3"));
         music.play();
         music.setVolume(100);
+
+        //erzeuge Spielfeld:
+        spielfeld=new ArrayList<>();
+
+
     }
 
     @Override
@@ -43,15 +53,12 @@ public class MonopolyScreen implements Screen {
 
         monopoly.batch.begin();
 
-        // Tap screen to go to main menu
-        menuFont.draw(monopoly.batch, "START",  xPosButtons, yPosInitialButtons);
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isTouched()){
-            // switch Screen
-            monopoly.setScreen(new MainMenuScreen(monopoly));
-        }
-        monopoly.batch.draw(img, 0, 0);
 
+        monopoly.batch.draw(img, 0, 0);
         monopoly.batch.end();
+
+
+
     }
 
     @Override
