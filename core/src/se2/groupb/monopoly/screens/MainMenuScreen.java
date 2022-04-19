@@ -18,12 +18,12 @@ public class MainMenuScreen implements Screen {
     private Texture joinButton;
     private int buttonSizeX;
     private int buttonSizeY;
-    private int yPosInitialButtons;
-    private int yPosOffsetButtons;
-    private int xPosButtons;
+    private float yPosInitialButtons;
+    private float yPosOffsetButtons;
+    private float xPosButtons;
 
-    private int userPosX;
-    private int userPosY;
+    private float userPosX;
+    private float userPosY;
 
     /**
      * Constructor
@@ -60,10 +60,10 @@ public class MainMenuScreen implements Screen {
         monopoly.batch.draw(playButton, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY);
 
         // Join Game Button
-        monopoly.batch.draw(joinButton, xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(joinButton, xPosButtons, (float)(yPosInitialButtons + yPosOffsetButtons), buttonSizeX, buttonSizeY);
 
         // Exit game Button
-        monopoly.batch.draw(exitButton, xPosButtons, yPosInitialButtons + 2f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(exitButton, xPosButtons, (float)(yPosInitialButtons + 2f * yPosOffsetButtons), buttonSizeX, buttonSizeY);
 
         // Pressing the buttons leads to different screens
         // borders of host button
@@ -86,12 +86,12 @@ public class MainMenuScreen implements Screen {
              * make screen for joining a game via code
              */
             if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                monopoly.batch.draw(new Texture("images/badlogic.jpg"), xPosButtons, yPosInitialButtons + yPosOffsetButtons);
+                monopoly.batch.draw(new Texture("images/badlogic.jpg"), xPosButtons, (float)(yPosInitialButtons + yPosOffsetButtons));
             }
         }
 
         //borders of exit button if clicked then exit app
-        if (userPosX > xPosButtons && userPosX < xPosButtons + buttonSizeX && userPosY > yPosInitialButtons + 2 * yPosOffsetButtons && userPosY < yPosInitialButtons + 2 * yPosOffsetButtons + buttonSizeY) {
+        if (userPosX > xPosButtons && userPosX < xPosButtons + buttonSizeX && userPosY > (float)(yPosInitialButtons + 2 * yPosOffsetButtons) && userPosY < yPosInitialButtons + 2 * yPosOffsetButtons + buttonSizeY) {
             if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 this.dispose();
                 Gdx.app.exit();
