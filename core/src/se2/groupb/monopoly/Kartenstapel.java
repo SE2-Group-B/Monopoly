@@ -22,17 +22,19 @@ public class Kartenstapel {
 
     public void zieheKarte(){
         Karte k=kartenStapel.get(index);
-
         if(index<kartenStapel.size()-1){
             index++;
         }
          else{
              index=0;
         }
+
         switch(k.getId()){
             case 1:
+                //move(-3);
                 break;
             case 2:
+                //moveTo(0);
                 break;
             case 3:
                 break;
@@ -41,6 +43,7 @@ public class Kartenstapel {
             case 5:
                 break;
             case 6:
+                //aendereKontostand(-100);
                 break;
             case 7:
                 break;

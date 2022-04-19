@@ -1,6 +1,6 @@
 package se2.groupb.monopoly;
 
-public class Grundstück {
+public class Grundstueck {
     private int id;
     private String name;
     private boolean kaufbar;
@@ -12,7 +12,7 @@ public class Grundstück {
     private int miete2Haus;
     private int mieteHotel;
 
-    public Grundstück(int id, String name, boolean kaufbar, boolean verkauft, int hauser, int hotel, int miete, int miete1Haus, int miete2Haus, int mieteHotel) {
+    public Grundstueck(int id, String name, boolean kaufbar, boolean verkauft, int hauser, int hotel, int miete, int miete1Haus, int miete2Haus, int mieteHotel) {
         this.id = id;
         this.name = name;
         this.kaufbar = kaufbar;
