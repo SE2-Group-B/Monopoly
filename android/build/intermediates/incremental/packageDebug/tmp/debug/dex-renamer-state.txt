@@ -1,4 +1,4 @@
-#Tue Apr 19 15:49:58 CEST 2022
+#Tue Apr 19 16:02:55 CEST 2022
 base.0=C\:\\Users\\Christian\\Desktop\\SE2\\Monopoly\\android\\build\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
