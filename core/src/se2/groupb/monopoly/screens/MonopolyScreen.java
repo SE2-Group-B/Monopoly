@@ -36,10 +36,14 @@ public class MonopolyScreen implements Screen {
 
         //erzeuge Spielfeld:
         spielfeld=new Grundstueck[40];
-        Grundstueck Los=new Grundstueck(0, "Los");
+        Grundstueck Los=new Grundstueck("Los");
         spielfeld[0]=Los;
-        Grundstueck Badstraße=new Strasse(1, "Badstraße", 40,false, 0, 0, 10,  50);
+        Grundstueck Badstraße=new Strasse("Badstraße", 40,false, 0, 0, 10,  50);
         spielfeld[1]=Badstraße;
+        Grundstueck Gemeinschaftsfeld=new Grundstueck("Gemeinschaftsfeld");
+        spielfeld[2]=Gemeinschaftsfeld;
+        Grundstueck Turmstraße=new Strasse("Turmstraße", 80,false, 0, 0, 20,  50);
+        spielfeld[3]=Turmstraße;
 
 
     }

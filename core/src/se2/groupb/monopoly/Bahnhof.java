@@ -4,8 +4,8 @@ public class Bahnhof extends Grundstueck{
     private boolean verkauft;
     private int miete;
 
-    public Bahnhof(int id, String name, boolean verkauft, int miete) {
-        super(id, name);
+    public Bahnhof(String name, boolean verkauft, int miete) {
+        super(name);
         this.verkauft = verkauft;
         this.miete=miete;
     }

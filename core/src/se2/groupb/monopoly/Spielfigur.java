@@ -49,7 +49,7 @@ public class Spielfigur {
     }
 
     public void aendereKontostand(int betrag){
-        this.Kontostand=getKontostand()+betrag;
+        setKontostand(getKontostand()+betrag);
     }
     public int getPosition() {
         return position;
