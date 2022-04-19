@@ -2,11 +2,13 @@ package se2.groupb.monopoly;
 
 public class Bahnhof extends Grundstueck{
     private boolean verkauft;
+    private int kaufpreis;
     private int miete;
 
     public Bahnhof(String name, boolean verkauft, int miete) {
         super(name);
         this.verkauft = verkauft;
+        this.kaufpreis=500;
         this.miete=miete;
     }
 
