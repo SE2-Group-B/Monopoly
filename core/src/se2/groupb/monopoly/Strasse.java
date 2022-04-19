@@ -2,26 +2,33 @@ package se2.groupb.monopoly;
 
 public class Strasse extends Grundstueck{
 
+    private int preis;
     private boolean verkauft;
-    private int hauser;
-    private int hotel;
+    private int hauser;//0,1,2
+    private int hotel;//0,1
     private int miete;
-    private int miete1Haus;
-    private int miete2Haus;
-    private int mieteHotel;
+    private int hausPreis;
 
 
-    public Strasse(int id, String name, boolean verkauft, int hauser, int hotel, int miete, int miete1Haus, int miete2Haus, int mieteHotel) {
+
+    public Strasse(int id, String name, int preis, boolean verkauft, int hauser, int hotel, int miete, int hausPreis) {
         super(id, name);
+        this.preis=preis;
         this.verkauft = verkauft;
         this.hauser = hauser;
         this.hotel = hotel;
         this.miete = miete;
-        this.miete1Haus = miete1Haus;
-        this.miete2Haus = miete2Haus;
-        this.mieteHotel = mieteHotel;
+        this.hausPreis=hausPreis;
+
     }
 
+    public int getPreis() {
+        return preis;
+    }
+
+    public void setPreis(int  preis) {
+        this.preis = preis;
+    }
     public boolean isVerkauft() {
         return verkauft;
     }
@@ -54,27 +61,4 @@ public class Strasse extends Grundstueck{
         this.miete = miete;
     }
 
-    public int getMiete1Haus() {
-        return miete1Haus;
-    }
-
-    public void setMiete1Haus(int miete1Haus) {
-        this.miete1Haus = miete1Haus;
-    }
-
-    public int getMiete2Haus() {
-        return miete2Haus;
-    }
-
-    public void setMiete2Haus(int miete2Haus) {
-        this.miete2Haus = miete2Haus;
-    }
-
-    public int getMieteHotel() {
-        return mieteHotel;
-    }
-
-    public void setMieteHotel(int mieteHotel) {
-        this.mieteHotel = mieteHotel;
-    }
 }

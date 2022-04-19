@@ -14,13 +14,14 @@ import java.util.ArrayList;
 
 import se2.groupb.monopoly.Grundstueck;
 import se2.groupb.monopoly.Monopoly;
+import se2.groupb.monopoly.Strasse;
 
 public class MonopolyScreen implements Screen {
     Texture img;
     Music music;
     private BitmapFont menuFont;
     private Monopoly monopoly;
-    private ArrayList<Grundstueck> spielfeld;
+    private Grundstueck[] spielfeld;
 
     public MonopolyScreen(Monopoly monopoly) {
         this.monopoly = monopoly;
@@ -34,7 +35,11 @@ public class MonopolyScreen implements Screen {
         music.setVolume(100);
 
         //erzeuge Spielfeld:
-        spielfeld=new ArrayList<>();
+        spielfeld=new Grundstueck[40];
+        Grundstueck Los=new Grundstueck(0, "Los");
+        spielfeld[0]=Los;
+        Grundstueck Badstraße=new Strasse(1, "Badstraße", 40,false, 0, 0, 10,  50);
+        spielfeld[1]=Badstraße;
 
 
     }
