@@ -42,15 +42,15 @@ public class MainMenuScreen implements Screen {
         buttonSizeX = Gdx.graphics.getWidth() / 10;
         buttonSizeY = Gdx.graphics.getHeight() / 10;
 
-        xPosButtons = Gdx.graphics.getWidth() / 2 - buttonSizeX / 2;
-        yPosInitialButtons = Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4;
-        yPosOffsetButtons = -Gdx.graphics.getWidth() / 8;
+        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
+        yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
+        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
     }
 
     @Override
     public void render(float delta) {
-        userPosX = Gdx.input.getX();
-        userPosY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        userPosX = (float) Gdx.input.getX();
+        userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -60,10 +60,10 @@ public class MainMenuScreen implements Screen {
         monopoly.batch.draw(playButton, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY);
 
         // Join Game Button
-        monopoly.batch.draw(joinButton, xPosButtons, (float)(yPosInitialButtons + yPosOffsetButtons), buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(joinButton, xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         // Exit game Button
-        monopoly.batch.draw(exitButton, xPosButtons, (float)(yPosInitialButtons + 2f * yPosOffsetButtons), buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(exitButton, xPosButtons, yPosInitialButtons + 2f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         // Pressing the buttons leads to different screens
         // borders of host button
