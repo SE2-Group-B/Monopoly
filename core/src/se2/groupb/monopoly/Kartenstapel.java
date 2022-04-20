@@ -7,6 +7,7 @@ public class Kartenstapel {
     ArrayList<Karte> kartenStapel;
     int index;
 
+
     public Kartenstapel(){
         kartenStapel=new ArrayList<>();
         index=0;
