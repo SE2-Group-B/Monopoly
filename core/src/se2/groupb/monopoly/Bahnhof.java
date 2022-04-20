@@ -20,6 +20,14 @@ public class Bahnhof extends Grundstueck{
         this.verkauft = verkauft;
     }
 
+    public int getKaufpreis() {
+        return kaufpreis;
+    }
+
+    public void setKaufpreis(int kaufpreis) {
+        this.kaufpreis = kaufpreis;
+    }
+
     public int getMiete() {
         return miete;
     }

@@ -11,6 +11,7 @@ public class Strasse extends Grundstueck{
 
 
 
+
     public Strasse(String name, int preis, boolean verkauft, int haus, int hotel, int miete, int hausPreis) {
         super(name);
         this.preis=preis;
@@ -59,6 +60,14 @@ public class Strasse extends Grundstueck{
 
     public void setMiete(int miete) {
         this.miete = miete;
+    }
+
+    public int getHausPreis() {
+        return hausPreis;
+    }
+
+    public void setHausPreis(int hausPreis) {
+        this.hausPreis = hausPreis;
     }
 
 }

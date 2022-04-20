@@ -85,6 +85,35 @@ public class MonopolyScreen implements Screen {
         spielfeld[23]=Museumsstraße;
         Grundstueck Opernplatz=new Strasse("Opernplatz", 400,false, 0, 0, 115,  150);
         spielfeld[24]=Opernplatz;
+        Grundstueck Nordbahnhof=new Bahnhof("Nordbahnhof", false, 50);
+        spielfeld[25]=Nordbahnhof;
+        Grundstueck Lessingstraße=new Strasse("Lessingstraße", 440,false, 0, 0, 120,  150);
+        spielfeld[26]=Lessingstraße;
+        Grundstueck Schillerstraße=new Strasse("Schillerstraße", 440,false, 0, 0, 122,  150);
+        spielfeld[27]=Schillerstraße;
+        spielfeld[28]=Gemeinschaftsfeld;
+        Grundstueck Goethestraße=new Strasse("Goethestraße", 480,false, 0, 0, 130,  150);
+        spielfeld[29]=Goethestraße;
+        Grundstueck GeheInsGefaengnis=new Grundstueck("Gehe ins Gefängnis");
+        spielfeld[30]=GeheInsGefaengnis;
+        Grundstueck Rathausplatz=new Strasse("Rathausplatz", 520,false, 0, 0, 150,  200);
+        spielfeld[31]=Rathausplatz;
+        Grundstueck Hauptstraße=new Strasse("Hauptstraße", 520,false, 0, 0, 155,  200);
+        spielfeld[32]=Hauptstraße;
+        spielfeld[33]=Gemeinschaftsfeld;
+        Grundstueck Bahnhofstraße=new Strasse("Bahnhofstraße", 560,false, 0, 0, 160,  200);
+        spielfeld[34]=Bahnhofstraße;
+        Grundstueck Hauptbahnhof=new Bahnhof("Hauptbahnhof", false, 50);
+        spielfeld[35]=Hauptbahnhof;
+        spielfeld[36]=Ereignisfeld;
+        Grundstueck Parkstraße=new Strasse("Parkstraße", 650,false, 0, 0, 250,  200);
+        spielfeld[37]=Parkstraße;
+        Grundstueck Zusatzsteuer = new Zahlfeld("Zusatzsteuer", 200);
+        spielfeld[38]=Zusatzsteuer;
+        Grundstueck Schlossallee=new Strasse("Schlossallee", 800,false, 0, 0, 350,  200);
+        spielfeld[39]=Schlossallee;
+
+
 
 
 

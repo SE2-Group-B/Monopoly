@@ -59,11 +59,7 @@ public class Spielfigur {
         this.position = position;
     }
 
-    public void move(int zahl){
-        if(getPosition()+zahl>=40) {
-            setPosition((getPosition()+zahl % 39)-1);
-        } else {
-            setPosition(getPosition()+zahl);
-        }
+    public void move(int augenzahl){
+        setPosition((getPosition()+augenzahl) % 40);
     }
 }
