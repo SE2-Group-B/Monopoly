@@ -13,12 +13,14 @@ public class KartenTestScreen implements Screen {
     private Texture kartenHintergrund;
 
     public KartenTestScreen(Monopoly monopoly) {
+
         this.monopoly = monopoly;
+        kartenHintergrund = new Texture("images/KartenHintergrund.png");
+
     }
 
     @Override
     public void show() {
-        kartenHintergrund = new Texture("images/KartenHintergrund.png");
     }
 
     @Override
@@ -26,7 +28,10 @@ public class KartenTestScreen implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         monopoly.batch.begin();
-        monopoly.batch.draw(kartenHintergrund, 10,10);
+        monopoly.batch.draw(kartenHintergrund, (Gdx.graphics.getWidth()/2)-1000/2, (Gdx.graphics.getHeight()/2)-1300/2, 1000, 1300);
+        //font.draw(batch, "lkjasd,", 100,100);
+        //monopoly.batch.draw("Hello World",100,100);
+        //drawMessageText(Batch batch,BitmapFont font, float x,  float y,float maxWidth);
         monopoly.batch.end();
     }
 
