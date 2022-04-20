@@ -1,5 +1,6 @@
 package se2.groupb.monopoly.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -9,12 +10,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.Timer;
 
 import javax.swing.text.View;
 
 
 import se2.groupb.monopoly.Monopoly;
 import sun.management.Sensor;
+import sun.rmi.runtime.Log;
 
 public class SensorScreen implements Screen {
 
@@ -42,26 +46,35 @@ public class SensorScreen implements Screen {
     @Override
     public void show() {
         stage = new Stage();
+        Gdx.app.setLogLevel(Application.LOG_INFO);
+        if(gyroSensorActive){
+            xGyro = Gdx.input.getGyroscopeX();
+            Gdx.app.log("GyroX", String.valueOf(xGyro));
 
+            yGyro = Gdx.input.getGyroscopeY();
+            Gdx.app.log("GyroY", String.valueOf(yGyro));
+
+            zGyro = Gdx.input.getGyroscopeZ();
+            Gdx.app.log("GyroZ", String.valueOf(zGyro));
+        }
+        if(lightSensorActive){
+            xLight = Gdx.input.getAccelerometerX();
+            Gdx.app.log("LightX", String.valueOf(xLight));
+
+            yLight = Gdx.input.getAccelerometerY();
+            Gdx.app.log("LightY", String.valueOf(yLight));
+
+            zLight = Gdx.input.getAccelerometerZ();
+            Gdx.app.log("LightZ", String.valueOf(zLight));
+        }
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //batch.setProjectionMatrix(camera.projection);
         monopoly.batch.begin();
-        if(gyroSensorActive){
-            xGyro = Gdx.input.getGyroscopeX();
-            yGyro = Gdx.input.getGyroscopeY();
-            zGyro = Gdx.input.getGyroscopeZ();
-        }
-        if(lightSensorActive){
-            xLight = Gdx.input.getAccelerometerX();
-            yLight = Gdx.input.getAccelerometerY();
-            zLight = Gdx.input.getAccelerometerZ();
-        }
-            //font.draw(batch, "OK, Let's GOO", 10,10);
+
         monopoly.batch.end();
 
     }
