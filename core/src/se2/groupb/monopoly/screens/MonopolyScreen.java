@@ -140,6 +140,13 @@ public class MonopolyScreen implements Screen {
 
         monopoly.batch.begin();
 
+        // Tap screen to go to main menu
+        menuFont.draw(monopoly.batch, "START",  xPosButtons, yPosInitialButtons);
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isTouched()){
+            // switch Screen
+            monopoly.setScreen(new MainMenuScreen(monopoly));
+        }
+        monopoly.batch.draw(img, 0, 0);
 
         monopoly.batch.draw(img, 0, 0);
         monopoly.batch.end();
