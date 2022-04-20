@@ -22,9 +22,6 @@ public class MainMenuScreen implements Screen {
     private float yPosOffsetButtons;
     private float xPosButtons;
 
-    private float userPosX;
-    private float userPosY;
-
     /**
      * Constructor
      * setup main menu with Monopoly game
@@ -49,8 +46,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        userPosX = (float) Gdx.input.getX();
-        userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
+        float userPosX = (float) Gdx.input.getX();
+        float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -65,37 +62,37 @@ public class MainMenuScreen implements Screen {
         // Exit game Button
         monopoly.batch.draw(exitButton, xPosButtons, yPosInitialButtons + 2f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
-        // Pressing the buttons leads to different screens
-        // borders of host button
-        if (userPosX > xPosButtons && userPosX < xPosButtons + buttonSizeX && userPosY > yPosInitialButtons && userPosY < yPosInitialButtons + buttonSizeY) {
-            /**
-             * if area is touched go into game
-             * TODO:
-             * make screen for hosting a game and let players go into online multiplayer
-             */
-            if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                this.dispose();
-                monopoly.setScreen(new MonopolyScreen(monopoly));
-            }
+        /**
+         * Pressing the Host Game button leads to HostGameScreen
+         */
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
+                && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
+
+            this.dispose();
+            monopoly.setScreen(new HostGameScreen(monopoly));
+
         }
 
-        //borders of join button
-        if (userPosX > xPosButtons && userPosX < xPosButtons + buttonSizeX && userPosY > yPosInitialButtons + yPosOffsetButtons && userPosY < yPosInitialButtons + yPosOffsetButtons + buttonSizeY) {
-            /**
-             * TODO:
-             * make screen for joining a game via code
-             */
-            if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                monopoly.batch.draw(new Texture("images/badlogic.jpg"), xPosButtons, (float)(yPosInitialButtons + yPosOffsetButtons));
-            }
+        /**
+         * Pressing the Join Game button leads to JoinGameScreen
+         */
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 1 * yPosOffsetButtons)
+                && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
+
+            this.dispose();
+            monopoly.setScreen(new JoinGameScreen(monopoly));
+
         }
 
-        //borders of exit button if clicked then exit app
-        if (userPosX > xPosButtons && userPosX < xPosButtons + buttonSizeX && userPosY > (float)(yPosInitialButtons + 2 * yPosOffsetButtons) && userPosY < yPosInitialButtons + 2 * yPosOffsetButtons + buttonSizeY) {
-            if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                this.dispose();
-                Gdx.app.exit();
-            }
+        /**
+         * Pressing the Exit button leads to exiting the game
+         */
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 2 * yPosOffsetButtons)
+                && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
+
+            this.dispose();
+            Gdx.app.exit();
+
         }
 
         monopoly.batch.end();
@@ -123,8 +120,11 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        exitButton.dispose();
-        playButton.dispose();
-        joinButton.dispose();
+    }
+
+    /****************** Methods ******************/
+
+    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
+        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
     }
 }
