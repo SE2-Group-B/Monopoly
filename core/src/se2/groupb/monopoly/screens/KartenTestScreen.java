@@ -23,7 +23,7 @@ public class KartenTestScreen implements Screen {
     public KartenTestScreen(Monopoly monopoly) {
 
         this.monopoly = monopoly;
-        kartenHintergrund = new Texture("images/KartenHintergrund.png");
+        kartenHintergrund = new Texture("images/KartenImages/Karte1");
 
     }
 
