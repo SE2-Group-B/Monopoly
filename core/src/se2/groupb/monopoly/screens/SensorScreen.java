@@ -69,12 +69,17 @@ public class SensorScreen implements Screen {
         }
     }
 
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         monopoly.batch.begin();
-
+        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN)) {
+            Gdx.app.log("pressed", "PREDSSDD");
+        }else{
+            Gdx.app.log("not pressed", "NOT PREDSSDD");
+        }
         monopoly.batch.end();
 
     }
