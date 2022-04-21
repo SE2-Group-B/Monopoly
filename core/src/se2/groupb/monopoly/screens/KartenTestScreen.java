@@ -12,6 +12,14 @@ public class KartenTestScreen implements Screen {
 
     private Texture kartenHintergrund;
 
+    public Texture getKartenHintergrund() {
+        return kartenHintergrund;
+    }
+
+    public void setKartenHintergrund(Texture kartenHintergrund) {
+        this.kartenHintergrund = kartenHintergrund;
+    }
+
     public KartenTestScreen(Monopoly monopoly) {
 
         this.monopoly = monopoly;
