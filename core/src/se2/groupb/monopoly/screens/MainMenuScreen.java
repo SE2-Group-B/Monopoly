@@ -66,7 +66,7 @@ public class MainMenuScreen implements Screen {
         monopoly.batch.draw(exitButton, xPosButtons, yPosInitialButtons + 2f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         // Sensor Button
-        monopoly.batch.draw(sensorButton, xPosButtons, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(sensorButton, 2*xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         /**
          * Pressing the Host Game button leads to HostGameScreen
@@ -104,7 +104,7 @@ public class MainMenuScreen implements Screen {
         /**
          * Pressing the Sensor button leads to the Sensor Screen
          */
-        if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
+        if (isCorrectPosition(userPosX, userPosY, 2*xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, yPosOffsetButtons)
                 && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
 
             this.dispose();

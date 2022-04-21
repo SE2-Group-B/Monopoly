@@ -31,7 +31,7 @@ public class SensorScreen implements Screen {
     private float xLight;
     private float yLight;
     private float zLight;
-
+    private int toggleVibration;
 
     public SensorScreen(Monopoly monopoly) {
         this.monopoly = monopoly;
@@ -46,6 +46,7 @@ public class SensorScreen implements Screen {
     @Override
     public void show() {
         stage = new Stage();
+        toggleVibration = -1;
         Gdx.app.setLogLevel(Application.LOG_INFO);
         if(gyroSensorActive){
             xGyro = Gdx.input.getGyroscopeX();
@@ -76,12 +77,12 @@ public class SensorScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         monopoly.batch.begin();
         if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN)) {
-            Gdx.app.log("pressed", "PREDSSDD");
-        }else{
-            Gdx.app.log("not pressed", "NOT PREDSSDD");
+            toggleVibration=toggleVibration*-1;
+        }
+        if(toggleVibration > 0){
+            Gdx.input.vibrate(100);
         }
         monopoly.batch.end();
-
     }
 
     @Override
