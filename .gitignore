@@ -1,3 +1,7 @@
+android\build\
+\android\build\
+android/build/
+/android/build/
 ## Java
 
 *.class
