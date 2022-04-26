@@ -27,7 +27,8 @@ public class HomeScreen extends ScreenAdapter {
         batch.begin();
         batch.draw(img, 0, 0);
         batch.end();
-       // Monopoly.INSTANCE.setScreen(HomeScreen());
+        if (Gdx.input.isTouched()) Monopoly.INSTANCE.setScreen(new Field());
+
 
     }
 
