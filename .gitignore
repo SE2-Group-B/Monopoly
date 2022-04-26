@@ -2,6 +2,11 @@ android\build\
 \android\build\
 android/build/
 /android/build/
+
+core\build\
+\core\build\
+core/build/
+/core/build/
 ## Java
 
 *.class
