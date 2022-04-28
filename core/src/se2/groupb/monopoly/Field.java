@@ -19,6 +19,8 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.JsonReader;
 
+import org.mockito.Mock;
+
 import sun.rmi.runtime.Log;
 
 
@@ -44,7 +46,7 @@ public class Field extends ScreenAdapter  {
         modelBatch = new ModelBatch();
 
         // Create a perspective camera with some sensible defaults
-        camera = new OrthographicCamera(30,30*(Gdx.graphics.getWidth()/ Gdx.graphics.getHeight()));
+        camera = new OrthographicCamera(30,30*((float)Gdx.graphics.getWidth()/ Gdx.graphics.getHeight()));
         camera.position.set(0,250,0);
         camera.lookAt(0, 0, 0);
         camera.zoom = -50;
@@ -64,6 +66,8 @@ public class Field extends ScreenAdapter  {
         cameraController = new CameraInputController(camera);
         Gdx.input.setInputProcessor(cameraController);
     }
+
+
 
     @Override
     public void render(float delta) {
