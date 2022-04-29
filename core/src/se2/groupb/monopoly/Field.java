@@ -16,12 +16,9 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.JsonReader;
 
-import org.mockito.Mock;
 
-import sun.rmi.runtime.Log;
 
 
 public class Field extends ScreenAdapter  {
