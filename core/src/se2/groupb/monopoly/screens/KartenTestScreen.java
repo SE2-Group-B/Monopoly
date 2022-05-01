@@ -32,8 +32,8 @@ public class KartenTestScreen implements Screen {
         /**
          * instead of closing the App go to Main Menu
          */
-        InputProcessors inputProcessor = new InputProcessors(monopoly);
-        inputProcessor.NetworkMenuProcessor();
+        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
+        inputProcessor.JoinMenuProcessor();
     }
 
     @Override

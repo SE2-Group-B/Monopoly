@@ -2,8 +2,6 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,7 +40,7 @@ public class MainMenuScreen implements Screen {
 
 
         buttonSizeX = Gdx.graphics.getWidth() / 3;
-        buttonSizeY = Gdx.graphics.getHeight() / 5;
+        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
 
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
@@ -51,7 +49,7 @@ public class MainMenuScreen implements Screen {
         /**
          * instead of closing the App do nothing
          */
-        InputProcessors inputProcessor = new InputProcessors(monopoly);
+        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
         inputProcessor.MainMenuProcessor();
     }
 
@@ -74,7 +72,7 @@ public class MainMenuScreen implements Screen {
         monopoly.batch.draw(exitButton, xPosButtons, yPosInitialButtons + 2f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         // Karten Button - nur zum Testen
-        monopoly.batch.draw(kartenButton, xPosButtons, yPosInitialButtons + 3f* yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(kartenButton, xPosButtons, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         /**
          * Pressing the Host Game button leads to HostGameScreen
