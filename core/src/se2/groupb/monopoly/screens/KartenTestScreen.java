@@ -29,6 +29,11 @@ public class KartenTestScreen implements Screen {
 
     @Override
     public void show() {
+        /**
+         * instead of closing the App go to Main Menu
+         */
+        InputProcessors inputProcessor = new InputProcessors(monopoly);
+        inputProcessor.NetworkMenuProcessor();
     }
 
     @Override

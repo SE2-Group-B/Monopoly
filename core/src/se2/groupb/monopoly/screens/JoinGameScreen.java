@@ -1,6 +1,9 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
@@ -16,7 +19,11 @@ public class JoinGameScreen implements Screen {
 
     @Override
     public void show() {
-
+        /**
+         * instead of closing the App go to Main Menu
+         */
+        InputProcessors inputProcessor = new InputProcessors(monopoly);
+        inputProcessor.NetworkMenuProcessor();
     }
 
     @Override

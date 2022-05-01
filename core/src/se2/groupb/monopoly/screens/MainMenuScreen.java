@@ -2,6 +2,8 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -45,6 +47,12 @@ public class MainMenuScreen implements Screen {
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
+
+        /**
+         * instead of closing the App do nothing
+         */
+        InputProcessors inputProcessor = new InputProcessors(monopoly);
+        inputProcessor.MainMenuProcessor();
     }
 
     @Override
