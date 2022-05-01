@@ -33,14 +33,14 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        exitButton = new Texture("images/exit_button_inactive.png");
-        playButton = new Texture("images/play_button_inactive.png");
-        joinButton = new Texture("images/play_button_active.png");
-        kartenButton = new Texture("images/play_button_active.png");
+        exitButton = new Texture("images/MenuButtons/exit.png");
+        playButton = new Texture("images/MenuButtons/host.png");
+        joinButton = new Texture("images/MenuButtons/join.png");
+        kartenButton = new Texture("images/MenuButtons/switch_view.png");
 
 
-        buttonSizeX = Gdx.graphics.getWidth() / 10;
-        buttonSizeY = Gdx.graphics.getHeight() / 10;
+        buttonSizeX = Gdx.graphics.getWidth() / 3;
+        buttonSizeY = Gdx.graphics.getHeight() / 5;
 
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
