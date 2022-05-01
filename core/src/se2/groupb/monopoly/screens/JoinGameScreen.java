@@ -26,6 +26,8 @@ public class JoinGameScreen implements Screen {
         monopoly.batch.begin();
 
         monopoly.batch.end();
+
+
     }
 
     @Override
