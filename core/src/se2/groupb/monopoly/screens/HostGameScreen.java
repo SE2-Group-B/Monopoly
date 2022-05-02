@@ -51,7 +51,7 @@ public class HostGameScreen implements Screen {
         buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
 
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
-        yPosInitialButtons = Gdx.graphics.getHeight() / 20;
+        yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
         font = new BitmapFont();
@@ -100,7 +100,7 @@ public class HostGameScreen implements Screen {
 
         if (buttonPressed) {
             font.draw(monopoly.batch, waitingText,
-                    (Gdx.graphics.getWidth() / 2 - waitingText.width / 2), (yPosInitialButtons + 1.5f* buttonSizeY));
+                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f* buttonSizeY));
         }
 
         monopoly.batch.end();
