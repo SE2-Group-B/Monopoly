@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
-import java.io.IOException;
-
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.network.ServerFoundation;
@@ -44,7 +42,7 @@ public class JoinGameScreen implements Screen {
          * instead of closing the App go to Main Menu
          */
         inputProcessor = new InputBackProcessor(monopoly);
-        inputProcessor.JoinMenuProcessor();
+        inputProcessor.backToMainMenuProcessor();
 
         connectButton = new Texture("images/MenuButtons/connect.png");
 
@@ -80,8 +78,10 @@ public class JoinGameScreen implements Screen {
             if (callOnce == 1) {
                 // connect client (new client) to the server
                 client = new ClientFoundation();
+
+                client.registerToKryo();
                 // new input processor that disconnects server if you go back
-                inputProcessor.JoinMenuProcessor();
+                inputProcessor.JoinMenuServerProcessor(client.getClient());
                 // show Waiting for Players on screen if server was started
                 buttonPressed = true;
 
@@ -91,6 +91,7 @@ public class JoinGameScreen implements Screen {
         }
 
         if (buttonPressed) {
+            // if server response: client connected is still missing
             font.draw(monopoly.batch, waitingText,
                     (Gdx.graphics.getWidth() / 2 - waitingText.width / 2), (yPosInitialButtons + 1.5f * buttonSizeY));
         }

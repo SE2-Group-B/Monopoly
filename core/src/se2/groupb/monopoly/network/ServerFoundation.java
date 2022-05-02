@@ -1,11 +1,15 @@
 package se2.groupb.monopoly.network;
 
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
+
+import se2.groupb.monopoly.screens.HostGameScreen;
+import se2.groupb.monopoly.screens.JoinGameScreen;
 
 public class ServerFoundation {
 
@@ -36,7 +40,17 @@ public class ServerFoundation {
         });
     }
 
+    public void registerToKryo(){
+        Kryo kryo = this.getServer().getKryo();
+        // register request and response
+        kryo.register(String.class);
+        // string was registered
+        System.out.println("*\n**\n*****\n***********\n**********************\n"+kryo.getRegistration(String.class)+"\n**********************\n***********\n*****\n**\n*");
+    }
+
     public Server getServer() {
         return server;
     }
+
+
 }

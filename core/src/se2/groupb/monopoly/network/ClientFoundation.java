@@ -1,5 +1,6 @@
 package se2.groupb.monopoly.network;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
@@ -22,6 +23,13 @@ public class ClientFoundation {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void registerToKryo(){
+        Kryo kryo = getClient().getKryo();
+        // register request and response
+        kryo.register(String.class);
+
     }
 
     public Client getClient() {

@@ -50,7 +50,7 @@ public class MainMenuScreen implements Screen {
          * instead of closing the App do nothing
          */
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        inputProcessor.MainMenuProcessor();
+        inputProcessor.backDoesNothingProcessor();
     }
 
     @Override

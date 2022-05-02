@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
-import java.io.IOException;
-
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.network.ServerFoundation;
@@ -45,7 +43,7 @@ public class HostGameScreen implements Screen {
          * close server if leaving
          */
         inputProcessor = new InputBackProcessor(monopoly);
-        inputProcessor.HostMenuProcessor();
+        inputProcessor.backToMainMenuProcessor();
 
         connectButton = new Texture("images/MenuButtons/connect.png");
 
@@ -86,8 +84,10 @@ public class HostGameScreen implements Screen {
             if (callOnce == 1) {
                 // starting a server to host a game
                 instance = new ServerFoundation();
+                instance.registerToKryo();
                 // connect client (the host) to the server
                 client = new ClientFoundation();
+                client.registerToKryo();
                 // new input processor that disconnects server if you go back
                 inputProcessor.HostMenuServerProcessor(instance.getServer(), client.getClient());
                 // show Waiting for Players on screen if server was started

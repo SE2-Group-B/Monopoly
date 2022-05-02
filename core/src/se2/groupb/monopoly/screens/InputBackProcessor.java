@@ -17,11 +17,11 @@ public class InputBackProcessor {
         this.monopoly = monopoly;
     }
 
-    public void MainMenuProcessor() {
-        /**
-         * Handling the back button of the phone
-         * instead of closing the App do nothing
-         */
+    /**
+     * Handling the back button of the phone
+     * instead of closing the App do nothing
+     */
+    public void backDoesNothingProcessor() {
         InputProcessor backProcessor = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -35,11 +35,11 @@ public class InputBackProcessor {
         Gdx.input.setInputProcessor(backProcessor);
     }
 
-    public void JoinMenuProcessor() {
-        /**
-         * Handling the back button of the phone
-         * instead of closing the App go to Main Menu
-         */
+    /**
+     * Handling the back button of the phone
+     * instead of closing the App go to Main Menu
+     */
+    public void backToMainMenuProcessor() {
         InputProcessor backProcessor = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -53,35 +53,40 @@ public class InputBackProcessor {
         Gdx.input.setInputProcessor(backProcessor);
     }
 
-    public void HostMenuProcessor() {
-        /**
-         * Handling the back button of the phone
-         * instead of closing the App go to Main Menu
-         */
-        InputProcessor backProcessor = new InputAdapter() {
-            @Override
-            public boolean keyDown(int keycode) {
-                if ((keycode == Input.Keys.BACK) || (keycode == Input.Keys.ESCAPE)) {
-                    monopoly.setScreen(new MainMenuScreen(monopoly));
-                }
-                return false;
-            }
-        };
-        Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        Gdx.input.setInputProcessor(backProcessor);
-    }
-
+    /**
+     * Handling the back button of the phone
+     * instead of closing the App go to Main Menu from Host menu
+     * disconnect the server and disconnect the client
+     * TO-DO unregister from Kryo
+     */
     public void HostMenuServerProcessor(final Server server, final Client client) {
-        /**
-         * Handling the back button of the phone
-         * instead of closing the App go to Main Menu
-         */
         InputProcessor backProcessor = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 if ((keycode == Input.Keys.BACK) || (keycode == Input.Keys.ESCAPE)) {
                     monopoly.setScreen(new MainMenuScreen(monopoly));
                     server.close();
+                    client.close();
+                }
+                return false;
+            }
+        };
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
+        Gdx.input.setInputProcessor(backProcessor);
+    }
+
+    /**
+     * Handling the back button of the phone
+     * instead of closing the App go to Main Menu from Host menu
+     * disconnect the client
+     * TO-DO unregister from Kryo
+     */
+    public void JoinMenuServerProcessor(final Client client) {
+        InputProcessor backProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if ((keycode == Input.Keys.BACK) || (keycode == Input.Keys.ESCAPE)) {
+                    monopoly.setScreen(new MainMenuScreen(monopoly));
                     client.close();
                 }
                 return false;
