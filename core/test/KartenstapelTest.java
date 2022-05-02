@@ -1,4 +1,4 @@
-package test;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -61,7 +61,8 @@ public class KartenstapelTest {
         Assert.assertTrue(kartenstapel.getKartenStapel().contains(k3));
     }
 
-    @Test
+    //Wie teste ich Shuffle Methode?
+    /*@Test
     public void testShuffle(){
         Kartenstapel kartenstapel2=new Kartenstapel();
         kartenstapel2.add(k1);
@@ -70,7 +71,7 @@ public class KartenstapelTest {
         kartenstapel.shuffle();
         kartenstapel2.shuffle();
         Assert.assertNotEquals(kartenstapel2.getKartenStapel(), kartenstapel.getKartenStapel());
-    }
+    }*/
 
     @Test
     public void testGetKartenstapelNotNull(){
@@ -145,9 +146,14 @@ public class KartenstapelTest {
 
     @Test
     public void testGetNextCardOutOfBounce(){
-        kartenstapel.setIndex(25);
-        Assert.assertNotNull(kartenstapel.getNextCard());
+        kartenstapel.setIndex(33);
+        kartenstapel.getNextCard();
         Assert.assertEquals(kartenstapel.getIndex(),1);
+    }
+    @Test
+    public void testGetNextCardOutOfBounceKarte(){
+        kartenstapel.setIndex(33);
+        Assert.assertNotNull(kartenstapel.getNextCard());
     }
 
 }
