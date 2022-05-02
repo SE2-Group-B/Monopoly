@@ -39,8 +39,8 @@ public class CreateGameField extends ScreenAdapter  {
 //    private ModelInstance il2;
 
 
-    Model[] modelLeft = new Model[39];
-    ModelInstance[] modInstanceLeft = new ModelInstance[10];
+    Model[] modelLeft = new Model[40];
+    ModelInstance[] modInstanceLeft = new ModelInstance[40]; // DON'T FORGET TO UPDATE ARRAY
 
     private void createFieldArray() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
@@ -105,11 +105,11 @@ public class CreateGameField extends ScreenAdapter  {
         // Create a perspective camera with some sensible defaults
         //camera = new OrthographicCamera(30,30*((float)Gdx.graphics.getWidth()/ Gdx.graphics.getHeight()));
         camera = new OrthographicCamera(100, 100);
-        camera.position.set(850,150,-800);
+        camera.position.set(850,150,-850);
 //        camera.position.set(Gdx.graphics.getHeight() / 2 - 700,Gdx.graphics.getWidth() / 2, 5);
 //        camera.position.set(500f,500f,200f);
-        camera.lookAt(850f, 100f, -800f);
-        camera.zoom = 30;
+        camera.lookAt(850f, 100f, -850f);
+        camera.zoom = 50;
 //        float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
 //        float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
 
@@ -173,31 +173,53 @@ public class CreateGameField extends ScreenAdapter  {
     public void resume() { }
 
     public void createModels() {
-                Gdx.app.setLogLevel(Application.LOG_DEBUG);
-
-//        for (int i = 0; i < modelLeft.length; i++) {
-//            modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
-//            modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, Color.BLUE));
-//            modInstanceLeft[i].transform.translate(new Vector3(0, 0, i*200));
-//            modInstanceLeft[i].transform.rotate(new Vector3(0,1,0), 90);
-//        }
-
         Vector3 vector3 = new Vector3(0, 0, 0);
-        Vector3 vector3Botton = new Vector3(0,1,0);
-        for (int i = 0; i < 10; i++) {
-            modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
-            modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-            vector3.x = i*200;
-            modInstanceLeft[i].transform.translate(vector3);
+        Vector3 vector3Rotate = new Vector3(0,1,0);
+        // Rotate 0 degrees = left side
+        // Rotate 90 degrees = bot side
+        // Rotate 180 degrees = right side
+        // Rotate 270 degrees = top side
+        for (int i = 0; i < fields.length; i++) { // Botton side
+            if (i <= 9) {
+                modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
+                modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+                vector3.x = i * 200;
+                modInstanceLeft[i].transform.translate(vector3);
+                modInstanceLeft[i].transform.rotate(vector3Rotate, 90);
 
-            modInstanceLeft[i].transform.rotate(vector3Botton, 90);
+            } else if (i >= 10 && i < 20) { // Left side
+                vector3.x = 100;
+                modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
+                modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+                vector3.z = -((i-8.6f)*200); // how far up/down - i-5 is more up
+                modInstanceLeft[i].transform.translate(vector3);
+                modInstanceLeft[i].transform.rotate(vector3Rotate, 0);
+            } else if (i >= 20 && i < 30) { // Top side
+                vector3.x = 100;
+                vector3.z = -2350; // here
+                modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
+                modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+                vector3.x = -((i-29f)*200); // how far up/down - i-5 is more up
+                modInstanceLeft[i].transform.translate(vector3);
+                modInstanceLeft[i].transform.rotate(vector3Rotate, 270);
+            } else if (i >=30 && i < fields.length) { // Right side
+                //vector3.x = 100;
+                vector3.x = 1700; // right/left
+                modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
+                modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+                vector3.z = -((i-28.6f)*200); // how far up/down - i-5 is more up
+                modInstanceLeft[i].transform.translate(vector3);
+                modInstanceLeft[i].transform.rotate(vector3Rotate, 180);
+            }
+
+
         }
     }
 
 
     public void renderModels() {
 //        ModelInstance[] modInstanceLeft
-        for (int i = 0; i < modInstanceLeft.length; i++) {
+        for (int i = 0; i < fields.length; i++) { // Don't forget to render the models
             modelBatch.render(modInstanceLeft[i], environment);
         }
     }
