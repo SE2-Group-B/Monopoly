@@ -9,9 +9,6 @@ public class Strasse extends Grundstueck{
     private int miete;
     private int hausPreis;
 
-
-
-
     public Strasse(String name, int preis, boolean verkauft, int haus, int hotel, int miete, int hausPreis) {
         super(name);
         this.preis=preis;
@@ -44,6 +41,8 @@ public class Strasse extends Grundstueck{
 
     public void setHaus(int haus) {
         this.haus = haus;
+        //Spielfigur.decreaseMoney(getHausPreis());
+        increasemiete();
     }
 
     public int getHotel() {
@@ -52,6 +51,8 @@ public class Strasse extends Grundstueck{
 
     public void setHotel(int hotel) {
         this.hotel = hotel;
+        //Spielfigur.decreaseMoney(getHausPreis()*2);
+        increasemiete();
     }
 
     public int getMiete() {
@@ -68,6 +69,37 @@ public class Strasse extends Grundstueck{
 
     public void setHausPreis(int hausPreis) {
         this.hausPreis = hausPreis;
+    }
+
+    public void verkauft() {if(isVerkauft() == false) {setVerkauft(true);}else{errormsg();}}
+
+    public void buyhouse(int number) {if(getHaus() < 4){setHaus(number);}else{errormsg();}}
+
+    public void buyhotel() {if(getHaus() == 4 && getHotel() == 0) {setHotel(1);}else{errormsg();}}
+
+    public boolean errormsg() {return false;}
+    //Fehlermeldung als eigenes Fenster(Screen) im nächsten Sprint einfügen
+
+    public void increasemiete() {
+        int miete1 = getMiete();
+        int haus = getHaus();
+        int hotel = getHotel();
+
+        if(haus == 1 && hotel == 0) {
+            miete1 = (int) (miete1 * 0.1);
+        }else if(haus == 2 && hotel == 0){
+            miete1 = (int) (miete1 * 0.2);
+        }else if(haus == 3 && hotel == 0){
+            miete1 = (int) (miete1 * 0.3);
+        }else if(haus == 4 && hotel == 0){
+            miete1 = (int) (miete1 * 0.4);
+        }else if(hotel == 1){
+            miete1 = (int) (miete1 * 0.5);
+        }else{
+            return;
+        }
+
+        setMiete(miete1);
     }
 
 }

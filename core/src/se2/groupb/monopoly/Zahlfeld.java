@@ -7,4 +7,11 @@ public class Zahlfeld extends Grundstueck{
         super(name);
         this.strafe = strafe;
     }
+
+    public int getStrafe() {return strafe;}
+
+    public void setStrafe(int strafe) {this.strafe = strafe;}
+
+    //public void zahlen() {Spielfigur.kontostand - strafe;}
+    //Im nächsten Sprint die private Methode umschreiben
 }
