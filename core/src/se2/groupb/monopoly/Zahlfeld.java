@@ -12,6 +12,6 @@ public class Zahlfeld extends Grundstueck{
 
     public void setStrafe(int strafe) {this.strafe = strafe;}
 
-    //public void zahlen() {Spielfigur.kontostand - strafe;}
-    //Im nächsten Sprint die private Methode umschreiben
+    //public void zahlen() {Spielfigur.getKontostand - strafe;}
+    //Im nächsten Sprint die static Methode umschreiben
 }

@@ -78,12 +78,13 @@ public class Spielfigur {
 
     public void move(int augenzahl) {
         setPosition((getPosition() + augenzahl) % 40);
+        if((getPosition() + augenzahl) > 39){
+            roundmoney();
+        }
     }
 
     public void roundmoney() {
-        if(getPosition() == 0){
         setKontostand((getKontostand() + 200));
-        }
     }
 
 
@@ -114,23 +115,23 @@ public class Spielfigur {
                 break;
             case 6:
                 kartenbild = new Texture("images/KartenImages/Karte6.png");
-                increaseMoney(-100);
+                decreaseMoney(100);
                 break;
             case 7:
                 kartenbild = new Texture("images/KartenImages/Karte7.png");
-                increaseMoney(-100);
+                decreaseMoney(100);
                 break;
             case 8:
                 kartenbild = new Texture("images/KartenImages/Karte8.png");
-                increaseMoney(-20);
+                decreaseMoney(20);
                 break;
             case 9:
                 kartenbild = new Texture("images/KartenImages/Karte9.png");
-                increaseMoney(-40);
+                decreaseMoney(40);
                 break;
             case 10:
                 kartenbild = new Texture("images/KartenImages/Karte10.png");
-                increaseMoney(-200);
+                decreaseMoney(200);
                 break;
             case 11:
                 kartenbild = new Texture("images/KartenImages/Karte11.png");
@@ -218,23 +219,23 @@ public class Spielfigur {
                 break;
             case 32:
                 kartenbild = new Texture("images/KartenImages/Karte32.png");
-                increaseMoney(-250);
+                decreaseMoney(250);
                 break;
             case 33:
                 kartenbild = new Texture("images/KartenImages/Karte33.png");
-                increaseMoney(-100);
+                decreaseMoney(100);
                 break;
             case 34:
                 kartenbild = new Texture("images/KartenImages/Karte34.png");
-                increaseMoney(-250);
+                decreaseMoney(250);
                 break;
             case 35:
                 kartenbild = new Texture("images/KartenImages/Karte35.png");
-                increaseMoney(-200);
+                decreaseMoney(200);
                 break;
             case 36:
                 kartenbild = new Texture("images/KartenImages/Karte36.png");
-                increaseMoney(-100);
+                decreaseMoney(100);
                 break;
             default:
                 break;

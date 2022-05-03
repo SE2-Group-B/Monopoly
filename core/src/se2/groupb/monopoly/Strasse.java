@@ -89,10 +89,6 @@ public class Strasse extends Grundstueck{
             miete1 = (int) (miete1 * 0.1);
         }else if(haus == 2 && hotel == 0){
             miete1 = (int) (miete1 * 0.2);
-        }else if(haus == 3 && hotel == 0){
-            miete1 = (int) (miete1 * 0.3);
-        }else if(haus == 4 && hotel == 0){
-            miete1 = (int) (miete1 * 0.4);
         }else if(hotel == 1){
             miete1 = (int) (miete1 * 0.5);
         }else{

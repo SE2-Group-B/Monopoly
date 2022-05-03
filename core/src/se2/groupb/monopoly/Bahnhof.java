@@ -48,11 +48,11 @@ public class Bahnhof extends Grundstueck{
         if(anzahl == 1){
             miete1 = (int) (miete1 * 1);
         }else if(anzahl == 2){
-            miete1 = (int) (miete1 * 1.25);
+            miete1 = (int) (miete1 + 50);
         }else if(anzahl == 3){
-            miete1 = (int) (miete1 * 1.5);
+            miete1 = (int) (miete1 + 50);
         }else if(anzahl == 4){
-            miete1 = (int) (miete1 * 1.75);
+            miete1 = (int) (miete1 + 50);
         }else if(anzahl == 0){
             return;
         }else{
