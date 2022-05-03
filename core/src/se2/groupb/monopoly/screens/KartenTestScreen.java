@@ -21,7 +21,7 @@ public class KartenTestScreen implements Screen {
 
     public KartenTestScreen(Monopoly monopoly) {
         this.monopoly = monopoly;
-        kartenHintergrund = new Texture("images/KartenImages/Karte1");
+        kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
     }
 
     @Override
