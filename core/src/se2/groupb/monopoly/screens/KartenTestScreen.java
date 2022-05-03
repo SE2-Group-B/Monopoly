@@ -9,22 +9,19 @@ import se2.groupb.monopoly.Monopoly;
 
 public class KartenTestScreen implements Screen {
     Monopoly monopoly;
-
     private Texture kartenHintergrund;
 
-    public Texture getKartenHintergrund() {
+    /*public Texture getKartenHintergrund() {
         return kartenHintergrund;
     }
 
     public void setKartenHintergrund(Texture kartenHintergrund) {
         this.kartenHintergrund = kartenHintergrund;
-    }
+    }*/
 
     public KartenTestScreen(Monopoly monopoly) {
-
         this.monopoly = monopoly;
-        kartenHintergrund = new Texture("images/KartenHintergrund.png");
-
+        kartenHintergrund = new Texture("images/KartenImages/Karte1");
     }
 
     @Override
