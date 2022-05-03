@@ -10,12 +10,10 @@ public class Zahlfeld extends Grundstueck{
 
     }
 
-    public int getStrafe() {
-        return strafe;
-    }
+    public int getStrafe() {return strafe;}
 
-    public void setStrafe(int strafe) {
-        this.strafe = strafe;
-    }
+    public void setStrafe(int strafe) {this.strafe = strafe;}
 
+    //public void zahlen() {Spielfigur.getKontostand - strafe;}
+    //Im nächsten Sprint die static Methode umschreiben
 }
