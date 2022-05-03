@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -16,10 +14,13 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.environment.PointLight;
+import com.badlogic.gdx.graphics.g3d.environment.SpotLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 
 public class CreateGameField extends ScreenAdapter  {
@@ -27,16 +28,16 @@ public class CreateGameField extends ScreenAdapter  {
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
+
     private Field[] fields = new Field[40];
 
-    private String buildingPath = "Spielfeld\\untitled.g3dj";
+    private String buildingPath = "Spielfeld\\field.g3dj";
 
 //    private
 
     private CameraInputController cameraController;
 
-//    private ModelInstance il1;
-//    private ModelInstance il2;
+
 
 
     Model[] modelLeft = new Model[40];
@@ -97,49 +98,46 @@ public class CreateGameField extends ScreenAdapter  {
 //        Gdx.app.debug("GDSAFA", "Hello");
         createFieldArray();
         environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f ,1f));
+        //environment.add(new SpotLight());
+        // environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
         modelBatch = new ModelBatch();
+
 
         // Create a perspective camera with some sensible defaults
         //camera = new OrthographicCamera(30,30*((float)Gdx.graphics.getWidth()/ Gdx.graphics.getHeight()));
         camera = new OrthographicCamera(100, 100);
-        camera.position.set(850,150,-850);
+        camera.position.set(35,100,-35);  // 20,100,-20
+        // camera.rotate(new Vector3(3, -45, 3), -45); //changed the view of se Camera
 //        camera.position.set(Gdx.graphics.getHeight() / 2 - 700,Gdx.graphics.getWidth() / 2, 5);
 //        camera.position.set(500f,500f,200f);
-        camera.lookAt(850f, 100f, -850f);
-        camera.zoom = 50;
+        camera.lookAt(35f, 0f, -35);  // 850f, 100f, -200f
+        camera.zoom = 1;
+
 //        float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
 //        float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
 
 
-//        camera.near = 0f;
-//        camera.far = 500f;
+//        camera.near = -10000f;
+        camera.far = 500000f;
         createModels();
         camera.update();
 
 
 
-        // Import and instantiate our model (called "myModel.g3dj")
-//        ModelBuilder modelBuilder = new ModelBuilder();
 
-//        ml1 = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal("Spielfeld\\untitled.g3dj"));
-//        ml2 = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal("Spielfeld\\untitled.g3dj"));
-//        il1 = new ModelInstance(ml1);
-//        il1.transform.translate(new Vector3(1000,0,0));
-//        il2 = new ModelInstance(ml2);
-//        il2.transform.translate(new Vector3(1000,0,200));
 
-//        cameraController = new CameraInputController(camera);
-//        Gdx.input.setInputProcessor(cameraController);
+        cameraController = new CameraInputController(camera);
+        Gdx.input.setInputProcessor(cameraController);
     }
 
 
 
     @Override
     public void render(float delta) {
-//        cameraController.update();
+        ScreenUtils.clear(0, 0, 0, 1);
+        cameraController.update();
 
         // Clear the stuff that is left over from the previous render cycle
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -147,9 +145,13 @@ public class CreateGameField extends ScreenAdapter  {
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
         modelBatch.begin(camera);
+
 //        modelBatch.render(il1, environment);
 //        modelBatch.render(il2, environment);
+
+
         renderModels();
+
         modelBatch.end();
     }
 
@@ -174,40 +176,43 @@ public class CreateGameField extends ScreenAdapter  {
 
     public void createModels() {
         Vector3 vector3 = new Vector3(0, 0, 0);
+        Vector3 boardPosition = new Vector3(3.25f, 0, -6.5f);
         Vector3 vector3Rotate = new Vector3(0,1,0);
         // Rotate 0 degrees = left side
         // Rotate 90 degrees = bot side
         // Rotate 180 degrees = right side
         // Rotate 270 degrees = top side
+        float distanceWidth = 6.5f;
+        vector3.set(boardPosition.add(vector3));
         for (int i = 0; i < fields.length; i++) { // Botton side
             if (i <= 9) {
                 modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
                 modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.x = i * 200;
+                vector3.x = i * distanceWidth + boardPosition.x;
                 modInstanceLeft[i].transform.translate(vector3);
                 modInstanceLeft[i].transform.rotate(vector3Rotate, 90);
 
             } else if (i >= 10 && i < 20) { // Left side
-                vector3.x = 100;
+                vector3.x = -6.2f;
                 modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
                 modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.z = -((i-8.6f)*200); // how far up/down - i-5 is more up
+                vector3.z = -((i-8.5f)*distanceWidth); // how far up/down - i-5 is more up
                 modInstanceLeft[i].transform.translate(vector3);
                 modInstanceLeft[i].transform.rotate(vector3Rotate, 0);
             } else if (i >= 20 && i < 30) { // Top side
-                vector3.x = 100;
-                vector3.z = -2350; // here
+                //vector3.x = 50;
+                vector3.z = -72; // here
                 modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
                 modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.x = -((i-29f)*200); // how far up/down - i-5 is more up
+                vector3.x = -((i-29.5f)*distanceWidth); // how far up/down - i-5 is more up
                 modInstanceLeft[i].transform.translate(vector3);
                 modInstanceLeft[i].transform.rotate(vector3Rotate, 270);
             } else if (i >=30 && i < fields.length) { // Right side
                 //vector3.x = 100;
-                vector3.x = 1700; // right/left
+                vector3.x = 71.25f; // right/left
                 modInstanceLeft[i] = new ModelInstance(fields[i].getModel());
                 modInstanceLeft[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.z = -((i-28.6f)*200); // how far up/down - i-5 is more up
+                vector3.z = -((i-28.5f)*distanceWidth); // how far up/down - i-5 is more up
                 modInstanceLeft[i].transform.translate(vector3);
                 modInstanceLeft[i].transform.rotate(vector3Rotate, 180);
             }
@@ -221,6 +226,7 @@ public class CreateGameField extends ScreenAdapter  {
 //        ModelInstance[] modInstanceLeft
         for (int i = 0; i < fields.length; i++) { // Don't forget to render the models
             modelBatch.render(modInstanceLeft[i], environment);
+
         }
     }
 
