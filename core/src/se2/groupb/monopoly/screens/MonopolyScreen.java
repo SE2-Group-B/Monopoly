@@ -38,6 +38,7 @@ public class MonopolyScreen implements Screen {
         music.play();
         music.setVolume(100);
 
+
         //erzeuge Spielfeld:
         spielfeld=new Grundstueck[40];
         Grundstueck Los=new Grundstueck("Los");
