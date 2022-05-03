@@ -1,6 +1,6 @@
 # Monopoly
 Monopoly App
-Diese Projekt soll das bekannte Brettspiel Monopoly in digitaler Form für zwei bis vier Spieller darstellen.
+Dieses Projekt soll das bekannte Brettspiel Monopoly in digitaler Form für zwei bis vier Spieler darstellen.
 Das Projekt ist aufgeteilt auf fünf Personen: Marko Mrsic, Chris Deutinger, Vivienne Haferkamp, Yü Li Chang Lin, Alen Hrnjic
 
 Die normalen Funktionen wurden aufgeteilt auf 5 Bereiche: Netzwerk, UI und Spielfeld, Geldsystem, Kartensystem, Penaltys
