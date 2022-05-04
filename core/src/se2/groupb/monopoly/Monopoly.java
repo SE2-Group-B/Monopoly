@@ -19,11 +19,19 @@ public class Monopoly extends Game {
     public SpriteBatch batch;
 
 
+
     @Override
     public void create() {
         batch = new SpriteBatch();
         setScreen(new MainMenuScreen(this));
     }
+
+//	public static Monopoly INSTANCE;
+//
+//	public Monopoly() {
+//		if (INSTANCE == null) { INSTANCE = this; }
+//	}
+
 
     @Override
     public void render() {

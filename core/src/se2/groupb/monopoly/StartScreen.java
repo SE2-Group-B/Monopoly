@@ -12,6 +12,8 @@ public class StartScreen extends ScreenAdapter {
     Texture img;
     Music music;
 
+    Monopoly monopoly;
+
 
     public StartScreen() {
         batch = new SpriteBatch();
@@ -30,8 +32,8 @@ public class StartScreen extends ScreenAdapter {
         batch.draw(img, (Gdx.graphics.getWidth()/2)-img.getWidth(), 0, img.getWidth()*3, img.getHeight()*3);
 
         batch.end();
-        if (Gdx.input.isTouched()) Monopoly.INSTANCE.setScreen(new HomeScreen());
-
+//        if (Gdx.input.isTouched()) Monopoly.INSTANCE.setScreen(new HomeScreen());
+            if (Gdx.input.isTouched()) monopoly.setScreen(new HomeScreen());
     }
 
     @Override

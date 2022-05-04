@@ -12,6 +12,8 @@ public class HomeScreen extends ScreenAdapter {
     Texture img;
     Music music;
 
+    Monopoly monopoly;
+
     public HomeScreen() {
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
@@ -27,7 +29,8 @@ public class HomeScreen extends ScreenAdapter {
         batch.begin();
         batch.draw(img, 0, 0);
         batch.end();
-        if (Gdx.input.isTouched()) Monopoly.INSTANCE.setScreen(new CreateGameField());
+//        if (Gdx.input.isTouched()) Monopoly.INSTANCE.setScreen(new CreateGameField());
+        if (Gdx.input.isTouched()) monopoly.setScreen(new CreateGameField());
 
 
     }
