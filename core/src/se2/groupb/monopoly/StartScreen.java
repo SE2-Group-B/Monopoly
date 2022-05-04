@@ -29,7 +29,7 @@ public class StartScreen extends ScreenAdapter {
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
         batch.begin();
-        batch.draw(img, (Gdx.graphics.getWidth()/2)-img.getWidth(), 0, img.getWidth()*3, img.getHeight()*3);
+        batch.draw(img, ((float) Gdx.graphics.getWidth()/2)-img.getWidth(), 0, (float)img.getWidth()*3, (float) img.getHeight()*3);
 
         batch.end();
 //        if (Gdx.input.isTouched()) Monopoly.INSTANCE.setScreen(new HomeScreen());
