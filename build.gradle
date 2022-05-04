@@ -19,7 +19,6 @@ plugins {
 //    id 'com.android.application' version '7.1.2' apply false
 //    id 'com.android.library' version '7.1.2' apply false
 
-
     id 'org.sonarqube' version '3.3'
 }
 
@@ -65,7 +64,7 @@ allprojects {
 }
 
 project(":android") {
-    apply plugin: "com.android.library"
+      apply plugin: "com.android.application"
 
     configurations { natives }
 
@@ -123,4 +122,5 @@ project(":core") {
         //implementation "org.o:mockito-comockitre:2.8.47"
         
     }
+
 }
