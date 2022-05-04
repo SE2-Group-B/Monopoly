@@ -174,23 +174,23 @@ public class SpielfigurTest {
         Assert.assertEquals(rot.getAnzahlBahnhoefe(),4);
     }
 
-    @Test
-    public void testAendereKontostandPlus(){
-        rot.aendereKontostand(50);
-        Assert.assertEquals(rot.getKontostand(),2050);
-    }
-
-    @Test
-    public void testAendereKontostandMinus(){
-        rot.aendereKontostand(-2000);
-        Assert.assertEquals(rot.getKontostand(),0);
-    }
-
-    @Test
-    public void testAendereKontostandNull(){
-        rot.aendereKontostand(0);
-        Assert.assertEquals(rot.getKontostand(),2000);
-    }
+//    @Test
+//    public void testAendereKontostandPlus(){
+//        rot.aendereKontostand(50);
+//        Assert.assertEquals(rot.getKontostand(),2050);
+//    }
+//
+//    @Test
+//    public void testAendereKontostandMinus(){
+//        rot.aendereKontostand(-2000);
+//        Assert.assertEquals(rot.getKontostand(),0);
+//    }
+//
+//    @Test
+//    public void testAendereKontostandNull(){
+//        rot.aendereKontostand(0);
+//        Assert.assertEquals(rot.getKontostand(),2000);
+//    }
 
     @Test
     public void testGetPosition(){

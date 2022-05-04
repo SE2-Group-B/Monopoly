@@ -1,5 +1,6 @@
 package se2.groupb.monopoly;
 
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,11 +19,19 @@ public class Monopoly extends Game {
     public SpriteBatch batch;
 
 
+
     @Override
     public void create() {
         batch = new SpriteBatch();
         setScreen(new MainMenuScreen(this));
     }
+
+//	public static Monopoly INSTANCE;
+//
+//	public Monopoly() {
+//		if (INSTANCE == null) { INSTANCE = this; }
+//	}
+
 
     @Override
     public void render() {
@@ -35,4 +44,5 @@ public class Monopoly extends Game {
         batch.dispose();
 
     }
+
 }

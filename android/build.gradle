@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "se2.groupb.monopoly"
+        // applicationId "se2.groupb.monopoly"
         minSdkVersion 14
         targetSdkVersion 31
         versionCode 1
