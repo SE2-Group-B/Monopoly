@@ -26,9 +26,6 @@ public class Karte {
         this.name = name;
     }
 
-    public static void main(String[] args) {
 
-
-    }
 
 }
