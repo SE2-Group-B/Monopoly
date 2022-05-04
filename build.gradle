@@ -114,6 +114,7 @@ project(":core") {
         testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
+
         // Mocking
         //implementation "org.o:mockito-comockitre:2.8.47"
 
