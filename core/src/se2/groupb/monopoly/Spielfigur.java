@@ -62,9 +62,11 @@ public class Spielfigur {
         this.anzahlBahnhoefe = anzahlBahnhoefe;
     }
 
-    public void aendereKontostand(int betrag) {
+    public void increaseMoney(int betrag) {
         setKontostand(getKontostand() + betrag);
     }
+
+    public void decreaseMoney(int betrag){setKontostand(getKontostand() - betrag);}
 
     public int getPosition() {
         return position;
@@ -76,6 +78,13 @@ public class Spielfigur {
 
     public void move(int augenzahl) {
         setPosition((getPosition() + augenzahl) % 40);
+        if((getPosition() + augenzahl) > 39){
+            roundmoney();
+        }
+    }
+
+    public void roundmoney() {
+        setKontostand((getKontostand() + 200));
     }
 
 
@@ -106,43 +115,43 @@ public class Spielfigur {
                 break;
             case 6:
                 kartenbild = new Texture("images/KartenImages/Karte6.png");
-                aendereKontostand(-100);
+                decreaseMoney(100);
                 break;
             case 7:
                 kartenbild = new Texture("images/KartenImages/Karte7.png");
-                aendereKontostand(-100);
+                decreaseMoney(100);
                 break;
             case 8:
                 kartenbild = new Texture("images/KartenImages/Karte8.png");
-                aendereKontostand(-20);
+                decreaseMoney(20);
                 break;
             case 9:
                 kartenbild = new Texture("images/KartenImages/Karte9.png");
-                aendereKontostand(-40);
+                decreaseMoney(40);
                 break;
             case 10:
                 kartenbild = new Texture("images/KartenImages/Karte10.png");
-                aendereKontostand(-200);
+                decreaseMoney(200);
                 break;
             case 11:
                 kartenbild = new Texture("images/KartenImages/Karte11.png");
-                aendereKontostand(250);
+                increaseMoney(250);
                 break;
             case 12:
                 kartenbild = new Texture("images/KartenImages/Karte12.png");
-                aendereKontostand(100);
+                increaseMoney(100);
                 break;
             case 13:
                 kartenbild = new Texture("images/KartenImages/Karte13.png");
-                aendereKontostand(100);
+                increaseMoney(100);
                 break;
             case 14:
                 kartenbild = new Texture("images/KartenImages/Karte14.png");
-                aendereKontostand(100);
+                increaseMoney(100);
                 break;
             case 15:
                 kartenbild = new Texture("images/KartenImages/Karte15.png");
-                aendereKontostand(500);
+                increaseMoney(500);
                 break;
             case 16:
                 kartenbild = new Texture("images/KartenImages/Karte16.png");
@@ -166,23 +175,23 @@ public class Spielfigur {
                 break;
             case 21:
                 kartenbild = new Texture("images/KartenImages/Karte21.png");
-                aendereKontostand(220);
+                increaseMoney(220);
                 break;
             case 22:
                 kartenbild = new Texture("images/KartenImages/Karte22.png");
-                aendereKontostand(170);
+                increaseMoney(170);
                 break;
             case 23:
                 kartenbild = new Texture("images/KartenImages/Karte23.png");
-                aendereKontostand(550);
+                increaseMoney(550);
                 break;
             case 24:
                 kartenbild = new Texture("images/KartenImages/Karte24.png");
-                aendereKontostand(350);
+                increaseMoney(350);
                 break;
             case 25:
                 kartenbild = new Texture("images/KartenImages/Karte25.png");
-                aendereKontostand(200);
+                increaseMoney(200);
                 break;
             case 26:
                 kartenbild = new Texture("images/KartenImages/Karte26.png");
@@ -190,7 +199,7 @@ public class Spielfigur {
                 break;
             case 27:
                 kartenbild = new Texture("images/KartenImages/Karte27.png");
-                aendereKontostand(300);
+                increaseMoney(300);
                 break;
             case 28:
                 kartenbild = new Texture("images/KartenImages/Karte28.png");
@@ -198,35 +207,35 @@ public class Spielfigur {
                 break;
             case 29:
                 kartenbild = new Texture("images/KartenImages/Karte29.png");
-                aendereKontostand(510);
+                increaseMoney(510);
                 break;
             case 30:
                 kartenbild = new Texture("images/KartenImages/Karte30.png");
-                aendereKontostand(350);
+                increaseMoney(350);
                 break;
             case 31:
                 kartenbild = new Texture("images/KartenImages/Karte31.png");
-                aendereKontostand(222);
+                increaseMoney(222);
                 break;
             case 32:
                 kartenbild = new Texture("images/KartenImages/Karte32.png");
-                aendereKontostand(-250);
+                decreaseMoney(250);
                 break;
             case 33:
                 kartenbild = new Texture("images/KartenImages/Karte33.png");
-                aendereKontostand(-100);
+                decreaseMoney(100);
                 break;
             case 34:
                 kartenbild = new Texture("images/KartenImages/Karte34.png");
-                aendereKontostand(-250);
+                decreaseMoney(250);
                 break;
             case 35:
                 kartenbild = new Texture("images/KartenImages/Karte35.png");
-                aendereKontostand(-200);
+                decreaseMoney(200);
                 break;
             case 36:
                 kartenbild = new Texture("images/KartenImages/Karte36.png");
-                aendereKontostand(-100);
+                decreaseMoney(100);
                 break;
             default:
                 break;

@@ -1,6 +1,5 @@
 buildscript {
 
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -8,6 +7,7 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         google()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
 
@@ -18,6 +18,7 @@ buildscript {
 plugins {
 //    id 'com.android.application' version '7.1.2' apply false
 //    id 'com.android.library' version '7.1.2' apply false
+
     id 'org.sonarqube' version '3.3'
 }
 
@@ -63,7 +64,7 @@ allprojects {
 }
 
 project(":android") {
-    apply plugin: "com.android.application"
+      apply plugin: "com.android.application"
 
     configurations { natives }
 
@@ -74,22 +75,53 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
-        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
-
     }
 }
 
 project(":core") {
     apply plugin: "java-library"
 
-
+    sourceSets.test.java.srcDirs = ["test/"] // maybe back to src
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
+        implementation "com.esotericsoftware:kryonet:2.22.0-RC1"
+
+        // Testing?
+        implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+
+        // if not work... delete line 95
+
+
+
+
+        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        testImplementation 'junit:junit:4.13.2'
+        implementation "junit:junit:4.13.2"
+        implementation "junit:junit:4.13.2"
+
+
+        implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+
+        testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+
+        // Mocking
+        //implementation "org.o:mockito-comockitre:2.8.47"
+
+
+        // Mocking
+        //implementation "org.o:mockito-comockitre:2.8.47"
+        
     }
+
 }

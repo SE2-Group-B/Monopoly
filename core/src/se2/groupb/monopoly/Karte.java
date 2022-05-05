@@ -1,6 +1,5 @@
 package se2.groupb.monopoly;
 
-import java.util.ArrayList;
 
 public class Karte {
     int id;
@@ -27,9 +26,6 @@ public class Karte {
         this.name = name;
     }
 
-    public static void main(String[] args) {
 
-
-    }
 
 }

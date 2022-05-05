@@ -43,12 +43,18 @@ public class MainMenuScreen implements Screen {
         kartenButton = new Texture("images/play_button_active.png");
 
 
-        buttonSizeX = Gdx.graphics.getWidth() / 10;
-        buttonSizeY = Gdx.graphics.getHeight() / 10;
+        buttonSizeX = Gdx.graphics.getWidth() / 3;
+        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
 
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
+
+        /**
+         * instead of closing the App do nothing
+         */
+        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
+        inputProcessor.backDoesNothingProcessor();
     }
 
     @Override
@@ -72,7 +78,7 @@ public class MainMenuScreen implements Screen {
         // Sensor Button
         monopoly.batch.draw(sensorButton, 2*xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSizeX, buttonSizeY);
         // Karten Button - nur zum Testen
-        monopoly.batch.draw(kartenButton, xPosButtons, yPosInitialButtons + 3f* yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(kartenButton, xPosButtons, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         /**
          * Pressing the Host Game button leads to HostGameScreen

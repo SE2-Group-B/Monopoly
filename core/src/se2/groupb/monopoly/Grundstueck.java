@@ -9,7 +9,6 @@ public class Grundstueck {
 
     }
 
-
     public String getName() {
         return name;
     }
