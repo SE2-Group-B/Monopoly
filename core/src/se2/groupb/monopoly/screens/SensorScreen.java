@@ -41,7 +41,7 @@ public class SensorScreen implements Screen {
     private Random random;
     private Texture dice1;
     private Texture dice2;
-
+    private int cheatDice;
 
     private int buttonSizeX;
     private int buttonSizeY;
@@ -79,8 +79,11 @@ public class SensorScreen implements Screen {
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
+        cheatDice = 0;
+
         dice1 = new Texture("images/Dice/dice_1.png");
         dice2 = new Texture("images/Dice/dice_1.png");
+//        drawDice(dice1, dice2);
 //        toggleVibration = -1;
 //        Gdx.app.setLogLevel(Application.LOG_INFO);
 //        if(gyroSensorActive){
@@ -118,16 +121,17 @@ public class SensorScreen implements Screen {
 
         //Roll Dice Button
         monopoly.batch.draw(rollDice, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY);
-
+        if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
+            cheatDice++;
+            Gdx.app.log("Ist: ", String.valueOf(cheatDice));
+        }
         /**
          * Pressing the Roll Dice Button
          */
         if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && onTurn) {
-            int cheatDice = 0;
-            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)) {
-                cheatDice++;
-            }
+
+
             firstDice = random.nextInt(6)+1;
             if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice ==0) {
                 secondDice = firstDice;
@@ -146,8 +150,6 @@ public class SensorScreen implements Screen {
                 secondDice = random.nextInt(6)+1;
                 cheatActivated = false;
             }
-            Gdx.app.log("firstDice: ", String.valueOf(firstDice));
-            Gdx.app.log("secondDice: ", String.valueOf(secondDice));
             //onTurn = false;
 
             dice1 = setDice(firstDice);
@@ -157,8 +159,10 @@ public class SensorScreen implements Screen {
             if (firstDice == secondDice) {
                 onTurn = true;
             }
+            Gdx.app.log("Soll: ", String.valueOf(cheatDice));
+            cheatDice =0;
         }
-
+        drawDice(dice1, dice2);
 //        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN)) {
 //            toggleVibration=toggleVibration*-1;
 //        }
