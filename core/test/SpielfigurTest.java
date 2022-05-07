@@ -176,19 +176,19 @@ public class SpielfigurTest {
 
     @Test
     public void testAendereKontostandPlus(){
-        rot.aendereKontostand(50);
+        rot.changeMoney(50);
         Assert.assertEquals(rot.getKontostand(),2050);
     }
 
     @Test
     public void testAendereKontostandMinus(){
-        rot.aendereKontostand(-2000);
+        rot.changeMoney(-2000);
         Assert.assertEquals(rot.getKontostand(),0);
     }
 
     @Test
     public void testAendereKontostandNull(){
-        rot.aendereKontostand(0);
+        rot.changeMoney(0);
         Assert.assertEquals(rot.getKontostand(),2000);
     }
 
