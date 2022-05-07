@@ -36,11 +36,11 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        exitButton = new Texture("images/exit_button_inactive.png");
-        playButton = new Texture("images/play_button_inactive.png");
-        joinButton = new Texture("images/play_button_active.png");
-        sensorButton = new Texture("images/play_button_inactive.png");
-        kartenButton = new Texture("images/play_button_active.png");
+        exitButton = new Texture("images/MenuButtons/exit.png");
+        playButton = new Texture("images/MenuButtons/host.png");
+        joinButton = new Texture("images/MenuButtons/join.png");
+        kartenButton = new Texture("images/MenuButtons/switch_view.png");
+        sensorButton = new Texture("images/MenuButtons/switch_view.png");
 
 
         buttonSizeX = Gdx.graphics.getWidth() / 3;
@@ -76,9 +76,10 @@ public class MainMenuScreen implements Screen {
         monopoly.batch.draw(exitButton, xPosButtons, yPosInitialButtons + 2f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         // Sensor Button
-        monopoly.batch.draw(sensorButton, 2*xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(sensorButton, xPosButtons + 500, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
+
         // Karten Button - nur zum Testen
-        monopoly.batch.draw(kartenButton, xPosButtons, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(kartenButton, xPosButtons - 500, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         /**
          * Pressing the Host Game button leads to HostGameScreen
@@ -115,7 +116,7 @@ public class MainMenuScreen implements Screen {
         /**
          * Pressing the KARTEN button leads to exiting the game
          */
-        if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons-500, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
                 && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
 
             this.dispose();
@@ -126,7 +127,7 @@ public class MainMenuScreen implements Screen {
         /**
          * Pressing the Sensor button leads to the Sensor Screen
          */
-        if (isCorrectPosition(userPosX, userPosY, 2*xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, yPosOffsetButtons)
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons+500, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
                 && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
 
             this.dispose();
