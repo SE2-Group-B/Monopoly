@@ -39,6 +39,9 @@ public class SensorScreen implements Screen {
     private boolean cheatActivated;
     private boolean onTurn;
     private Random random;
+    private Texture dice1;
+    private Texture dice2;
+
 
     private int buttonSizeX;
     private int buttonSizeY;
@@ -76,31 +79,30 @@ public class SensorScreen implements Screen {
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
-
-
-        stage = new Stage();
-        toggleVibration = -1;
-        Gdx.app.setLogLevel(Application.LOG_INFO);
-        if(gyroSensorActive){
-            xGyro = Gdx.input.getGyroscopeX();
-            Gdx.app.log("GyroX", String.valueOf(xGyro));
-
-            yGyro = Gdx.input.getGyroscopeY();
-            Gdx.app.log("GyroY", String.valueOf(yGyro));
-
-            zGyro = Gdx.input.getGyroscopeZ();
-            Gdx.app.log("GyroZ", String.valueOf(zGyro));
-        }
-        if(lightSensorActive){
-            xLight = Gdx.input.getAccelerometerX();
-            Gdx.app.log("LightX", String.valueOf(xLight));
-
-            yLight = Gdx.input.getAccelerometerY();
-            Gdx.app.log("LightY", String.valueOf(yLight));
-
-            zLight = Gdx.input.getAccelerometerZ();
-            Gdx.app.log("LightZ", String.valueOf(zLight));
-        }
+        dice1 = new Texture("images/Dice/dice_1.png");
+        dice2 = new Texture("images/Dice/dice_1.png");
+//        toggleVibration = -1;
+//        Gdx.app.setLogLevel(Application.LOG_INFO);
+//        if(gyroSensorActive){
+//            xGyro = Gdx.input.getGyroscopeX();
+//            Gdx.app.log("GyroX", String.valueOf(xGyro));
+//
+//            yGyro = Gdx.input.getGyroscopeY();
+//            Gdx.app.log("GyroY", String.valueOf(yGyro));
+//
+//            zGyro = Gdx.input.getGyroscopeZ();
+//            Gdx.app.log("GyroZ", String.valueOf(zGyro));
+//        }
+//        if(lightSensorActive){
+//            xLight = Gdx.input.getAccelerometerX();
+//            Gdx.app.log("LightX", String.valueOf(xLight));
+//
+//            yLight = Gdx.input.getAccelerometerY();
+//            Gdx.app.log("LightY", String.valueOf(yLight));
+//
+//            zLight = Gdx.input.getAccelerometerZ();
+//            Gdx.app.log("LightZ", String.valueOf(zLight));
+//        }
     }
 
 
@@ -121,19 +123,36 @@ public class SensorScreen implements Screen {
          * Pressing the Roll Dice Button
          */
         if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
-                && Gdx.input.isTouched() && onTurn) {
-
+                && Gdx.input.justTouched() && onTurn) {
+            int cheatDice = 0;
+            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)) {
+                cheatDice++;
+            }
             firstDice = random.nextInt(6)+1;
-            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice ==0) {
                 secondDice = firstDice;
                 cheatActivated = true;
-            }else {
+            }else if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice !=0){
+                if(cheatDice>=6){
+                    firstDice = 6;
+                    secondDice = 6;
+                }else {
+                    firstDice = cheatDice;
+                    secondDice = cheatDice;
+                }
+                cheatActivated = true;
+            }
+            else {
                 secondDice = random.nextInt(6)+1;
                 cheatActivated = false;
             }
             Gdx.app.log("firstDice: ", String.valueOf(firstDice));
             Gdx.app.log("secondDice: ", String.valueOf(secondDice));
-            onTurn = false;
+            //onTurn = false;
+
+            dice1 = setDice(firstDice);
+            dice2 = setDice(secondDice);
+            drawDice(dice1, dice2);
 
             if (firstDice == secondDice) {
                 onTurn = true;
@@ -149,6 +168,37 @@ public class SensorScreen implements Screen {
         monopoly.batch.end();
     }
 
+    private Texture setDice(float value) {
+        String path;
+        switch ((int) value){
+            case 1:
+                path="images/Dice/dice_1.png";
+                break;
+            case 2:
+                path="images/Dice/dice_2.png";
+                break;
+            case 3:
+                path="images/Dice/dice_3.png";
+                break;
+            case 4:
+                path="images/Dice/dice_4.png";
+                break;
+            case 5:
+                path="images/Dice/dice_5.png";
+                break;
+            case 6:
+                path="images/Dice/dice_6.png";
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + (int) value);
+        }
+        return new Texture(path);
+    }
+
+    private void drawDice(Texture d1, Texture d2) {
+        monopoly.batch.draw(d1, Gdx.graphics.getWidth()/8, (Gdx.graphics.getHeight()/4)-500, 1000, 1000);
+        monopoly.batch.draw(d2, Gdx.graphics.getWidth()/2, (Gdx.graphics.getHeight()/4)-500, 1000, 1000);
+    }
 
 
     @Override
