@@ -1,30 +1,27 @@
 package se2.groupb.monopoly;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.environment.PointLight;
-import com.badlogic.gdx.graphics.g3d.environment.SpotLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.ArrayList;
+
 
 public class CreateGameField extends ScreenAdapter  {
 
+    Monopoly monopoly;
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
@@ -33,11 +30,11 @@ public class CreateGameField extends ScreenAdapter  {
 
     private String buildingPath = "Spielfeld\\field.g3dj";
 
-//    private
+    private Spielfigur spielfigur;
 
     private CameraInputController cameraController;
 
-
+    ArrayList<Grundstueck> arrayList = new ArrayList();
 
 
     Model[] modelLeft = new Model[40];
@@ -92,7 +89,7 @@ public class CreateGameField extends ScreenAdapter  {
     }
 
 
-    public CreateGameField() {
+    public CreateGameField(Monopoly monopoly) {
 
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 //        Gdx.app.debug("GDSAFA", "Hello");
@@ -122,6 +119,7 @@ public class CreateGameField extends ScreenAdapter  {
 //        camera.near = -10000f;
         camera.far = 500000f;
         createModels();
+        spielfigur = new Spielfigur(1, "Bernd", 0, arrayList, 3, Color.BLUE);
         camera.update();
 
 
