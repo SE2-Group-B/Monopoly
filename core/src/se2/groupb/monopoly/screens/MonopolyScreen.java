@@ -17,6 +17,7 @@ import se2.groupb.monopoly.Grundstueck;
 import se2.groupb.monopoly.Karte;
 import se2.groupb.monopoly.Kartenstapel;
 import se2.groupb.monopoly.Monopoly;
+import se2.groupb.monopoly.Spielfigur;
 import se2.groupb.monopoly.Strasse;
 import se2.groupb.monopoly.Zahlfeld;
 
@@ -26,6 +27,7 @@ public class MonopolyScreen implements Screen {
     private BitmapFont menuFont;
     private Monopoly monopoly;
     private Grundstueck[] spielfeld;
+    private Texture kartenHintergrund;
 
     public MonopolyScreen(Monopoly monopoly) {
         this.monopoly = monopoly;
@@ -37,6 +39,17 @@ public class MonopolyScreen implements Screen {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/OkLetsGOOO.mp3"));
         music.play();
         music.setVolume(100);
+
+        //Spielfiguren
+        ArrayList<Grundstueck> grundstueckeRot=new ArrayList<>();
+        ArrayList<Grundstueck> grundstueckeGelb=new ArrayList<>();
+        ArrayList<Grundstueck> grundstueckeGruen=new ArrayList<>();
+        ArrayList<Grundstueck> grundstueckeBlau=new ArrayList<>();
+        Spielfigur rot = new Spielfigur(1, "Rot", 2000, grundstueckeRot, 0);
+        Spielfigur gelb = new Spielfigur(2, "Gelb", 2000, grundstueckeGelb, 0);
+        Spielfigur gruen = new Spielfigur(3, "Grün", 2000, grundstueckeGruen, 0);
+        Spielfigur blau = new Spielfigur(4, "Blau", 2000, grundstueckeBlau, 0);
+
 
 
         //erzeuge Spielfeld:
@@ -198,6 +211,8 @@ public class MonopolyScreen implements Screen {
         Karte g16=new Karte(36, "Du hast ein gutes Herz und spendest an eine Hilfsorganisation 100€");
         gemeinschaftskarten.add(g16);
 
+
+        //kartenHintergrund=rot.zieheKarte(ereigniskarten);
 
 
 
