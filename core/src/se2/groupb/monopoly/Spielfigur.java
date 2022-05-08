@@ -34,10 +34,10 @@ public class Spielfigur {
         this.anzahlBahnhoefe = anzahlBahnhoefe;
         this.position = 0;
         this.color = color;
-        createSpielfigut();
+        createSpielfigur();
     }
 
-    public void createSpielfigut() {
+    public void createSpielfigur() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);
         modInstance.materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));

@@ -25,6 +25,7 @@ public class SpielfigurTest {
     Karte g1, g2, g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16;
     Kartenstapel gemeinschaftskarten;
 
+    /*
     @Before
     public void init(){
         meineGrundstuecke=new ArrayList<>();
