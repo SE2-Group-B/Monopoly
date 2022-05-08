@@ -174,6 +174,7 @@ public class SpielfigurTest {
         Assert.assertEquals(rot.getAnzahlBahnhoefe(),4);
     }
 
+
     @Test
     public void testAendereKontostandPlus(){
         rot.changeMoney(50);

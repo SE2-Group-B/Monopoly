@@ -15,10 +15,10 @@ public class ServerFoundation {
 
     private Server server;
 
-    public ServerFoundation() {
+    public ServerFoundation(int tcpPort, int udpPort) {
         this.server = new Server(1_000_000, 1_000_000);
         // starting a tcp server connection at port 6333 and udp server at port 6334
-        this.bindServer(6333, 6334);
+        this.bindServer(tcpPort, udpPort);
     }
 
     private void bindServer(final int tcpPort, final int udpPort) {

@@ -83,18 +83,18 @@ public class HostGameScreen implements Screen {
 
             if (callOnce == 1) {
                 // starting a server to host a game
-                instance = new ServerFoundation();
+                instance = new ServerFoundation(6333,6333);
                 instance.registerToKryo();
                 // connect client (the host) to the server
-                client = new ClientFoundation();
+                /*client = new ClientFoundation(6333,6333);
                 client.registerToKryo();
                 // new input processor that disconnects server if you go back
                 inputProcessor.HostMenuServerProcessor(instance.getServer(), client.getClient());
                 // show Waiting for Players on screen if server was started
-                buttonPressed = true;
+                */buttonPressed = true;
 
                 // send a message to server
-                client.getClient().sendUDP("Ich will ein Spiel hosten");
+                //client.getClient().sendUDP("Ich will ein Spiel hosten");
             }
         }
 
