@@ -77,7 +77,7 @@ public class JoinGameScreen implements Screen {
 
             if (callOnce == 1) {
                 // connect client (new client) to the server
-                client = new ClientFoundation();
+                client = new ClientFoundation(6333,6333);
 
                 client.registerToKryo();
                 // new input processor that disconnects server if you go back
