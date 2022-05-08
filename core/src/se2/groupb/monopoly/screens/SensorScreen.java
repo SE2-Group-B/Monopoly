@@ -12,27 +12,25 @@ import se2.groupb.monopoly.Monopoly;
 public class SensorScreen implements Screen {
 
     private Monopoly monopoly;
-    private boolean gyroSensorActive=Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope);
-    private boolean lightSensorActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
-    private float xGyro;
-    private float yGyro;
-    private float zGyro;
-    private float xLight;
-    private float yLight;
-    private float zLight;
+//    private boolean gyroSensorActive=Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope);
+    private boolean AccelerometerActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
+//    private float xGyro;
+//    private float yGyro;
+//    private float zGyro;
+    private float xAccel;
+    private float yAccel;
+    private float zAccel;
 
     private boolean cheatActivated;
     private boolean onTurn;
 
     private Random random;
+    private int cheatDice;
 
     private Texture rollDice;
     private Texture reportCheat;
     private Texture dice1;
     private Texture dice2;
-
-    private int toggleVibration;
-    private int cheatDice;
 
     private int buttonSizeX;
     private int buttonSizeY;
@@ -51,8 +49,10 @@ public class SensorScreen implements Screen {
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
         inputProcessor.backToMainMenuProcessor();
 
-        reportCheat = new Texture("images/play_button_inactive.png");
-        rollDice = new Texture("images/play_button_inactive.png");
+        reportCheat = new Texture("images/MenuButtons/report_cheat.png");
+        rollDice = new Texture("images/MenuButtons/roll.png");
+        dice1 = new Texture("images/Dice/dice_0.png");
+        dice2 = new Texture("images/Dice/dice_0.png");
         cheatActivated = false;
         onTurn = true;
         random = new Random();
@@ -64,32 +64,6 @@ public class SensorScreen implements Screen {
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
-
-        dice1 = new Texture("images/Dice/dice_0.png");
-        dice2 = new Texture("images/Dice/dice_0.png");
-
-//        toggleVibration = -1;
-//        Gdx.app.setLogLevel(Application.LOG_INFO);
-//        if(gyroSensorActive){
-//            xGyro = Gdx.input.getGyroscopeX();
-//            Gdx.app.log("GyroX", String.valueOf(xGyro));
-//
-//            yGyro = Gdx.input.getGyroscopeY();
-//            Gdx.app.log("GyroY", String.valueOf(yGyro));
-//
-//            zGyro = Gdx.input.getGyroscopeZ();
-//            Gdx.app.log("GyroZ", String.valueOf(zGyro));
-//        }
-//        if(lightSensorActive){
-//            xLight = Gdx.input.getAccelerometerX();
-//            Gdx.app.log("LightX", String.valueOf(xLight));
-//
-//            yLight = Gdx.input.getAccelerometerY();
-//            Gdx.app.log("LightY", String.valueOf(yLight));
-//
-//            zLight = Gdx.input.getAccelerometerZ();
-//            Gdx.app.log("LightZ", String.valueOf(zLight));
-//        }
     }
 
 
@@ -110,8 +84,7 @@ public class SensorScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
             cheatDice++;
-            Gdx.app.log("Ist: ", String.valueOf(cheatDice));
-        }
+           }
         /**
          * Pressing the Roll Dice Button
          */
@@ -136,6 +109,34 @@ public class SensorScreen implements Screen {
         }
 
         drawDice(dice1, dice2);
+
+//        if(gyroSensorActive){
+//            xGyro = Gdx.input.getGyroscopeX();
+//            Gdx.app.log("GyroX", String.valueOf(xGyro));
+//
+//            yGyro = Gdx.input.getGyroscopeY();
+//            Gdx.app.log("GyroY", String.valueOf(yGyro));
+//
+//            zGyro = Gdx.input.getGyroscopeZ();
+//            Gdx.app.log("GyroZ", String.valueOf(zGyro));
+//        }
+
+        /**
+         * Check if phone is shaking while pressing volume down
+         */
+        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN)){
+            if(AccelerometerActive){
+                xAccel = Gdx.input.getAccelerometerX();
+                yAccel = Gdx.input.getAccelerometerY();
+                zAccel = Gdx.input.getAccelerometerZ();
+                if(xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15){
+                    Gdx.gl.glClearColor(0, 0, 1, 1);
+                    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                    cheatActivated = true;
+                }
+            }
+        }
+
         monopoly.batch.end();
     }
     private void roll(){
@@ -146,19 +147,16 @@ public class SensorScreen implements Screen {
             cheatActivated = true;
         }else if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice !=0){
             if(cheatDice>=6){
-                firstDice = 6;
-                secondDice = 6;
+                firstDice = secondDice = 6;
             }else {
-                firstDice = cheatDice;
-                secondDice = cheatDice;
-            }
+                firstDice = secondDice = cheatDice;
+                }
             cheatActivated = true;
         }
         else {
             secondDice = random.nextInt(6)+1;
-            cheatActivated = false;
         }
-        //onTurn = false;
+        onTurn = false;
 
         dice1 = setDice(firstDice);
         dice2 = setDice(secondDice);
@@ -167,7 +165,6 @@ public class SensorScreen implements Screen {
         if (firstDice == secondDice) {
             onTurn = true;
         }
-        Gdx.app.log("Soll: ", String.valueOf(cheatDice));
         cheatDice =0;
     }
 
