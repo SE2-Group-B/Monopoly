@@ -41,7 +41,7 @@ public class Kartenstapel {
         int i=getIndex();
         if(i<kartenStapel.size()-1){
             Karte k=kartenStapel.get(i);
-            setIndex(i++);
+            setIndex(i+1);
             return k;
         }else if(i==kartenStapel.size()-1){ //letzte Karte im Stapel -> shuffle & index 0 setzten
             Karte k=kartenStapel.get(i);
@@ -51,9 +51,10 @@ public class Kartenstapel {
         }
         else{//index out of bounce
             setIndex(0);
+            i=0;
             shuffle();
-            Karte k=kartenStapel.get(i);
-            setIndex(i++);
+            Karte k=kartenStapel.get(getIndex());
+            setIndex(i+1);
             return k;
         }
 

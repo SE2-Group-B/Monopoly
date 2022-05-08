@@ -13,6 +13,8 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.hideStatusBar=true;
 		config.useWakelock=true; //handy soll an bleiben!
+		config.useGyroscope = true;
+		config.useAccelerometer = true;
 
 		initialize(new Monopoly(), config);
 	}

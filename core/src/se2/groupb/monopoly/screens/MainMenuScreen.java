@@ -16,12 +16,15 @@ public class MainMenuScreen implements Screen {
     private Texture exitButton;
     private Texture playButton;
     private Texture joinButton;
+    private Texture sensorButton;
     private Texture kartenButton;
+
     private int buttonSizeX;
     private int buttonSizeY;
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
     private float xPosButtons;
+
 
     /**
      * Constructor
@@ -37,6 +40,7 @@ public class MainMenuScreen implements Screen {
         playButton = new Texture("images/MenuButtons/host.png");
         joinButton = new Texture("images/MenuButtons/join.png");
         kartenButton = new Texture("images/MenuButtons/switch_view.png");
+        sensorButton = new Texture("images/MenuButtons/switch_view.png");
 
 
         buttonSizeX = Gdx.graphics.getWidth() / 3;
@@ -71,8 +75,11 @@ public class MainMenuScreen implements Screen {
         // Exit game Button
         monopoly.batch.draw(exitButton, xPosButtons, yPosInitialButtons + 2f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
+        // Sensor Button
+        monopoly.batch.draw(sensorButton, xPosButtons + 500, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
+
         // Karten Button - nur zum Testen
-        monopoly.batch.draw(kartenButton, xPosButtons, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
+        monopoly.batch.draw(kartenButton, xPosButtons - 500, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX, buttonSizeY);
 
         /**
          * Pressing the Host Game button leads to HostGameScreen
@@ -109,11 +116,22 @@ public class MainMenuScreen implements Screen {
         /**
          * Pressing the KARTEN button leads to exiting the game
          */
-        if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons-500, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
                 && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
 
             this.dispose();
             monopoly.setScreen(new KartenTestScreen(monopoly));
+
+        }
+
+        /**
+         * Pressing the Sensor button leads to the Sensor Screen
+         */
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons+500, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
+                && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
+
+            this.dispose();
+            monopoly.setScreen(new SensorScreen(monopoly));
 
         }
 
