@@ -42,6 +42,7 @@ public class KartenTestScreen implements Screen {
         //font.draw(batch, "lkjasd,", 100,100);
         //monopoly.batch.draw("Hello World",100,100);
         //drawMessageText(Batch batch,BitmapFont font, float x,  float y,float maxWidth);
+
         monopoly.batch.end();
     }
 

@@ -74,6 +74,7 @@ public class Spielfigur {
         this.position = position;
     }
 
+
     public void move(int augenzahl) {
         if((getPosition() + augenzahl) > 39){
             roundmoney();
