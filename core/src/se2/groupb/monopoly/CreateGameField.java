@@ -144,9 +144,7 @@ public class CreateGameField extends ScreenAdapter  {
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
         modelBatch.begin(camera);
 
-//        modelBatch.render(il1, environment);
-//        modelBatch.render(il2, environment);
-
+        modelBatch.render(spielfigur.modInstance, environment);
 
         renderModels();
 

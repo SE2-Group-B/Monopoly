@@ -22,7 +22,7 @@ public class Spielfigur {
     private Color color;
     ModelInstance modInstance;
 
-    private String buildingPath = "Spielfeld\\field.g3dj";
+    private String buildingPath = "Spielfeld\\char.g3dj";
 
 
 
@@ -40,12 +40,13 @@ public class Spielfigur {
     public void createSpielfigur() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);
-        modInstance.materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
-        Vector3 fieldPos = new Vector3(0, 10, 0);
+        modInstance.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
+        Vector3 fieldPos = new Vector3(0, 5, 0);
         modInstance.transform.translate(fieldPos);
     }
 
     public Color getColor() { return color; }
+
     public int getId() {
         return id;
     }
