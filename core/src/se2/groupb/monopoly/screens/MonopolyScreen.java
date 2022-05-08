@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
@@ -45,10 +46,10 @@ public class MonopolyScreen implements Screen {
         ArrayList<Grundstueck> grundstueckeGelb=new ArrayList<>();
         ArrayList<Grundstueck> grundstueckeGruen=new ArrayList<>();
         ArrayList<Grundstueck> grundstueckeBlau=new ArrayList<>();
-        Spielfigur rot = new Spielfigur(1, "Rot", 2000, grundstueckeRot, 0);
-        Spielfigur gelb = new Spielfigur(2, "Gelb", 2000, grundstueckeGelb, 0);
-        Spielfigur gruen = new Spielfigur(3, "Grün", 2000, grundstueckeGruen, 0);
-        Spielfigur blau = new Spielfigur(4, "Blau", 2000, grundstueckeBlau, 0);
+        Spielfigur rot = new Spielfigur(1, "Rot", 2000, grundstueckeRot, 0, Color.RED);
+        Spielfigur gelb = new Spielfigur(2, "Gelb", 2000, grundstueckeGelb, 0, Color.YELLOW);
+        Spielfigur gruen = new Spielfigur(3, "Grün", 2000, grundstueckeGruen, 0, Color.GREEN);
+        Spielfigur blau = new Spielfigur(4, "Blau", 2000, grundstueckeBlau, 0, Color.BLUE);
 
 
 

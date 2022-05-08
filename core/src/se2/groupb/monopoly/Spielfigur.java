@@ -1,6 +1,14 @@
 package se2.groupb.monopoly;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.JsonReader;
 
 import java.util.ArrayList;
 
@@ -11,17 +19,33 @@ public class Spielfigur {
     private int Kontostand;
     private ArrayList<Grundstueck> meineGrundstuecke;
     private int anzahlBahnhoefe;
+    private Color color;
+    ModelInstance modInstance;
+
+    private String buildingPath = "Spielfeld\\field.g3dj";
 
 
-    public Spielfigur(int id, String name, int kontostand, ArrayList<Grundstueck> meineGrundstuecke, int anzahlBahnhoefe) {
+
+    public Spielfigur(int id, String name, int kontostand, ArrayList<Grundstueck> meineGrundstuecke, int anzahlBahnhoefe, Color color) {
         this.id = id;
         this.name = name;
         this.Kontostand = kontostand;
         this.meineGrundstuecke = meineGrundstuecke;
         this.anzahlBahnhoefe = anzahlBahnhoefe;
         this.position = 0;
+        this.color = color;
+        createSpielfigut();
     }
 
+    public void createSpielfigut() {
+        Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
+        modInstance = new ModelInstance(model);
+        modInstance.materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
+        Vector3 fieldPos = new Vector3(0, 10, 0);
+        modInstance.transform.translate(fieldPos);
+    }
+
+    public Color getColor() { return color; }
     public int getId() {
         return id;
     }

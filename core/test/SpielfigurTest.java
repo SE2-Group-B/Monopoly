@@ -1,3 +1,4 @@
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
 import org.junit.After;
@@ -31,7 +32,7 @@ public class SpielfigurTest {
         meineGrundstuecke.add(hauptstraße);
         nordbahnhof=new Bahnhof("Nordbahnhof", false, 50);
         meineGrundstuecke.add(nordbahnhof);
-        rot=new Spielfigur(1, "Rot", 2000, meineGrundstuecke,1 );
+        rot=new Spielfigur(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
 
         ereigniskarten = new Kartenstapel();
          e1 = new Karte(1, "Gehe 3 Felder zurück");
