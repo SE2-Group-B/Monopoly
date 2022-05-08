@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import se2.groupb.monopoly.screens.HostGameScreen;
 import se2.groupb.monopoly.screens.JoinGameScreen;
@@ -17,7 +18,9 @@ public class ServerFoundation {
 
     public ServerFoundation(int tcpPort, int udpPort) {
         this.server = new Server(1_000_000, 1_000_000);
-        // starting a tcp server connection at port 6333 and udp server at port 6334
+        // register kryo network
+        Network.register(server);
+        // starting a tcp server connection
         this.bindServer(tcpPort, udpPort);
     }
 
@@ -35,17 +38,24 @@ public class ServerFoundation {
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
                     System.out.println("\nServer received message:\t" + object + "\n");
+
+                    if (object.equals("HOST")){
+                        // start game when 4 Players are connected
+                        if (server.getConnections().length == 1){
+                            server.sendToAllTCP("START");
+                        } else { // wait for players if not all connected
+                            server.sendToAllTCP("WAITFORPLAYER");
+                        }
+                    }
                 }
+
+
+
+
             }
         });
-    }
 
-    public void registerToKryo(){
-        Kryo kryo = this.getServer().getKryo();
-        // register request and response
-        kryo.register(String.class);
-        // string was registered
-        System.out.println("*\n**\n*****\n***********\n**********************\n"+kryo.getRegistration(String.class)+"\n**********************\n***********\n*****\n**\n*");
+
     }
 
     public Server getServer() {

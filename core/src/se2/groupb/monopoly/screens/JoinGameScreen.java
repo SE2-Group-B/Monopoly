@@ -19,6 +19,7 @@ public class JoinGameScreen implements Screen {
 
     ServerFoundation instance;
     ClientFoundation client;
+    private boolean isConnected = false;
     private int callOnce = 0; // so that the connect button only calls server create function once
 
     private Texture connectButton;
@@ -79,7 +80,6 @@ public class JoinGameScreen implements Screen {
                 // connect client (new client) to the server
                 client = new ClientFoundation(6333,6333);
 
-                client.registerToKryo();
                 // new input processor that disconnects server if you go back
                 inputProcessor.JoinMenuServerProcessor(client.getClient());
                 // show Waiting for Players on screen if server was started
@@ -94,6 +94,16 @@ public class JoinGameScreen implements Screen {
             // if server response: client connected is still missing
             font.draw(monopoly.batch, waitingText,
                     (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * buttonSizeY));
+        }
+
+        if (isConnected) {
+            if (client.allPlayersJoined()) {
+                /**
+                 * START THE GAME
+                 * set the screen
+                 */
+                monopoly.setScreen(new MonopolyScreen(monopoly));
+            }
         }
 
         monopoly.batch.end();
