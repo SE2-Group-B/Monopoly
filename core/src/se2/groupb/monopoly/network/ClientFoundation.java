@@ -7,11 +7,8 @@ import java.io.IOException;
 
 public class ClientFoundation {
     private Client client;
-    static final int tcpPort = 6333;
-    static final int udpPort = 6334;
 
-
-    public ClientFoundation() {
+    public ClientFoundation(int tcpPort, int udpPort) {
         this.client = new Client();
         startConnection(client, "localhost", tcpPort, udpPort, 100);
     }
