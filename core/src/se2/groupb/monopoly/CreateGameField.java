@@ -125,9 +125,13 @@ public class CreateGameField extends ScreenAdapter  {
         createModels();
 
         spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        spielfigur1.createSpielfigur();
         spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList, 0, Color.RED);
+        spielfigur2.createSpielfigur();
         spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        spielfigur3.createSpielfigur();
         spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList, 0, Color.GREEN);
+        spielfigur4.createSpielfigur();
 
         camera.update();
 

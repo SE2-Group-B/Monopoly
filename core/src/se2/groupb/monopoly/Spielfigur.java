@@ -34,8 +34,9 @@ public class Spielfigur {
         this.anzahlBahnhoefe = anzahlBahnhoefe;
         this.position = 0;
         this.color = color;
-        createSpielfigur();
+        //createSpielfigur();
     }
+
 
     public void createSpielfigur() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
