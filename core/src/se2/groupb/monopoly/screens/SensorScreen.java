@@ -25,6 +25,7 @@ public class SensorScreen implements Screen {
 
     private Random random;
     private int cheatDice;
+    private int pachCount;
 
     private Texture rollDice;
     private Texture reportCheat;
@@ -58,6 +59,7 @@ public class SensorScreen implements Screen {
         onTurn = true;
         random = new Random();
         cheatDice = 0;
+        pachCount = 0;
 
         buttonSizeX = Gdx.graphics.getWidth() / 3;
         buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
@@ -150,6 +152,12 @@ public class SensorScreen implements Screen {
 
         if (firstDice == secondDice) {
             onTurn = true;
+            pachCount++;
+        }
+        if(pachCount > 2){
+            onTurn = false;
+            Gdx.gl.glClearColor(1, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         }
         cheatDice =0;
     }
