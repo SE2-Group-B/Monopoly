@@ -1,16 +1,11 @@
 package se2.groupb.monopoly.network;
 
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
-import java.util.Arrays;
-
-import se2.groupb.monopoly.screens.HostGameScreen;
-import se2.groupb.monopoly.screens.JoinGameScreen;
 
 public class ServerFoundation {
 
@@ -39,17 +34,15 @@ public class ServerFoundation {
                 if (object instanceof String) {
                     System.out.println("\nServer received message:\t" + object + "\n");
 
-                    if (object.equals("HOST")){
+                    if (object.equals("HOST")) {
                         // start game when 4 Players are connected
-                        if (server.getConnections().length == 1){
+                        if (server.getConnections().length == 4) {
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");
                         }
                     }
                 }
-
-
 
 
             }

@@ -1,6 +1,5 @@
 package se2.groupb.monopoly.network;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -44,10 +43,11 @@ public class ClientFoundation {
     }
 
     /**
-     * Method to use in screens to see if all players joined
+     * Getter Method to use in screens to see if all players joined
      */
     public boolean allPlayersJoined(){
         return allJoined;
     }
+
 
 }

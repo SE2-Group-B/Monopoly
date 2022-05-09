@@ -263,7 +263,6 @@ public class MonopolyScreen implements Screen {
 
     @Override
     public void dispose() {
-        /*img.dispose();
-        menuFont.dispose();*/
+
     }
 }

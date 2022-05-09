@@ -65,8 +65,8 @@ public class InputBackProcessor {
             public boolean keyDown(int keycode) {
                 if ((keycode == Input.Keys.BACK) || (keycode == Input.Keys.ESCAPE)) {
                     monopoly.setScreen(new MainMenuScreen(monopoly));
-                    /*server.close();
-                    client.close();*/
+                    server.close();
+                    client.close();
                 }
                 return false;
             }
@@ -87,7 +87,7 @@ public class InputBackProcessor {
             public boolean keyDown(int keycode) {
                 if ((keycode == Input.Keys.BACK) || (keycode == Input.Keys.ESCAPE)) {
                     monopoly.setScreen(new MainMenuScreen(monopoly));
-                    //client.close();
+                    client.close();
                 }
                 return false;
             }
