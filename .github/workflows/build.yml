@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - main
+      - branch-main
       - Develop
   pull_request:
     types: [opened, synchronize, reopened]
