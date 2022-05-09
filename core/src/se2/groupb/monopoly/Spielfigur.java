@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.JsonReader;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Spielfigur {
     ModelInstance modInstance;
 
     private String buildingPath = "Spielfeld\\char.g3dj";
+    private CreateGameField field;
 
 
 
@@ -34,14 +36,13 @@ public class Spielfigur {
         this.anzahlBahnhoefe = anzahlBahnhoefe;
         this.position = 0;
         this.color = color;
-        createSpielfigur();
     }
 
     public void createSpielfigur() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);
         modInstance.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
-        Vector3 fieldPos = new Vector3(0, 5, 0);
+        Vector3 fieldPos = new Vector3(0, 3.2f, 0);
         modInstance.transform.translate(fieldPos);
     }
 
@@ -104,7 +105,7 @@ public class Spielfigur {
         if((getPosition() + augenzahl) > 39){
             roundmoney();
         }
-        setPosition((getPosition() + augenzahl) % 40);
+//        setPosition((getPosition() + augenzahl) % 40);
     }
 
     public void roundmoney() {
