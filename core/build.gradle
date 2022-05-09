@@ -1,6 +1,24 @@
+
+plugins {
+    id 'jacoco'
+}
 sourceCompatibility = 1.7
+
 dependencies {
     implementation 'junit:junit:4.13.2'
+}
+
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = false
+        xml.enabled = true
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
