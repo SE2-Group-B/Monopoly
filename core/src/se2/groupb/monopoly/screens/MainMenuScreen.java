@@ -20,6 +20,7 @@ public class MainMenuScreen implements Screen {
     private Texture sensorButton;
     private Texture kartenButton;
     private Texture gameFieldButton;
+    private Texture BuyButton;
 
     private int buttonSizeX;
     private int buttonSizeY;
@@ -44,6 +45,7 @@ public class MainMenuScreen implements Screen {
         kartenButton = new Texture("images/MenuButtons/switch_view.png");
         sensorButton = new Texture("images/MenuButtons/switch_view.png");
         gameFieldButton=new Texture("images/MenuButtons/switch_view.png");
+        BuyButton = new Texture("images/MenuButtons/switch_view.png");
 
 
         buttonSizeX = Gdx.graphics.getWidth() / 3;
@@ -88,6 +90,9 @@ public class MainMenuScreen implements Screen {
         //Spielfeld Button
         monopoly.batch.draw(gameFieldButton, xPosButtons - 700, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX/2, buttonSizeY/2);
         //-500
+
+        //Kaufbutton - erstmal zum Testen
+        monopoly.batch.draw(kartenButton, xPosButtons + 1200, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX/2, buttonSizeY/2);
 
         /**
          * Pressing the Host Game button leads to HostGameScreen
@@ -140,6 +145,17 @@ public class MainMenuScreen implements Screen {
 
             this.dispose();
             monopoly.setScreen(new SensorScreen(monopoly));
+
+        }
+
+        /**
+         * Pressing the Sensor button leads to the Sensor Screen
+         */
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons+1000, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
+                && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
+
+            this.dispose();
+            monopoly.setScreen(new BuyScreen(monopoly));
 
         }
 
