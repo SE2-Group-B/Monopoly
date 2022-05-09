@@ -124,4 +124,18 @@ project(":core") {
         
     }
 
+
+
+
+//    task jacocoTestReport(type:JacocoReport) {
+//        group = "Reporting"
+//
+//        description = "Generate Jacoco coverage reports"
+//
+//        reports {
+//            xml.enabled = true
+//        }
+//    }
+
+
 }
