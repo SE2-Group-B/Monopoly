@@ -23,7 +23,9 @@ public class ClientFoundation {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         client.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
                     System.out.println("\nClient received message:\t" + object + "\n");

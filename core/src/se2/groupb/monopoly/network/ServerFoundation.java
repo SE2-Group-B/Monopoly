@@ -30,6 +30,7 @@ public class ServerFoundation {
 
         // Listeners for Client messages
         server.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
                     System.out.println("\nServer received message:\t" + object + "\n");
