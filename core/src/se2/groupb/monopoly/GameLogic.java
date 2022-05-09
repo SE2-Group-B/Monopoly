@@ -81,10 +81,8 @@ public class GameLogic {
 
 
     }
-    public Grundstueck[] getLogicArray() {
-        setLogicArray();
-        return spielfeld;
-    }
+
+
 
 
 }

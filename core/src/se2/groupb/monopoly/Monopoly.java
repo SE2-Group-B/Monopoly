@@ -27,10 +27,7 @@ public class Monopoly extends Game {
 
     @Override
     public void create() {
-        logicArray = new GameLogic();
         batch = new SpriteBatch();
-        arr = logicArray.getLogicArray();
-//        diceRoll = sensors.roll();
         setScreen(new MainMenuScreen(this));
 
     }
