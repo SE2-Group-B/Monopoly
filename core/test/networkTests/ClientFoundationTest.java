@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.ConnectException;
 
 import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.network.ServerFoundation;
@@ -27,11 +28,16 @@ public class ClientFoundationTest {
         client = null;
     }
 
-    // should be @Test (expected = InvoiceServiceException.class), but it works fine without
-    @Test
+    // should be @Test (expected = IOException.class or ConnectException.class), but it works fine without
+    @Test /*(expected = ConnectException.class)*/
     public void noServerTest() {
         server.getServer().close();
         server = null;
+        try {
+            client.getClient().update(500);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         client = new ClientFoundation(6333, 6333);
     }
 
