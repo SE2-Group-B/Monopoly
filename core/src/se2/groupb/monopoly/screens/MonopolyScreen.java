@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -26,6 +27,7 @@ public class MonopolyScreen implements Screen {
     Texture img;
     Music music;
     private BitmapFont menuFont;
+    private BitmapFont money;
     private Monopoly monopoly;
     private Grundstueck[] spielfeld;
     private Texture kartenHintergrund;
@@ -224,8 +226,7 @@ public class MonopolyScreen implements Screen {
 
 
 
-
-
+        
     }
 
     @Override
@@ -239,6 +240,8 @@ public class MonopolyScreen implements Screen {
         menuFont.setColor(0,0,0,1);
         menuFont.getData().setScale(4,4);
 
+        money = new BitmapFont();
+        money.getData().setScale(3.5f);
 
         monopoly.batch.begin();
 
@@ -248,6 +251,8 @@ public class MonopolyScreen implements Screen {
             // switch Screen
             monopoly.setScreen(new MainMenuScreen(monopoly));
         }
+        
+
         monopoly.batch.draw(img, 0, 0);
 
         monopoly.batch.draw(img, 0, 0);
