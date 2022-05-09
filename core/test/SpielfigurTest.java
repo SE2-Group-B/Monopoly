@@ -1,3 +1,4 @@
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
 import org.junit.After;
@@ -24,6 +25,8 @@ public class SpielfigurTest {
     Karte g1, g2, g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16;
     Kartenstapel gemeinschaftskarten;
 
+
+
     @Before
     public void init(){
         meineGrundstuecke=new ArrayList<>();
@@ -31,7 +34,7 @@ public class SpielfigurTest {
         meineGrundstuecke.add(hauptstraße);
         nordbahnhof=new Bahnhof("Nordbahnhof", false, 50);
         meineGrundstuecke.add(nordbahnhof);
-        rot=new Spielfigur(1, "Rot", 2000, meineGrundstuecke,1 );
+        rot=new Spielfigur(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
 
         ereigniskarten = new Kartenstapel();
          e1 = new Karte(1, "Gehe 3 Felder zurück");
@@ -123,6 +126,7 @@ public class SpielfigurTest {
         Assert.assertNotNull(rot);
     }
 
+
     @Test
     public void testGetId(){
         Assert.assertEquals(rot.getId(), 1);
@@ -174,23 +178,24 @@ public class SpielfigurTest {
         Assert.assertEquals(rot.getAnzahlBahnhoefe(),4);
     }
 
-//    @Test
-//    public void testAendereKontostandPlus(){
-//        rot.aendereKontostand(50);
-//        Assert.assertEquals(rot.getKontostand(),2050);
-//    }
-//
-//    @Test
-//    public void testAendereKontostandMinus(){
-//        rot.aendereKontostand(-2000);
-//        Assert.assertEquals(rot.getKontostand(),0);
-//    }
-//
-//    @Test
-//    public void testAendereKontostandNull(){
-//        rot.aendereKontostand(0);
-//        Assert.assertEquals(rot.getKontostand(),2000);
-//    }
+
+    @Test
+    public void testAendereKontostandPlus(){
+        rot.changeMoney(50);
+        Assert.assertEquals(rot.getKontostand(),2050);
+    }
+
+    @Test
+    public void testAendereKontostandMinus(){
+        rot.changeMoney(-2000);
+        Assert.assertEquals(rot.getKontostand(),0);
+    }
+
+    @Test
+    public void testAendereKontostandNull(){
+        rot.changeMoney(0);
+        Assert.assertEquals(rot.getKontostand(),2000);
+    }
 
     @Test
     public void testGetPosition(){
@@ -215,7 +220,7 @@ public class SpielfigurTest {
         rot.move(5);
         Assert.assertEquals(rot.getPosition(),3);
     }
-    /*
+/*
     @Test
     public void testZieheKarteCase1(){
         Texture kartenbild=new Texture("images/KartenImages/Karte1.png");

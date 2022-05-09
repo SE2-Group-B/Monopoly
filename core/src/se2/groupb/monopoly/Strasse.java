@@ -73,12 +73,22 @@ public class Strasse extends Grundstueck{
 
     public void verkauft() {if(isVerkauft() == false) {setVerkauft(true);}else{errormsg();}}
 
+    //number weg - man kann immer nur 1 Haus kaufen,
+    //Es gibt max nur 2 Häuser
+    //Haus bezahlen?
+    //increasemiete aufrufen
     public void buyhouse(int number) {if(getHaus() < 4){setHaus(number);}else{errormsg();}}
 
+    //Nur 2 Häuser
+    //bezahlen?
+    //Häuser 0 setzten
+    //increasemiete aufrufen
     public void buyhotel() {if(getHaus() == 4 && getHotel() == 0) {setHotel(1);}else{errormsg();}}
 
     public boolean errormsg() {return false;}
     //Fehlermeldung als eigenes Fenster(Screen) im nächsten Sprint einfügen
+
+
 
     public void increasemiete() {
         int miete1 = getMiete();
@@ -86,11 +96,11 @@ public class Strasse extends Grundstueck{
         int hotel = getHotel();
 
         if(haus == 1 && hotel == 0) {
-            miete1 = (int) (miete1 * 0.1);
+            miete1 = (int) (miete1 * 1.2);
         }else if(haus == 2 && hotel == 0){
-            miete1 = (int) (miete1 * 0.2);
+            miete1 = (int) (miete1 * 1.4);
         }else if(hotel == 1){
-            miete1 = (int) (miete1 * 0.5);
+            miete1 = (int) (miete1 * 1.8);
         }else{
             return;
         }

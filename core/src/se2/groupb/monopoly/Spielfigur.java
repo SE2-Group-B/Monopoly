@@ -1,6 +1,14 @@
 package se2.groupb.monopoly;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.JsonReader;
 
 import java.util.ArrayList;
 
@@ -11,16 +19,34 @@ public class Spielfigur {
     private int Kontostand;
     private ArrayList<Grundstueck> meineGrundstuecke;
     private int anzahlBahnhoefe;
+    private Color color;
+    ModelInstance modInstance;
+
+    private String buildingPath = "Spielfeld\\char.g3dj";
 
 
-    public Spielfigur(int id, String name, int kontostand, ArrayList<Grundstueck> meineGrundstuecke, int anzahlBahnhoefe) {
+
+    public Spielfigur(int id, String name, int kontostand, ArrayList<Grundstueck> meineGrundstuecke, int anzahlBahnhoefe, Color color) {
         this.id = id;
         this.name = name;
         this.Kontostand = kontostand;
         this.meineGrundstuecke = meineGrundstuecke;
         this.anzahlBahnhoefe = anzahlBahnhoefe;
         this.position = 0;
+        this.color = color;
+        //createSpielfigur();
     }
+
+
+    public void createSpielfigur() {
+        Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
+        modInstance = new ModelInstance(model);
+        modInstance.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
+        Vector3 fieldPos = new Vector3(0, 5, 0);
+        modInstance.transform.translate(fieldPos);
+    }
+
+    public Color getColor() { return color; }
 
     public int getId() {
         return id;
@@ -62,11 +88,9 @@ public class Spielfigur {
         this.anzahlBahnhoefe = anzahlBahnhoefe;
     }
 
-    public void increaseMoney(int betrag) {
+    public void changeMoney(int betrag) {
         setKontostand(getKontostand() + betrag);
     }
-
-    public void decreaseMoney(int betrag){setKontostand(getKontostand() - betrag);}
 
     public int getPosition() {
         return position;
@@ -76,11 +100,12 @@ public class Spielfigur {
         this.position = position;
     }
 
+
     public void move(int augenzahl) {
-        setPosition((getPosition() + augenzahl) % 40);
         if((getPosition() + augenzahl) > 39){
             roundmoney();
         }
+        setPosition((getPosition() + augenzahl) % 40);
     }
 
     public void roundmoney() {
@@ -115,43 +140,43 @@ public class Spielfigur {
                 break;
             case 6:
                 kartenbild = new Texture("images/KartenImages/Karte6.png");
-                decreaseMoney(100);
+                changeMoney(-100);
                 break;
             case 7:
                 kartenbild = new Texture("images/KartenImages/Karte7.png");
-                decreaseMoney(100);
+                changeMoney(-100);
                 break;
             case 8:
                 kartenbild = new Texture("images/KartenImages/Karte8.png");
-                decreaseMoney(20);
+                changeMoney(-20);
                 break;
             case 9:
                 kartenbild = new Texture("images/KartenImages/Karte9.png");
-                decreaseMoney(40);
+                changeMoney(-40);
                 break;
             case 10:
                 kartenbild = new Texture("images/KartenImages/Karte10.png");
-                decreaseMoney(200);
+                changeMoney(-200);
                 break;
             case 11:
                 kartenbild = new Texture("images/KartenImages/Karte11.png");
-                increaseMoney(250);
+                changeMoney(250);
                 break;
             case 12:
                 kartenbild = new Texture("images/KartenImages/Karte12.png");
-                increaseMoney(100);
+                changeMoney(100);
                 break;
             case 13:
                 kartenbild = new Texture("images/KartenImages/Karte13.png");
-                increaseMoney(100);
+                changeMoney(100);
                 break;
             case 14:
                 kartenbild = new Texture("images/KartenImages/Karte14.png");
-                increaseMoney(100);
+                changeMoney(100);
                 break;
             case 15:
                 kartenbild = new Texture("images/KartenImages/Karte15.png");
-                increaseMoney(500);
+                changeMoney(500);
                 break;
             case 16:
                 kartenbild = new Texture("images/KartenImages/Karte16.png");
@@ -175,23 +200,23 @@ public class Spielfigur {
                 break;
             case 21:
                 kartenbild = new Texture("images/KartenImages/Karte21.png");
-                increaseMoney(220);
+                changeMoney(220);
                 break;
             case 22:
                 kartenbild = new Texture("images/KartenImages/Karte22.png");
-                increaseMoney(170);
+                changeMoney(170);
                 break;
             case 23:
                 kartenbild = new Texture("images/KartenImages/Karte23.png");
-                increaseMoney(550);
+                changeMoney(550);
                 break;
             case 24:
                 kartenbild = new Texture("images/KartenImages/Karte24.png");
-                increaseMoney(350);
+                changeMoney(350);
                 break;
             case 25:
                 kartenbild = new Texture("images/KartenImages/Karte25.png");
-                increaseMoney(200);
+                changeMoney(200);
                 break;
             case 26:
                 kartenbild = new Texture("images/KartenImages/Karte26.png");
@@ -199,7 +224,7 @@ public class Spielfigur {
                 break;
             case 27:
                 kartenbild = new Texture("images/KartenImages/Karte27.png");
-                increaseMoney(300);
+                changeMoney(300);
                 break;
             case 28:
                 kartenbild = new Texture("images/KartenImages/Karte28.png");
@@ -207,35 +232,35 @@ public class Spielfigur {
                 break;
             case 29:
                 kartenbild = new Texture("images/KartenImages/Karte29.png");
-                increaseMoney(510);
+                changeMoney(510);
                 break;
             case 30:
                 kartenbild = new Texture("images/KartenImages/Karte30.png");
-                increaseMoney(350);
+                changeMoney(350);
                 break;
             case 31:
                 kartenbild = new Texture("images/KartenImages/Karte31.png");
-                increaseMoney(222);
+                changeMoney(222);
                 break;
             case 32:
                 kartenbild = new Texture("images/KartenImages/Karte32.png");
-                decreaseMoney(250);
+                changeMoney(-250);
                 break;
             case 33:
                 kartenbild = new Texture("images/KartenImages/Karte33.png");
-                decreaseMoney(100);
+                changeMoney(-100);
                 break;
             case 34:
                 kartenbild = new Texture("images/KartenImages/Karte34.png");
-                decreaseMoney(250);
+                changeMoney(-250);
                 break;
             case 35:
                 kartenbild = new Texture("images/KartenImages/Karte35.png");
-                decreaseMoney(200);
+                changeMoney(-200);
                 break;
             case 36:
                 kartenbild = new Texture("images/KartenImages/Karte36.png");
-                decreaseMoney(100);
+                changeMoney(-100);
                 break;
             default:
                 break;

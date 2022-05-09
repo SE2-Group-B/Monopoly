@@ -1,30 +1,27 @@
 package se2.groupb.monopoly;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.environment.PointLight;
-import com.badlogic.gdx.graphics.g3d.environment.SpotLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.ArrayList;
+
 
 public class CreateGameField extends ScreenAdapter  {
 
+    Monopoly monopoly;
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
@@ -33,11 +30,15 @@ public class CreateGameField extends ScreenAdapter  {
 
     private String buildingPath = "Spielfeld\\field.g3dj";
 
-//    private
+    private Spielfigur spielfigur1;
+    private Spielfigur spielfigur2;
+    private Spielfigur spielfigur3;
+    private Spielfigur spielfigur4;
+
 
     private CameraInputController cameraController;
 
-
+    ArrayList<Grundstueck> arrayList = new ArrayList();
 
 
     Model[] modelLeft = new Model[40];
@@ -92,7 +93,7 @@ public class CreateGameField extends ScreenAdapter  {
     }
 
 
-    public CreateGameField() {
+    public CreateGameField(Monopoly monopoly) {
 
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 //        Gdx.app.debug("GDSAFA", "Hello");
@@ -122,11 +123,17 @@ public class CreateGameField extends ScreenAdapter  {
 //        camera.near = -10000f;
         camera.far = 500000f;
         createModels();
+
+        spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        spielfigur1.createSpielfigur();
+        spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList, 0, Color.RED);
+        spielfigur2.createSpielfigur();
+        spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        spielfigur3.createSpielfigur();
+        spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList, 0, Color.GREEN);
+        spielfigur4.createSpielfigur();
+
         camera.update();
-
-
-
-
 
         cameraController = new CameraInputController(camera);
         Gdx.input.setInputProcessor(cameraController);
@@ -146,9 +153,10 @@ public class CreateGameField extends ScreenAdapter  {
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
         modelBatch.begin(camera);
 
-//        modelBatch.render(il1, environment);
-//        modelBatch.render(il2, environment);
-
+        modelBatch.render(spielfigur1.modInstance, environment);
+        modelBatch.render(spielfigur2.modInstance, environment);
+        modelBatch.render(spielfigur3.modInstance, environment);
+        modelBatch.render(spielfigur4.modInstance, environment);
 
         renderModels();
 
