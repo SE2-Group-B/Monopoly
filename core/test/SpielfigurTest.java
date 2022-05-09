@@ -26,6 +26,7 @@ public class SpielfigurTest {
     Kartenstapel gemeinschaftskarten;
 
     /*
+
     @Before
     public void init(){
         meineGrundstuecke=new ArrayList<>();
@@ -125,6 +126,7 @@ public class SpielfigurTest {
         Assert.assertNotNull(rot);
     }
 
+
     @Test
     public void testGetId(){
         Assert.assertEquals(rot.getId(), 1);
@@ -218,7 +220,7 @@ public class SpielfigurTest {
         rot.move(5);
         Assert.assertEquals(rot.getPosition(),3);
     }
-    /*
+/*
     @Test
     public void testZieheKarteCase1(){
         Texture kartenbild=new Texture("images/KartenImages/Karte1.png");
