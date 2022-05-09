@@ -30,7 +30,11 @@ public class CreateGameField extends ScreenAdapter  {
 
     private String buildingPath = "Spielfeld\\field.g3dj";
 
-    private Spielfigur spielfigur;
+    private Spielfigur spielfigur1;
+    private Spielfigur spielfigur2;
+    private Spielfigur spielfigur3;
+    private Spielfigur spielfigur4;
+
 
     private CameraInputController cameraController;
 
@@ -119,12 +123,13 @@ public class CreateGameField extends ScreenAdapter  {
 //        camera.near = -10000f;
         camera.far = 500000f;
         createModels();
-        spielfigur = new Spielfigur(1, "Bernd", 0, arrayList, 3, Color.BLUE);
+
+        spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList, 0, Color.RED);
+        spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList, 0, Color.GREEN);
+
         camera.update();
-
-
-
-
 
         cameraController = new CameraInputController(camera);
         Gdx.input.setInputProcessor(cameraController);
@@ -144,7 +149,10 @@ public class CreateGameField extends ScreenAdapter  {
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
         modelBatch.begin(camera);
 
-        modelBatch.render(spielfigur.modInstance, environment);
+        modelBatch.render(spielfigur1.modInstance, environment);
+        modelBatch.render(spielfigur2.modInstance, environment);
+        modelBatch.render(spielfigur3.modInstance, environment);
+        modelBatch.render(spielfigur4.modInstance, environment);
 
         renderModels();
 
