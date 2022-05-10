@@ -73,17 +73,12 @@ public class Strasse extends Grundstueck{
 
     public void verkauft() {if(isVerkauft() == false) {setVerkauft(true);}else{errormsg();}}
 
-    //number weg - man kann immer nur 1 Haus kaufen,
-    //Es gibt max nur 2 Häuser
-    //Haus bezahlen?
-    //increasemiete aufrufen
-    public void buyhouse(int number) {if(getHaus() < 4){setHaus(number);}else{errormsg();}}
 
-    //Nur 2 Häuser
+    //Haus bezahlen?
+    public void buyhouse() {if(getHaus() < 2){setHaus(getHaus()+1); increasemiete();}else{errormsg();}}
+
     //bezahlen?
-    //Häuser 0 setzten
-    //increasemiete aufrufen
-    public void buyhotel() {if(getHaus() == 4 && getHotel() == 0) {setHotel(1);}else{errormsg();}}
+    public void buyhotel() {if(getHaus() == 2 && getHotel() == 0) {setHotel(1); setHaus(0); increasemiete();}else{errormsg();}}
 
     public boolean errormsg() {return false;}
     //Fehlermeldung als eigenes Fenster(Screen) im nächsten Sprint einfügen

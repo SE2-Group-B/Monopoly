@@ -20,6 +20,7 @@ public class MainMenuScreen implements Screen {
     private Texture sensorButton;
     private Texture kartenButton;
     private Texture gameFieldButton;
+    private Texture BuyButton;
 
     private int buttonSizeX;
     private int buttonSizeY;
@@ -44,7 +45,7 @@ public class MainMenuScreen implements Screen {
         kartenButton = new Texture("images/MenuButtons/switch_view.png");
         sensorButton = new Texture("images/MenuButtons/switch_view.png");
         gameFieldButton=new Texture("images/MenuButtons/switch_view.png");
-
+        BuyButton = new Texture("images/MenuButtons/switch_view.png");
 
         buttonSizeX = Gdx.graphics.getWidth() / 3;
         buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
@@ -88,6 +89,9 @@ public class MainMenuScreen implements Screen {
         //Spielfeld Button
         monopoly.batch.draw(gameFieldButton, xPosButtons - 700, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX/2, buttonSizeY/2);
         //-500
+
+        //Kaufbutton - erstmal zum Testen
+        monopoly.batch.draw(kartenButton, xPosButtons + 1200, yPosInitialButtons + 3f * yPosOffsetButtons, buttonSizeX/2, buttonSizeY/2);
 
         /**
          * Pressing the Host Game button leads to HostGameScreen
@@ -143,6 +147,17 @@ public class MainMenuScreen implements Screen {
 
         }
 
+        /**
+         * Pressing the Sensor button leads to the Sensor Screen
+         */
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons+1000, yPosInitialButtons, buttonSizeX, buttonSizeY, 3 * yPosOffsetButtons)
+                && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
+
+            this.dispose();
+            monopoly.setScreen(new BuyScreen(monopoly));
+
+        }
+
 
 
     /**
@@ -187,5 +202,10 @@ public class MainMenuScreen implements Screen {
 
     private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
         return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
+    }
+
+    // purely for unit testing private static method isCorrectPosition()
+    public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
+        return isCorrectPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
     }
 }

@@ -39,6 +39,7 @@ public class Spielfigur {
         this.color = color;
     }
 
+
     public void createSpielfigur() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);

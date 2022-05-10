@@ -24,6 +24,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Random;
 
+import se2.groupb.monopoly.screens.InputBackProcessor;
+
 
 public class CreateGameField extends ScreenAdapter {
 
@@ -37,9 +39,17 @@ public class CreateGameField extends ScreenAdapter {
 
     private String buildingPath = "Spielfeld\\field.g3dj";
 
+
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
 
-    private Spielfigur spielfigur;
+
+
+    private Spielfigur spielfigur1;
+    private Spielfigur spielfigur2;
+    private Spielfigur spielfigur3;
+    private Spielfigur spielfigur4;
+
+
 
     private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
@@ -167,7 +177,6 @@ public class CreateGameField extends ScreenAdapter {
 
 
     public CreateGameField(Monopoly monopoly) {
-
         spriteBatch = new SpriteBatch();
          buttonSizeX = Gdx.graphics.getWidth() / 3;
          buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
@@ -203,8 +212,17 @@ public class CreateGameField extends ScreenAdapter {
 //        camera.near = -10000f;
         camera.far = 500000f;
         createModels();
-        spielfigur = new Spielfigur(1, "Bernd", 0, arrayList, 3, Color.BLUE);
-        spielfigur.createSpielfigur();
+
+
+        spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        spielfigur1.createSpielfigur();
+        spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList, 0, Color.RED);
+        spielfigur2.createSpielfigur();
+        spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        spielfigur3.createSpielfigur();
+        spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList, 0, Color.GREEN);
+        spielfigur4.createSpielfigur();
+
         camera.update();
 
 
@@ -230,7 +248,10 @@ public class CreateGameField extends ScreenAdapter {
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
 
-        modelBatch.render(spielfigur.modInstance, environment);
+        modelBatch.render(spielfigur1.modInstance, environment);
+        modelBatch.render(spielfigur2.modInstance, environment);
+        modelBatch.render(spielfigur3.modInstance, environment);
+        modelBatch.render(spielfigur4.modInstance, environment);
 
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
@@ -241,7 +262,9 @@ public class CreateGameField extends ScreenAdapter {
             }
             currentPos+=pos;
             currentPos %= 40;
-            spielfigur.move(positions[currentPos]);
+//            float posA = positions[currentPos].x;
+//            positions[currentPos].x = posA + 4;
+            spielfigur1.move(positions[currentPos]);
 
         }
 
