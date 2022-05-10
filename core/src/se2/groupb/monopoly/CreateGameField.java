@@ -40,15 +40,13 @@ public class CreateGameField extends ScreenAdapter {
     private String buildingPath = "Spielfeld\\field.g3dj";
 
 
+
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
-
-
 
     private Spielfigur spielfigur1;
     private Spielfigur spielfigur2;
     private Spielfigur spielfigur3;
     private Spielfigur spielfigur4;
-
 
 
     private CameraInputController cameraController;
@@ -223,8 +221,8 @@ public class CreateGameField extends ScreenAdapter {
         spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList, 0, Color.GREEN);
         spielfigur4.createSpielfigur();
 
-        camera.update();
 
+        camera.update();
 
         cameraController = new CameraInputController(camera);
         Gdx.input.setInputProcessor(cameraController);
@@ -253,6 +251,7 @@ public class CreateGameField extends ScreenAdapter {
         modelBatch.render(spielfigur3.modInstance, environment);
         modelBatch.render(spielfigur4.modInstance, environment);
 
+
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
@@ -267,6 +266,7 @@ public class CreateGameField extends ScreenAdapter {
             spielfigur1.move(positions[currentPos]);
 
         }
+
 
         renderModels();
         drawDice(dice1, dice2);
