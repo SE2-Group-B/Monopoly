@@ -126,7 +126,9 @@ public class SensorScreen implements Screen {
         }
         monopoly.batch.end();
     }
+
     public int[] roll(){
+
         int firstDice = random.nextInt(6) + 1;
         int secondDice = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice ==0) {
