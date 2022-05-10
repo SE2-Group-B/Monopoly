@@ -13,10 +13,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import se2.groupb.monopoly.screens.MainMenuScreen;
 import se2.groupb.monopoly.screens.MonopolyScreen;
+import se2.groupb.monopoly.screens.SensorScreen;
 
 
 public class Monopoly extends Game {
     public SpriteBatch batch;
+    GameLogic logicArray;
+    Grundstueck[] arr;
+    SensorScreen sensors;
+    int[] diceRoll;
 
 
 
@@ -24,6 +29,7 @@ public class Monopoly extends Game {
     public void create() {
         batch = new SpriteBatch();
         setScreen(new MainMenuScreen(this));
+
     }
 
 //	public static Monopoly INSTANCE;

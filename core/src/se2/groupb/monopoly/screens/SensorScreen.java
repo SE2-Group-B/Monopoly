@@ -127,7 +127,8 @@ public class SensorScreen implements Screen {
         monopoly.batch.end();
     }
 
-    private void roll(){
+    public int[] roll(){
+
         int firstDice = random.nextInt(6) + 1;
         int secondDice = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice ==0) {
@@ -160,6 +161,7 @@ public class SensorScreen implements Screen {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         }
         cheatDice =0;
+        return new int[] {firstDice, secondDice};
     }
 
     private Texture setDice(int value) {
