@@ -208,18 +208,18 @@ public class SpielfigurTest {
         Assert.assertEquals(rot.getPosition(),12);
     }
 
-    @Test
-    public void testMove(){
-        rot.move(12);
-        Assert.assertEquals(rot.getPosition(),12);
-    }
-
-    @Test
-    public void testMoveUeberLos(){
-        rot.setPosition(38);
-        rot.move(5);
-        Assert.assertEquals(rot.getPosition(),3);
-    }
+//    @Test
+//    public void testMove(){
+//        rot.move(12);
+//        Assert.assertEquals(rot.getPosition(),12);
+//    }
+//
+//    @Test
+//    public void testMoveUeberLos(){
+//        rot.setPosition(38);
+//        rot.move(5);
+//        Assert.assertEquals(rot.getPosition(),3);
+//    }
 /*
     @Test
     public void testZieheKarteCase1(){
