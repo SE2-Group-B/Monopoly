@@ -23,6 +23,8 @@ public class BuyScreen implements Screen {
     private int callOnce = 0;
     private boolean buttonPressed = false;
 
+    private Integer money = 8000;
+
 
 
     public BuyScreen(Monopoly monopoly) {
@@ -49,7 +51,7 @@ public class BuyScreen implements Screen {
 
         font = new BitmapFont();
         font.getData().setScale(3.5f);
-        waitingText = new GlyphLayout(font, "You bought that building");
+        waitingText = new GlyphLayout(font, money.toString());
     }
 
     @Override

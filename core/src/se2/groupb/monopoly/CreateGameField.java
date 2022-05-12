@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -31,9 +32,11 @@ public class CreateGameField extends ScreenAdapter {
 
     Monopoly monopoly;
     SpriteBatch spriteBatch;
+    SpriteBatch spriteBatch2;
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
+    private BitmapFont moneyfont;
 
     private Field[] fields = new Field[40];
 
@@ -193,7 +196,6 @@ public class CreateGameField extends ScreenAdapter {
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
-
         modelBatch = new ModelBatch();
 
 
@@ -235,6 +237,9 @@ public class CreateGameField extends ScreenAdapter {
         float userPosX = (float) Gdx.input.getX();
         float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
 
+        spriteBatch2 = new SpriteBatch();
+        moneyfont = new BitmapFont();
+
         ScreenUtils.clear(0, 0, 0, 1);
         cameraController.update();
 
@@ -243,6 +248,7 @@ public class CreateGameField extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         modelBatch.begin(camera);
         spriteBatch.begin();
+
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
 
@@ -267,9 +273,17 @@ public class CreateGameField extends ScreenAdapter {
 
         }
 
-
         renderModels();
         drawDice(dice1, dice2);
+
+        moneyfont.setColor(Color.WHITE);
+        moneyfont.getData().setScale(4,4);
+        //Gdx.graphics.getWidth() = 2872;
+        //Gdx.graphics.getHeight() = 1440;
+        moneyfont.draw(spriteBatch, spielfigur1.getName() + ": " + String.valueOf(spielfigur1.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-100);
+        moneyfont.draw(spriteBatch, spielfigur2.getName() + ": " +String.valueOf(spielfigur2.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-150);
+        moneyfont.draw(spriteBatch, spielfigur3.getName()+ ": " + String.valueOf(spielfigur3.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-200);
+        moneyfont.draw(spriteBatch, spielfigur4.getName() + ": " +String.valueOf(spielfigur4.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-250);
 
         spriteBatch.end();
         modelBatch.end();
