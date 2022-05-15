@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import se2.groupb.monopoly.Monopoly;
 
-public class KartenTestScreen implements Screen {
-    Monopoly monopoly;
+public class KartenTestScreen extends ScreenAdapter {
     private Texture kartenHintergrund;
 
     /*public Texture getKartenHintergrund() {
@@ -20,7 +19,7 @@ public class KartenTestScreen implements Screen {
     }*/
 
     public KartenTestScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
         kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
     }
 

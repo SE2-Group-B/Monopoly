@@ -9,8 +9,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 import se2.groupb.monopoly.Monopoly;
 
-public class BuyScreen implements Screen {
-    Monopoly monopoly;
+public class BuyScreen extends ScreenAdapter {
     private BitmapFont font;
     private GlyphLayout waitingText;
 
@@ -26,7 +25,7 @@ public class BuyScreen implements Screen {
 
 
     public BuyScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -105,9 +104,4 @@ public class BuyScreen implements Screen {
 
     }
 
-    /****************** Methods ******************/
-
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
 }

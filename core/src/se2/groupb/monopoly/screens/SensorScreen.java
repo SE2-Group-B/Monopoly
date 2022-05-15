@@ -9,9 +9,8 @@ import java.util.Random;
 import se2.groupb.monopoly.Monopoly;
 
 
-public class SensorScreen implements Screen {
+public class SensorScreen extends ScreenAdapter {
 
-    private Monopoly monopoly;
     private boolean AccelerometerActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
 
     private float xAccel;
@@ -40,7 +39,7 @@ public class SensorScreen implements Screen {
 
 
     public SensorScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -231,7 +230,4 @@ public class SensorScreen implements Screen {
 
     }
 
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
 }

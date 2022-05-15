@@ -2,15 +2,11 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-
 
 import java.util.ArrayList;
 
@@ -23,17 +19,16 @@ import se2.groupb.monopoly.Spielfigur;
 import se2.groupb.monopoly.Strasse;
 import se2.groupb.monopoly.Zahlfeld;
 
-public class MonopolyScreen implements Screen {
+public class MonopolyScreen extends ScreenAdapter {
     Texture img;
     Music music;
     private BitmapFont menuFont;
     private BitmapFont money;
-    private Monopoly monopoly;
     private Grundstueck[] spielfeld;
     private Texture kartenHintergrund;
 
     public MonopolyScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override

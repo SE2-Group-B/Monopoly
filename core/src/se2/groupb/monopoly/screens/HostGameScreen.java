@@ -7,13 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
+import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.network.ServerFoundation;
 
-public class HostGameScreen implements Screen {
-
-    Monopoly monopoly;
+public class HostGameScreen extends ScreenAdapter {
 
     InputBackProcessor inputProcessor;
 
@@ -36,7 +35,7 @@ public class HostGameScreen implements Screen {
     private GlyphLayout connectedText;
 
     public HostGameScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -102,8 +101,6 @@ public class HostGameScreen implements Screen {
 
                 // send a message to server
                 client.getClient().sendUDP("Ich will ein Spiel hosten");
-
-
             }
         }
 
@@ -134,7 +131,8 @@ public class HostGameScreen implements Screen {
                  * START THE Game
                  * set the screen
                  */
-                monopoly.setScreen(new SensorScreen(monopoly));
+                inputProcessor.backDoesNothingProcessor();
+                monopoly.setScreen(new CreateGameField(monopoly));
             }
 
         }
@@ -165,17 +163,6 @@ public class HostGameScreen implements Screen {
     @Override
     public void dispose() {
 
-    }
-
-    /****************** Methods ******************/
-
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
-
-    // purely for unit testing private static method isCorrectPosition()
-    public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
-        return isCorrectPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
     }
 
 }

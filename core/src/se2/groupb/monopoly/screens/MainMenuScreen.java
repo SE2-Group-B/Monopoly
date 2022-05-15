@@ -10,9 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends ScreenAdapter {
 
-    private Monopoly monopoly;
 
     private Texture exitButton;
     private Texture playButton;
@@ -34,7 +33,7 @@ public class MainMenuScreen implements Screen {
      * setup main menu with Monopoly game
      */
     public MainMenuScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -198,14 +197,5 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
     }
 
-    /****************** Methods ******************/
 
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
-
-    // purely for unit testing private static method isCorrectPosition()
-    public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
-        return isCorrectPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
-    }
 }
