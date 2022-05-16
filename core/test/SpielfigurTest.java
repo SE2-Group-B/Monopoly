@@ -123,7 +123,8 @@ public class SpielfigurTest {
 
     @Test
     public void testSpielfigur(){
-        Assert.assertNotNull(rot);
+        Spielfigur testFigur=new Spielfigur(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
+        Assert.assertNotNull(testFigur);
     }
 
 
