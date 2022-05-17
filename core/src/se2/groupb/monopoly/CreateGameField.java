@@ -87,7 +87,7 @@ public class CreateGameField extends ScreenAdapter {
 
     private void createFieldArray() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
-        //Left Side of Board
+        //Bot Side of Board
         //Color.Cyan = Corner -> debugging
         fields[0] = new Field(model, Color.CYAN, Type.CORNER);
         fields[1] = new Field(model, Color.BROWN, Type.BUILDING);
@@ -100,17 +100,17 @@ public class CreateGameField extends ScreenAdapter {
         fields[8] = new Field(model, Color.WHITE, Type.BUILDING);
         fields[9] = new Field(model, Color.WHITE, Type.BUILDING);
         fields[10] = new Field(model, Color.CYAN, Type.CORNER);
-        // Top Side of Board
+        // Left Side of Board
         fields[11] = new Field(model, Color.PURPLE, Type.BUILDING);
         fields[12] = new Field(model, null, Type.SPECIAL);
         fields[13] = new Field(model, Color.PURPLE, Type.BUILDING);
         fields[14] = new Field(model, Color.PURPLE, Type.BUILDING);
         fields[15] = new Field(model, null, Type.SPECIAL);
-        fields[16] = new Field(model, Color.YELLOW, Type.BUILDING);
+        fields[16] = new Field(model, Color.ORANGE, Type.BUILDING);
         fields[17] = new Field(model, null, Type.SPECIAL);
-        fields[18] = new Field(model, Color.YELLOW, Type.BUILDING);
-        fields[19] = new Field(model, Color.YELLOW, Type.BUILDING);
-        // Right Side of Board
+        fields[18] = new Field(model, Color.ORANGE, Type.BUILDING);
+        fields[19] = new Field(model, Color.ORANGE, Type.BUILDING);
+        // Top Side of Board
         fields[20] = new Field(model, Color.CYAN, Type.CORNER);
         fields[21] = new Field(model, Color.RED, Type.BUILDING);
         fields[22] = new Field(model, null, Type.SPECIAL);
@@ -122,7 +122,7 @@ public class CreateGameField extends ScreenAdapter {
         fields[28] = new Field(model, null, Type.SPECIAL);
         fields[29] = new Field(model, Color.YELLOW, Type.BUILDING);
         fields[30] = new Field(model, Color.CYAN, Type.CORNER);
-        // Bot Side of Board
+        // Right Side of Board
         fields[31] = new Field(model, Color.GREEN, Type.BUILDING);
         fields[32] = new Field(model, Color.GREEN, Type.BUILDING);
         fields[33] = new Field(model, null, Type.SPECIAL);
