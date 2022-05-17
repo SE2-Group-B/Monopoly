@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
@@ -32,6 +33,8 @@ public class HostGameScreen extends GameScreenAdapter {
     private BitmapFont font;
     private GlyphLayout waitingText;
     private GlyphLayout connectedText;
+
+    private ShapeRenderer shapeRenderer;;
 
     public HostGameScreen(Monopoly monopoly) {
         super(monopoly);
@@ -61,6 +64,8 @@ public class HostGameScreen extends GameScreenAdapter {
         waitingText = new GlyphLayout(font, "Waiting for other Players");
         connectedText = new GlyphLayout(font, "Connected to Server");
 
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setAutoShapeType(true);
     }
 
     @Override
@@ -119,6 +124,14 @@ public class HostGameScreen extends GameScreenAdapter {
                 client.getClient().sendUDP("HOST");
 
                 buttonPressed = false;
+                // draw rectangle above old text since it does not vanish when loading the game
+                monopoly.batch.end();
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0.2f,0.2f,0.2f,1);
+                shapeRenderer.rect((float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * buttonSizeY - buttonSizeY/2), 600, 100);
+                shapeRenderer.end();
+                monopoly.batch.begin();
+                // draw new text
                 font.draw(monopoly.batch, waitingText,
                         (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * buttonSizeY));
 

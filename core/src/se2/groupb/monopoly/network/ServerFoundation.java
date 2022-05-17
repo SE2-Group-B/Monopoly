@@ -37,7 +37,7 @@ public class ServerFoundation {
 
                     if (object.equals("HOST")) {
                         // start game when 4 Players are connected
-                        if (server.getConnections().length == 4) {
+                        if (server.getConnections().length == 1) {
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");
