@@ -4,11 +4,11 @@ import com.badlogic.gdx.Screen;
 
 import se2.groupb.monopoly.Monopoly;
 
-public abstract class ScreenAdapter implements Screen {
+public abstract class GameScreenAdapter implements Screen {
 
     Monopoly monopoly;
 
-    public ScreenAdapter(Monopoly monopoly) {
+    public GameScreenAdapter(Monopoly monopoly) {
         this.monopoly = monopoly;
     }
 

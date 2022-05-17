@@ -2,7 +2,6 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -10,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 
-public class MainMenuScreen extends ScreenAdapter {
+public class MainMenuScreen extends GameScreenAdapter {
 
 
     private Texture exitButton;

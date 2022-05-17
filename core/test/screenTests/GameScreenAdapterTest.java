@@ -8,17 +8,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se2.groupb.monopoly.Monopoly;
-import se2.groupb.monopoly.screens.ScreenAdapter;
+import se2.groupb.monopoly.screens.GameScreenAdapter;
 
-public class ScreenAdapterTest {
+public class GameScreenAdapterTest {
     Monopoly monopoly;
-    ScreenAdapter screen;
+    GameScreenAdapter screen;
 
     @Before
     public void setUp() {
 
         monopoly = new Monopoly();
-        screen = new ScreenAdapter(monopoly) {
+        screen = new GameScreenAdapter(monopoly) {
 
 
             @Override

@@ -19,7 +19,7 @@ import se2.groupb.monopoly.Spielfigur;
 import se2.groupb.monopoly.Strasse;
 import se2.groupb.monopoly.Zahlfeld;
 
-public class MonopolyScreen extends ScreenAdapter {
+public class MonopolyScreen extends GameScreenAdapter {
     Texture img;
     Music music;
     private BitmapFont menuFont;
