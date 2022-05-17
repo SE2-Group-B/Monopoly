@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -31,9 +32,11 @@ public class CreateGameField extends ScreenAdapter {
 
     Monopoly monopoly;
     SpriteBatch spriteBatch;
+    SpriteBatch spriteBatch2;
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
+    private BitmapFont moneyfont;
 
     private Field[] fields = new Field[40];
 
@@ -42,6 +45,7 @@ public class CreateGameField extends ScreenAdapter {
 
 
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
+    private Texture BuyButton = new Texture("images/MenuButtons/buy_building.png");
 
     private Spielfigur spielfigur1;
     private Spielfigur spielfigur2;
@@ -52,7 +56,10 @@ public class CreateGameField extends ScreenAdapter {
     private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
 
-    ArrayList<Grundstueck> arrayList = new ArrayList();
+    ArrayList<Grundstueck> arrayList1 = new ArrayList();
+    ArrayList<Grundstueck> arrayList2 = new ArrayList();
+    ArrayList<Grundstueck> arrayList3 = new ArrayList();
+    ArrayList<Grundstueck> arrayList4 = new ArrayList();
 
 
     private int buttonSizeX;
@@ -193,7 +200,6 @@ public class CreateGameField extends ScreenAdapter {
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
-
         modelBatch = new ModelBatch();
 
 
@@ -212,13 +218,13 @@ public class CreateGameField extends ScreenAdapter {
         createModels();
 
 
-        spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList1, 0, Color.BLUE);
         spielfigur1.createSpielfigur();
-        spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList, 0, Color.RED);
+        spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList2, 0, Color.RED);
         spielfigur2.createSpielfigur();
-        spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
         spielfigur3.createSpielfigur();
-        spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList, 0, Color.GREEN);
+        spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList4, 0, Color.GREEN);
         spielfigur4.createSpielfigur();
 
 
@@ -234,6 +240,10 @@ public class CreateGameField extends ScreenAdapter {
 
         float userPosX = (float) Gdx.input.getX();
         float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
+        int count = 0;
+
+        spriteBatch2 = new SpriteBatch();
+        moneyfont = new BitmapFont();
 
         ScreenUtils.clear(0, 0, 0, 1);
         cameraController.update();
@@ -243,6 +253,7 @@ public class CreateGameField extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         modelBatch.begin(camera);
         spriteBatch.begin();
+
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
 
@@ -255,21 +266,40 @@ public class CreateGameField extends ScreenAdapter {
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
-            int pos = roll();
-            for (int i = 0; i < positions.length; i++) {
-                System.out.println(i + " " + positions[i]);
-            }
-            currentPos+=pos;
-            currentPos %= 40;
+            if(count <10) {
+                int pos = roll();
+                for (int i = 0; i < positions.length; i++) {
+                    System.out.println(i + " " + positions[i]);
+                }
+                currentPos += pos;
+                currentPos %= 40;
 //            float posA = positions[currentPos].x;
 //            positions[currentPos].x = posA + 4;
-            spielfigur1.move(positions[currentPos]);
-
+                spielfigur1.move(positions[currentPos]);
+                count++;
+            }else{
+                //Some end-event
+            }
         }
-
 
         renderModels();
         drawDice(dice1, dice2);
+
+        moneyfont.setColor(Color.WHITE);
+        moneyfont.getData().setScale(4,4);
+        moneyfont.draw(spriteBatch, spielfigur1.getName() + ": " + String.valueOf(spielfigur1.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-100);
+        moneyfont.draw(spriteBatch, spielfigur2.getName() + ": " +String.valueOf(spielfigur2.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-150);
+        moneyfont.draw(spriteBatch, spielfigur3.getName()+ ": " + String.valueOf(spielfigur3.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-200);
+        moneyfont.draw(spriteBatch, spielfigur4.getName() + ": " +String.valueOf(spielfigur4.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-250);
+
+        spriteBatch.draw(BuyButton, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2);
+        if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2, 0 * yPosOffsetButtons)
+                && Gdx.input.justTouched()) {
+            int pos = spielfigur1.getPosition();
+
+            //fields[pos]
+            //spielfigur1.setMeineGrundstuecke(arrayList1.add());
+        }
 
         spriteBatch.end();
         modelBatch.end();
