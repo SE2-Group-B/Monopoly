@@ -307,8 +307,8 @@ public class CreateGameField extends ScreenAdapter {
         /**
          * Pressing the Report Cheat Button
          */
-        spriteBatch.draw(reportCheat, xPosButtons+100, yPosInitialButtons - 100, buttonSizeX, buttonSizeY);
-        if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-100, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
+        spriteBatch.draw(reportCheat, xPosButtons+100, yPosInitialButtons+150, buttonSizeX, buttonSizeY);
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons+150, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && !reported) {
             if(cheatActivated){
                 player1.changeMoney(-100);
