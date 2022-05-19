@@ -111,7 +111,8 @@ public class Player {
         if((getPosition() + augenzahl) > 39){
             roundmoney();
         }
-//        setPosition((getPosition() + augenzahl) % 40);
+        setPosition((getPosition() + augenzahl) % 40);
+        
     }
 
     public void roundmoney() {
