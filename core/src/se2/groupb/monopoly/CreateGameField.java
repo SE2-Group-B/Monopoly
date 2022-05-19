@@ -181,6 +181,8 @@ public class CreateGameField extends ScreenAdapter {
         dice1 = new Texture("images/Dice/dice_0.png");
         dice2 = new Texture("images/Dice/dice_0.png");
 
+        Property[] logicalGameField =createLogicalGameField();
+
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 //        Gdx.app.debug("GDSAFA", "Hello");
         createFieldArray();
@@ -458,4 +460,50 @@ public class CreateGameField extends ScreenAdapter {
     private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
         return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
     }
+
+    public Property[] createLogicalGameField(){
+        Property[] spielfeld = new Property[40];
+        spielfeld[0] = new Property("Los");
+        spielfeld[1] = new Street("Badstraße", 40,false, 0, 0, 10,  50);
+        spielfeld[2]=new Property("Gemeinschaftsfeld");
+        spielfeld[3]=new Street("Turmstraße", 80,false, 0, 0, 20,  50);
+        spielfeld[4]=new PenaltyField("Einkommenssteuer", 200);
+        spielfeld[5]=new Trainstation("Südbahnhof", false, 50);
+        spielfeld[6]=new Street("Chausseestraße", 120,false, 0, 0, 30,  50);
+        spielfeld[7]=new Property("Ereignisfeld");
+        spielfeld[8]=new Street("Elisenstraße", 120,false, 0, 0, 30,  50);
+        spielfeld[9]=new Street("Poststraße", 160,false, 0, 0, 35,  50);
+        spielfeld[10]=new Property("Gefängnis");
+        spielfeld[11]=new Street("Seestraße", 200,false, 0, 0, 60,  100);
+        spielfeld[12]=new Property("Ereignisfeld");
+        spielfeld[13]=new Street("Hafenstraße", 200,false, 0, 0, 70,  100);
+        spielfeld[14]=new Street("Neue Straße", 240,false, 0, 0, 80,  100);
+        spielfeld[15]=new Trainstation("Westbahnhof", false, 50);
+        spielfeld[16]=new Street("Münchner Straße", 280,false, 0, 0, 85,  100);
+        spielfeld[17]=new Property("Gemeinschaftsfeld");
+        spielfeld[18]=new Street("Wiener Straße", 280,false, 0, 0, 90,  100);
+        spielfeld[19]=new Street("Berliner Straße", 320,false, 0, 0, 95,  100);
+        spielfeld[20]=new Property("Sofa");
+        spielfeld[21]=new Street("Theater Straße", 360,false, 0, 0, 100,  150);
+        spielfeld[22]=new Property("Ereignisfeld");
+        spielfeld[23]=new Street("Museumsstraße", 360,false, 0, 0, 110,  150);
+        spielfeld[24]=new Street("Opernplatz", 400,false, 0, 0, 115,  150);
+        spielfeld[25]=new Trainstation("Nordbahnhof", false, 50);
+        spielfeld[26]=new Street("Lessingstraße", 440,false, 0, 0, 120,  150);
+        spielfeld[27]=new Street("Schillerstraße", 440,false, 0, 0, 122,  150);
+        spielfeld[28]=new Property("Gemeinschaftsfeld");
+        spielfeld[29]=new Street("Goethestraße", 480,false, 0, 0, 130,  150);
+        spielfeld[30]=new Property("Gehe ins Gefängnis");
+        spielfeld[31]=new Street("Rathausplatz", 520,false, 0, 0, 150,  200);
+        spielfeld[32]=new Street("Hauptstraße", 520,false, 0, 0, 155,  200);
+        spielfeld[33]=new Property("Gemeinschaftsfeld");
+        spielfeld[34]=new Street("Bahnhofstraße", 560,false, 0, 0, 160,  200);
+        spielfeld[35]=new Trainstation("Hauptbahnhof", false, 50);
+        spielfeld[36]=new Property("Ereignisfeld");
+        spielfeld[37]=new Street("Parkstraße", 650,false, 0, 0, 250,  200);
+        spielfeld[38]= new PenaltyField("Zusatzsteuer", 200);
+        spielfeld[39]=new Street("Schlossallee", 800,false, 0, 0, 350,  200);
+        return spielfeld;
+    }
+
 }
