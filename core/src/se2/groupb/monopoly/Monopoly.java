@@ -10,7 +10,6 @@ import se2.groupb.monopoly.screens.SensorScreen;
 
 public class Monopoly extends Game {
     public SpriteBatch batch;
-    GameLogic logicArray;
     Property[] arr;
     SensorScreen sensors;
     int[] diceRoll;
