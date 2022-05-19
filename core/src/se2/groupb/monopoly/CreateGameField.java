@@ -1,6 +1,7 @@
 package se2.groupb.monopoly;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -40,6 +41,7 @@ public class CreateGameField extends ScreenAdapter {
 
 
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
+    private Texture reportCheat = new Texture("images/MenuButtons/report_cheat.png");
     private Texture BuyButton = new Texture("images/MenuButtons/buy_building.png");
 
     private Player player1;
@@ -66,12 +68,20 @@ public class CreateGameField extends ScreenAdapter {
     private float yPosOffsetButtons;
     private float xPosButtons;
 
+    private boolean AccelerometerActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
+
+    private float xAccel;
+    private float yAccel;
+    private float zAccel;
+
     private boolean cheatActivated;
+    private boolean shakeCheatActivated;
     private boolean onTurn;
+    private boolean reported;
 
     private Random random = new Random();
     private int cheatDice;
-
+    private int pachCount;
 
     private Texture dice1;
     private Texture dice2;
@@ -181,6 +191,10 @@ public class CreateGameField extends ScreenAdapter {
         dice1 = new Texture("images/Dice/dice_0.png");
         dice2 = new Texture("images/Dice/dice_0.png");
 
+        onTurn = true;
+        cheatActivated = reported = shakeCheatActivated = false;
+        cheatDice = pachCount = 0;
+
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 //        Gdx.app.debug("GDSAFA", "Hello");
         createFieldArray();
@@ -253,7 +267,7 @@ public class CreateGameField extends ScreenAdapter {
 
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
-                && Gdx.input.justTouched()) {
+                && Gdx.input.justTouched() && onTurn) {
             if(count <10) {
                 int pos = roll();
                 currentPos += pos;
@@ -288,6 +302,36 @@ public class CreateGameField extends ScreenAdapter {
 
             //fields[pos]
             //spielfigur1.setMeineGrundstuecke(arrayList1.add());
+        }
+
+        /**
+         * Pressing the Report Cheat Button
+         */
+        spriteBatch.draw(reportCheat, xPosButtons+100, yPosInitialButtons - 100, buttonSizeX, buttonSizeY);
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-100, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
+                && Gdx.input.justTouched() && !reported) {
+            if(cheatActivated){
+                player1.changeMoney(-100);
+                player2.changeMoney(100);
+            }else{
+                player2.changeMoney(-100);
+            }
+            reported = true;
+        }
+
+        /**
+         * Check if phone is shaking while pressing volume down
+         */
+        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated){
+            if(AccelerometerActive){
+                xAccel = Gdx.input.getAccelerometerX();
+                yAccel = Gdx.input.getAccelerometerY();
+                zAccel = Gdx.input.getAccelerometerZ();
+                if(xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15){
+                    player1.changeMoney(100);
+                    cheatActivated = shakeCheatActivated = true;
+                }
+            }
         }
 
         spriteBatch.end();
@@ -393,32 +437,35 @@ public class CreateGameField extends ScreenAdapter {
 
     public int roll(){
         int firstDice = random.nextInt(6) + 1;
-        int secondDice = random.nextInt(6)+1;
-//        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice ==0) {
-//            secondDice = firstDice;
-//            cheatActivated = true;
-//        }else if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice !=0){
-//            if(cheatDice>=6){
-//                firstDice = secondDice = 6;
-//            }else {
-//                firstDice = secondDice = cheatDice;
-////            }
-//            cheatActivated = true;
-//        }
-//        else {
-//            secondDice = random.nextInt(6)+1;
-//        }
-//        onTurn = false;
+        int secondDice = 0;
+        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice ==0) {
+            secondDice = firstDice;
+            cheatActivated = true;
+        }else if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice !=0){
+            if(cheatDice>=6){
+                firstDice = secondDice = 6;
+            }else {
+                firstDice = secondDice = cheatDice;
+            }
+            cheatActivated = true;
+        }
+        else {
+            secondDice = random.nextInt(6)+1;
+        }
+        onTurn = false;
 
         dice1 = setDice(firstDice);
         dice2 = setDice(secondDice);
         drawDice(dice1, dice2);
 
-//        if (firstDice == secondDice) {
-//            onTurn = true;
-//        }
-//        cheatDice =0;
-//        return new int[] {firstDice, secondDice};
+        if (firstDice == secondDice) {
+            onTurn = true;
+            pachCount++;
+        }
+        if(pachCount > 2){
+            onTurn = false;
+        }
+        cheatDice =0;
         return firstDice+secondDice;
     }
 
@@ -444,7 +491,8 @@ public class CreateGameField extends ScreenAdapter {
                 path="images/Dice/dice_6.png";
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + (int) value);
+                path="images/Dice/dice_0.png";
+                break;
         }
         return new Texture(path);
     }
