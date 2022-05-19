@@ -1,7 +1,14 @@
 package se2.groupb.monopoly.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
 
+import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 
 public abstract class GameScreenAdapter implements Screen {
@@ -43,4 +50,14 @@ public abstract class GameScreenAdapter implements Screen {
     public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
         return isCorrectPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
     }
+
+    protected static ImageButton drawImageButton(String texturePath){
+        Texture buttonTexture = new Texture(Gdx.files.internal(texturePath));
+        TextureRegion buttonTextureRegion = new TextureRegion(buttonTexture);
+        TextureRegionDrawable buttonRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
+        return new ImageButton(buttonRegionDrawable);
+
+    }
+
+    public abstract void switchScreenDelayed(final GameScreenAdapter screen, float delay);
 }

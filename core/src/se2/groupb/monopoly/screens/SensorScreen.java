@@ -229,4 +229,9 @@ public class SensorScreen extends GameScreenAdapter {
 
     }
 
+    @Override
+    public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
+
+    }
+
 }

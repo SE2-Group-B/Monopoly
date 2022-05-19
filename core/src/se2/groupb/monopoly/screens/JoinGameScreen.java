@@ -73,7 +73,7 @@ public class JoinGameScreen extends GameScreenAdapter {
 
             if (callOnce == 1) {
                 // connect client (new client) to the server
-                client = new ClientFoundation(6333,6333);
+                client = new ClientFoundation(6334,6333);
 
                 // new input processor that disconnects server if you go back
                 inputProcessor.JoinMenuServerProcessor(client.getClient());
@@ -128,6 +128,11 @@ public class JoinGameScreen extends GameScreenAdapter {
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }
 

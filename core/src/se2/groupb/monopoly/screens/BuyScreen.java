@@ -103,4 +103,9 @@ public class BuyScreen extends GameScreenAdapter {
 
     }
 
+    @Override
+    public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
+
+    }
+
 }
