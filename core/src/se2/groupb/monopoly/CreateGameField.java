@@ -1,7 +1,6 @@
 package se2.groupb.monopoly;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,12 +19,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Random;
-
-import se2.groupb.monopoly.screens.InputBackProcessor;
 
 
 public class CreateGameField extends ScreenAdapter {
@@ -47,19 +42,22 @@ public class CreateGameField extends ScreenAdapter {
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
     private Texture BuyButton = new Texture("images/MenuButtons/buy_building.png");
 
-    private Spielfigur spielfigur1;
-    private Spielfigur spielfigur2;
-    private Spielfigur spielfigur3;
-    private Spielfigur spielfigur4;
+    private Player player1;
+    private Player player2;
+    private Player player3;
+    private Player player4;
 
 
    // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
 
-    ArrayList<Grundstueck> arrayList1 = new ArrayList();
-    ArrayList<Grundstueck> arrayList2 = new ArrayList();
-    ArrayList<Grundstueck> arrayList3 = new ArrayList();
-    ArrayList<Grundstueck> arrayList4 = new ArrayList();
+
+    ArrayList<Property> arrayList = new ArrayList();
+
+    ArrayList<Property> arrayList1 = new ArrayList();
+    ArrayList<Property> arrayList2 = new ArrayList();
+    ArrayList<Property> arrayList3 = new ArrayList();
+    ArrayList<Property> arrayList4 = new ArrayList();
 
 
     private int buttonSizeX;
@@ -207,15 +205,15 @@ public class CreateGameField extends ScreenAdapter {
         camera.far = 500000f;
         createModels();
 
+        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        player1.createSpielfigur();
+        player2 = new Player(2, "Red", 2000, arrayList, 0, Color.RED);
+        player2.createSpielfigur();
+        player3 = new Player(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        player3.createSpielfigur();
+        player4 = new Player(4, "Green", 2000, arrayList, 0, Color.GREEN);
+        player4.createSpielfigur();
 
-        spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList1, 0, Color.BLUE);
-        spielfigur1.createSpielfigur();
-        spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList2, 0, Color.RED);
-        spielfigur2.createSpielfigur();
-        spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
-        spielfigur3.createSpielfigur();
-        spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        spielfigur4.createSpielfigur();
 
 
         camera.update();
@@ -247,10 +245,10 @@ public class CreateGameField extends ScreenAdapter {
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
 
-        modelBatch.render(spielfigur1.modInstance, environment);
-        modelBatch.render(spielfigur2.modInstance, environment);
-        modelBatch.render(spielfigur3.modInstance, environment);
-        modelBatch.render(spielfigur4.modInstance, environment);
+        modelBatch.render(player1.modInstance, environment);
+        modelBatch.render(player2.modInstance, environment);
+        modelBatch.render(player3.modInstance, environment);
+        modelBatch.render(player4.modInstance, environment);
 
 
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
@@ -262,11 +260,15 @@ public class CreateGameField extends ScreenAdapter {
                 currentPos %= 40;
 //            float posA = positions[currentPos].x;
 //            positions[currentPos].x = posA + 4;
-                spielfigur1.move(positions[currentPos]);
+
+            player1.move(positions[currentPos]);
+
+                player1.move(positions[currentPos]);
                 count++;
             }else{
                 //Some end-event
             }
+
         }
 
         renderModels();
@@ -274,15 +276,15 @@ public class CreateGameField extends ScreenAdapter {
 
         moneyfont.setColor(Color.WHITE);
         moneyfont.getData().setScale(4,4);
-        moneyfont.draw(spriteBatch, spielfigur1.getName() + ": " + String.valueOf(spielfigur1.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-100);
-        moneyfont.draw(spriteBatch, spielfigur2.getName() + ": " +String.valueOf(spielfigur2.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-150);
-        moneyfont.draw(spriteBatch, spielfigur3.getName()+ ": " + String.valueOf(spielfigur3.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-200);
-        moneyfont.draw(spriteBatch, spielfigur4.getName() + ": " +String.valueOf(spielfigur4.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-250);
+        moneyfont.draw(spriteBatch, player1.getName() + ": " + String.valueOf(player1.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-100);
+        moneyfont.draw(spriteBatch, player2.getName() + ": " +String.valueOf(player2.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-150);
+        moneyfont.draw(spriteBatch, player3.getName()+ ": " + String.valueOf(player3.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-200);
+        moneyfont.draw(spriteBatch, player4.getName() + ": " +String.valueOf(player4.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-250);
 
         spriteBatch.draw(BuyButton, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2);
         if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
-            int pos = spielfigur1.getPosition();
+            int pos = player1.getPosition();
 
             //fields[pos]
             //spielfigur1.setMeineGrundstuecke(arrayList1.add());

@@ -4,14 +4,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import se2.groupb.monopoly.Bahnhof;
+import se2.groupb.monopoly.Trainstation;
 
-public class BahnhofTest {
-    Bahnhof nordbahnhof;
+public class trainstationTest {
+    Trainstation nordbahnhof;
 
     @Before
     public void init(){
-        nordbahnhof=new Bahnhof("Nordbahnhof", false, 200);
+        nordbahnhof=new Trainstation("Nordbahnhof", false, 200);
     }
     @After
     public void teardown(){
@@ -25,35 +25,35 @@ public class BahnhofTest {
 
     @Test
     public void testIsVerkauftFalse(){
-        Assert.assertFalse(nordbahnhof.isVerkauft());
+        Assert.assertFalse(nordbahnhof.isSold());
     }
 
     @Test
     public void testIsVerkauftTrue(){
-        nordbahnhof.setVerkauft(true);
-        Assert.assertTrue(nordbahnhof.isVerkauft());
+        nordbahnhof.setSold(true);
+        Assert.assertTrue(nordbahnhof.isSold());
     }
 
     @Test
     public void testGetKaufpreis(){
-        Assert.assertEquals(nordbahnhof.getKaufpreis(), 500);
+        Assert.assertEquals(nordbahnhof.getPrice(), 500);
     }
 
     @Test
     public void testSetKaufpreis(){
-        nordbahnhof.setKaufpreis(100);
-        Assert.assertEquals(nordbahnhof.getKaufpreis(), 100);
+        nordbahnhof.setPrice(100);
+        Assert.assertEquals(nordbahnhof.getPrice(), 100);
     }
 
     @Test
     public void testGetMiete(){
-        Assert.assertEquals(nordbahnhof.getMiete(), 200);
+        Assert.assertEquals(nordbahnhof.getRent(), 200);
     }
 
     @Test
     public void testSetMiete(){
-        nordbahnhof.setMiete(111);
-        Assert.assertEquals(nordbahnhof.getMiete(), 111);
+        nordbahnhof.setRent(111);
+        Assert.assertEquals(nordbahnhof.getRent(), 111);
     }
 
 }

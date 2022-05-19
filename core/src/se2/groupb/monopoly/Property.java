@@ -1,10 +1,10 @@
 package se2.groupb.monopoly;
 
-public class Grundstueck {
+public class Property {
     private String name;
 
 
-    public Grundstueck(String name) {
+    public Property(String name) {
         this.name = name;
 
     }

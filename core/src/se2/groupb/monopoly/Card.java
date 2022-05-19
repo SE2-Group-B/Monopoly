@@ -1,11 +1,11 @@
 package se2.groupb.monopoly;
 
 
-public class Karte {
+public class Card {
     int id;
     String name;
 
-    public Karte(int id, String name) {
+    public Card(int id, String name) {
         this.id = id;
         this.name = name;
     }

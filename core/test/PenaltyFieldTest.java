@@ -3,14 +3,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import se2.groupb.monopoly.Zahlfeld;
+import se2.groupb.monopoly.PenaltyField;
 
-public class ZahlfeldTest {
-    Zahlfeld einkommenssteuer;
+public class PenaltyFieldTest {
+    PenaltyField einkommenssteuer;
 
     @Before
     public void init(){
-        einkommenssteuer=new Zahlfeld("Einkommenssteuer",200);
+        einkommenssteuer=new PenaltyField("Einkommenssteuer",200);
     }
     @After
     public void teardown(){
