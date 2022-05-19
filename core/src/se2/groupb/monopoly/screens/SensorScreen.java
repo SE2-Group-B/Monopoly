@@ -2,16 +2,14 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import java.util.Random;
 import se2.groupb.monopoly.Monopoly;
 
 
-public class SensorScreen implements Screen {
+public class SensorScreen extends GameScreenAdapter {
 
-    private Monopoly monopoly;
     private boolean AccelerometerActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
 
     private float xAccel;
@@ -40,7 +38,7 @@ public class SensorScreen implements Screen {
 
 
     public SensorScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -231,7 +229,4 @@ public class SensorScreen implements Screen {
 
     }
 
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
 }

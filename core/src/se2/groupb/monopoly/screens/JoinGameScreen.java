@@ -1,7 +1,6 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,9 +9,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
 
-public class JoinGameScreen implements Screen {
-
-    Monopoly monopoly;
+public class JoinGameScreen extends GameScreenAdapter {
 
     InputBackProcessor inputProcessor;
 
@@ -32,7 +29,7 @@ public class JoinGameScreen implements Screen {
     private GlyphLayout waitingText;
 
     public JoinGameScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -134,13 +131,4 @@ public class JoinGameScreen implements Screen {
 
     }
 
-    /****************** Methods ******************/
-
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
-
-    public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
-        return isCorrectPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
-    }
 }

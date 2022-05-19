@@ -1,7 +1,6 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,8 +8,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 import se2.groupb.monopoly.Monopoly;
 
-public class BuyScreen implements Screen {
-    Monopoly monopoly;
+public class BuyScreen extends GameScreenAdapter {
     private BitmapFont font;
     private GlyphLayout waitingText;
 
@@ -23,10 +21,12 @@ public class BuyScreen implements Screen {
     private int callOnce = 0;
     private boolean buttonPressed = false;
 
+    private Integer money = 8000;
+
 
 
     public BuyScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class BuyScreen implements Screen {
 
         font = new BitmapFont();
         font.getData().setScale(3.5f);
-        waitingText = new GlyphLayout(font, "You bought that building");
+        waitingText = new GlyphLayout(font, money.toString());
     }
 
     @Override
@@ -105,9 +105,4 @@ public class BuyScreen implements Screen {
 
     }
 
-    /****************** Methods ******************/
-
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
 }

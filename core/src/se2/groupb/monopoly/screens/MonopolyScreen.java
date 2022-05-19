@@ -2,13 +2,15 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
@@ -16,17 +18,27 @@ import se2.groupb.monopoly.Property;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.Player;
 
-public class MonopolyScreen implements Screen {
+public class MonopolyScreen extends GameScreenAdapter {
     Texture img;
     Music music;
     private BitmapFont menuFont;
     private BitmapFont money;
+
+    private SpriteBatch batch1;
     private Monopoly monopoly;
+
+    private Grundstueck[] spielfeld;
 
     private Texture kartenHintergrund;
 
     public MonopolyScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
+    }
+
+    public void create() {
+        batch1 = new SpriteBatch();
+        money = new BitmapFont();
+        money.setColor(Color.BLACK);
     }
 
     @Override
@@ -61,17 +73,24 @@ public class MonopolyScreen implements Screen {
         menuFont.setColor(0,0,0,1);
         menuFont.getData().setScale(4,4);
 
-        money = new BitmapFont();
-        money.getData().setScale(3.5f);
+        /*textButton = new TextButton("Hallo", skin);
+        textButton.setPosition(Gdx.graphics.getWidth() - 540f, Gdx.graphics.getHeight() - 180f);
+        textButton.setSize(220, 140);*/
 
         monopoly.batch.begin();
 
+        create();
+
         // Tap screen to go to main menu
-        menuFont.draw(monopoly.batch, "START",  xPosButtons, yPosInitialButtons);
+        menuFont.draw(monopoly.batch, "Start",  xPosButtons, yPosInitialButtons);
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isTouched()){
             // switch Screen
             monopoly.setScreen(new MainMenuScreen(monopoly));
         }
+        batch1.begin();
+        money.getData().setScale(4,4);
+        money.draw(batch1, String.valueOf(200), Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 12,200);
+        batch1.end();
         
 
         monopoly.batch.draw(img, 0, 0);

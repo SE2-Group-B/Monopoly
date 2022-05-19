@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -26,9 +27,11 @@ public class CreateGameField extends ScreenAdapter {
 
     Monopoly monopoly;
     SpriteBatch spriteBatch;
+    SpriteBatch spriteBatch2;
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
+    private BitmapFont moneyfont;
 
     private Field[] fields = new Field[40];
 
@@ -37,6 +40,7 @@ public class CreateGameField extends ScreenAdapter {
 
 
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
+    private Texture BuyButton = new Texture("images/MenuButtons/buy_building.png");
 
     private Player player1;
     private Player player2;
@@ -44,10 +48,16 @@ public class CreateGameField extends ScreenAdapter {
     private Player player4;
 
 
-    private CameraInputController cameraController;
+   // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
 
+
     ArrayList<Property> arrayList = new ArrayList();
+
+    ArrayList<Grundstueck> arrayList1 = new ArrayList();
+    ArrayList<Grundstueck> arrayList2 = new ArrayList();
+    ArrayList<Grundstueck> arrayList3 = new ArrayList();
+    ArrayList<Grundstueck> arrayList4 = new ArrayList();
 
 
     private int buttonSizeX;
@@ -75,7 +85,7 @@ public class CreateGameField extends ScreenAdapter {
 
     private void createFieldArray() {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
-        //Left Side of Board
+        //Bot Side of Board
         //Color.Cyan = Corner -> debugging
         fields[0] = new Field(model, Color.CYAN, Type.CORNER);
         fields[1] = new Field(model, Color.BROWN, Type.BUILDING);
@@ -88,17 +98,17 @@ public class CreateGameField extends ScreenAdapter {
         fields[8] = new Field(model, Color.WHITE, Type.BUILDING);
         fields[9] = new Field(model, Color.WHITE, Type.BUILDING);
         fields[10] = new Field(model, Color.CYAN, Type.CORNER);
-        // Top Side of Board
+        // Left Side of Board
         fields[11] = new Field(model, Color.PURPLE, Type.BUILDING);
         fields[12] = new Field(model, null, Type.SPECIAL);
         fields[13] = new Field(model, Color.PURPLE, Type.BUILDING);
         fields[14] = new Field(model, Color.PURPLE, Type.BUILDING);
         fields[15] = new Field(model, null, Type.SPECIAL);
-        fields[16] = new Field(model, Color.YELLOW, Type.BUILDING);
+        fields[16] = new Field(model, Color.ORANGE, Type.BUILDING);
         fields[17] = new Field(model, null, Type.SPECIAL);
-        fields[18] = new Field(model, Color.YELLOW, Type.BUILDING);
-        fields[19] = new Field(model, Color.YELLOW, Type.BUILDING);
-        // Right Side of Board
+        fields[18] = new Field(model, Color.ORANGE, Type.BUILDING);
+        fields[19] = new Field(model, Color.ORANGE, Type.BUILDING);
+        // Top Side of Board
         fields[20] = new Field(model, Color.CYAN, Type.CORNER);
         fields[21] = new Field(model, Color.RED, Type.BUILDING);
         fields[22] = new Field(model, null, Type.SPECIAL);
@@ -110,7 +120,7 @@ public class CreateGameField extends ScreenAdapter {
         fields[28] = new Field(model, null, Type.SPECIAL);
         fields[29] = new Field(model, Color.YELLOW, Type.BUILDING);
         fields[30] = new Field(model, Color.CYAN, Type.CORNER);
-        // Bot Side of Board
+        // Right Side of Board
         fields[31] = new Field(model, Color.GREEN, Type.BUILDING);
         fields[32] = new Field(model, Color.GREEN, Type.BUILDING);
         fields[33] = new Field(model, null, Type.SPECIAL);
@@ -121,51 +131,41 @@ public class CreateGameField extends ScreenAdapter {
         fields[38] = new Field(model, null, Type.SPECIAL);
         fields[39] = new Field(model, Color.BLUE, Type.BUILDING);
     }
+    private void createBotPositions() {
+        float[] botPos = {0, -6.5f, -13f, -19.5f, -26f, -32.5f, -39f, -45.5f, -52f, -58.5f, -65f};
+        for (int i = 0; i < 11; i++) {
+            positions[i] = new Vector3(0f, 3.5f, botPos[i]);
+        }
+    }
+    private void createLeftPositions() {
+        float[] leftPos = {9.522501f, 16.022501f, 22.522501f, 29.022501f, 35.5225f, 42.0225f, 48.5225f, 55.0225f, 61.5225f};
+        int count = 0;
+        for (int i = 11; i < 20; i++) {
+            positions[i] = new Vector3(leftPos[count], 3.5f, -68f);
+            count++;
+        }
+    }
+    private void createTopPositions() {
+        float[] topPos = {-65f, -58.5f, -52f, -45.5f, -39f, -32.5f, -26f, -19.5f, -13f, -6.5f, 0f};
+        int count = 0;
+        for (int i = 20; i < 31; i++) {
+            positions[i] = new Vector3(71.05f, 3.5f, topPos[count]);
+            count++;
+        }
+    }
+    private void createRightPositions() {
+        float[] rightPos = {61.5f, 55.0f, 48.5f, 42.0f, 35.5f, 29.0f, 22.5f, 16.0f, 9.5f};
+        int count = 0;
+        for (int i = 31; i < 40; i++) {
+            positions[i] = new Vector3(rightPos[count], 3.5f, 3.25f);
+            count++;
+        }
+    }
     private void createPositions() {
-        positions[0] = new Vector3(0f, 3.5f, 0f);
-        positions[1] = new Vector3(0f, 3.5f, -6.5f);
-        positions[2] = new Vector3(0f, 3.5f, -13f);
-        positions[3] = new Vector3(0f, 3.5f, -19.5f);
-        positions[4] = new Vector3(0f, 3.5f, -26f);
-        positions[5] = new Vector3(0f, 3.5f, -32.5f);
-        positions[6] = new Vector3(0f, 3.5f, -39f);
-        positions[7] = new Vector3(0f, 3.5f, -45.5f);
-        positions[8] = new Vector3(0f, 3.5f, -52f);
-        positions[9] = new Vector3(0f, 3.5f, -58.5f);
-        positions[10] = new Vector3(0f, 3.5f, -65f);
-        positions[11] = new Vector3(9.522501f, 3.5f, -68f);
-        positions[12] = new Vector3(16.022501f, 3.5f, -68f);
-        positions[13] = new Vector3(22.522501f, 3.5f, -68f);
-        positions[14] = new Vector3(29.022501f, 3.5f, -68f);
-        positions[15] = new Vector3(35.5225f, 3.5f, -68f);
-        positions[16] = new Vector3(42.0225f, 3.5f, -68f);
-        positions[17] = new Vector3(48.5225f, 3.5f, -68f);
-        positions[18] = new Vector3(55.0225f, 3.5f, -68f);
-        positions[19] = new Vector3(61.5225f, 3.5f, -68f);
-        positions[20] = new Vector3(71.05f, 3.5f, -65.0f);
-        positions[21] = new Vector3(71.05f, 3.5f, -58.5f);
-        positions[22] = new Vector3(71.05f, 3.5f, -52.0f);
-        positions[23] = new Vector3(71.05f, 3.5f, -45.5f);
-        positions[24] = new Vector3(71.05f, 3.5f, -39.0f);
-        positions[25] = new Vector3(71.05f, 3.5f, -32.5f);
-        positions[26] = new Vector3(71.05f, 3.5f, -26.0f);
-        positions[27] = new Vector3(71.05f, 3.5f, -19.5f);
-        positions[28] = new Vector3(71.05f, 3.5f, -13.0f);
-        positions[29] = new Vector3(71.05f, 3.5f, -6.5f);
-        positions[30] = new Vector3(71.05f, 3.5f, 0f);
-        positions[31] = new Vector3(61.5f, 3.5f, 3.25f);
-        positions[32] = new Vector3(55.0f, 3.5f, 3.25f);
-        positions[33] = new Vector3(48.5f, 3.5f, 3.25f);
-        positions[34] = new Vector3(42.0f, 3.5f, 3.25f);
-        positions[35] = new Vector3(35.5f, 3.5f, 3.25f);
-        positions[36] = new Vector3(29.0f, 3.5f, 3.25f);
-        positions[37] = new Vector3(22.5f, 3.5f, 3.25f);
-        positions[38] = new Vector3(16.0f, 3.5f, 3.25f);
-        positions[39] = new Vector3(9.5f, 3.5f, 3.25f);
-
-
-
-
+        createBotPositions();
+        createLeftPositions();
+        createTopPositions();
+        createRightPositions();
     }
 
 
@@ -188,7 +188,6 @@ public class CreateGameField extends ScreenAdapter {
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
-
         modelBatch = new ModelBatch();
 
 
@@ -206,7 +205,6 @@ public class CreateGameField extends ScreenAdapter {
         camera.far = 500000f;
         createModels();
 
-
         player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
         player1.createSpielfigur();
         player2 = new Player(2, "Red", 2000, arrayList, 0, Color.RED);
@@ -217,10 +215,11 @@ public class CreateGameField extends ScreenAdapter {
         player4.createSpielfigur();
 
 
+
         camera.update();
 
-        cameraController = new CameraInputController(camera);
-        Gdx.input.setInputProcessor(cameraController);
+//        cameraController = new CameraInputController(camera);
+//        Gdx.input.setInputProcessor(cameraController);
     }
 
 
@@ -229,15 +228,20 @@ public class CreateGameField extends ScreenAdapter {
 
         float userPosX = (float) Gdx.input.getX();
         float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
+        int count = 0;
+
+        spriteBatch2 = new SpriteBatch();
+        moneyfont = new BitmapFont();
 
         ScreenUtils.clear(0, 0, 0, 1);
-        cameraController.update();
+       // cameraController.update();
 
         // Clear the stuff that is left over from the previous render cycle
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         modelBatch.begin(camera);
         spriteBatch.begin();
+
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
 
@@ -250,21 +254,41 @@ public class CreateGameField extends ScreenAdapter {
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
-            int pos = roll();
-            for (int i = 0; i < positions.length; i++) {
-                System.out.println(i + " " + positions[i]);
-            }
-            currentPos+=pos;
-            currentPos %= 40;
+            if(count <10) {
+                int pos = roll();
+                currentPos += pos;
+                currentPos %= 40;
 //            float posA = positions[currentPos].x;
 //            positions[currentPos].x = posA + 4;
+
             player1.move(positions[currentPos]);
+
+                spielfigur1.move(positions[currentPos]);
+                count++;
+            }else{
+                //Some end-event
+            }
 
         }
 
-
         renderModels();
         drawDice(dice1, dice2);
+
+        moneyfont.setColor(Color.WHITE);
+        moneyfont.getData().setScale(4,4);
+        moneyfont.draw(spriteBatch, spielfigur1.getName() + ": " + String.valueOf(spielfigur1.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-100);
+        moneyfont.draw(spriteBatch, spielfigur2.getName() + ": " +String.valueOf(spielfigur2.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-150);
+        moneyfont.draw(spriteBatch, spielfigur3.getName()+ ": " + String.valueOf(spielfigur3.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-200);
+        moneyfont.draw(spriteBatch, spielfigur4.getName() + ": " +String.valueOf(spielfigur4.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-250);
+
+        spriteBatch.draw(BuyButton, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2);
+        if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2, 0 * yPosOffsetButtons)
+                && Gdx.input.justTouched()) {
+            int pos = spielfigur1.getPosition();
+
+            //fields[pos]
+            //spielfigur1.setMeineGrundstuecke(arrayList1.add());
+        }
 
         spriteBatch.end();
         modelBatch.end();
@@ -346,7 +370,6 @@ public class CreateGameField extends ScreenAdapter {
                 fieldModInstance[i].transform.rotate(vector3Rotate, 90);
 //                instantiatePositions(i, vector3);
             }
-            System.out.println(positions[i].toString());
         }
     }
 

@@ -2,7 +2,6 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -10,9 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends GameScreenAdapter {
 
-    private Monopoly monopoly;
 
     private Texture exitButton;
     private Texture playButton;
@@ -34,7 +32,7 @@ public class MainMenuScreen implements Screen {
      * setup main menu with Monopoly game
      */
     public MainMenuScreen(Monopoly monopoly) {
-        this.monopoly = monopoly;
+        super(monopoly);
     }
 
     @Override
@@ -154,7 +152,7 @@ public class MainMenuScreen implements Screen {
                 && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
 
             this.dispose();
-            monopoly.setScreen(new BuyScreen(monopoly));
+            monopoly.setScreen(new MonopolyScreen(monopoly));
 
         }
 
@@ -198,14 +196,5 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
     }
 
-    /****************** Methods ******************/
 
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
-        return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-    }
-
-    // purely for unit testing private static method isCorrectPosition()
-    public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
-        return isCorrectPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
-    }
 }
