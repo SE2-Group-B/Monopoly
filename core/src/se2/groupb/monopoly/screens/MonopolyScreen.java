@@ -27,7 +27,7 @@ public class MonopolyScreen extends GameScreenAdapter {
     private SpriteBatch batch1;
     private Monopoly monopoly;
 
-    private Grundstueck[] spielfeld;
+    private Property[] spielfeld;
 
     private Texture kartenHintergrund;
 
