@@ -1,5 +1,4 @@
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -8,108 +7,108 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import se2.groupb.monopoly.Bahnhof;
-import se2.groupb.monopoly.Grundstueck;
-import se2.groupb.monopoly.Karte;
-import se2.groupb.monopoly.Kartenstapel;
-import se2.groupb.monopoly.Spielfigur;
-import se2.groupb.monopoly.Strasse;
+import se2.groupb.monopoly.Trainstation;
+import se2.groupb.monopoly.Property;
+import se2.groupb.monopoly.Card;
+import se2.groupb.monopoly.Deck;
+import se2.groupb.monopoly.Player;
+import se2.groupb.monopoly.Street;
 
-public class SpielfigurTest {
-    Spielfigur rot;
-    ArrayList<Grundstueck> meineGrundstuecke;
-    Strasse hauptstraße;
-    Bahnhof nordbahnhof;
-    Kartenstapel ereigniskarten;
-    Karte e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11,e12,e13,e14, e15,e16,e17,e18,e19,e20;
-    Karte g1, g2, g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16;
-    Kartenstapel gemeinschaftskarten;
+public class PlayerTest {
+    Player rot;
+    ArrayList<Property> meineGrundstuecke;
+    Street hauptstraße;
+    Trainstation nordbahnhof;
+    Deck ereigniskarten;
+    Card e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11,e12,e13,e14, e15,e16,e17,e18,e19,e20;
+    Card g1, g2, g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16;
+    Deck gemeinschaftskarten;
 
 
 
     @Before
     public void init(){
         meineGrundstuecke=new ArrayList<>();
-        hauptstraße=new Strasse("Hauptstraße", 220, false, 0,0,20, 50);
+        hauptstraße=new Street("Hauptstraße", 220, false, 0,0,20, 50);
         meineGrundstuecke.add(hauptstraße);
-        nordbahnhof=new Bahnhof("Nordbahnhof", false, 50);
+        nordbahnhof=new Trainstation("Nordbahnhof", false, 50);
         meineGrundstuecke.add(nordbahnhof);
-        rot=new Spielfigur(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
+        rot=new Player(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
 
-        ereigniskarten = new Kartenstapel();
-         e1 = new Karte(1, "Gehe 3 Felder zurück");
+        ereigniskarten = new Deck();
+         e1 = new Card(1, "Gehe 3 Felder zurück");
         ereigniskarten.add(e1);
-         e2 = new Karte(2, "Rücke vor bis auf Los!");
+         e2 = new Card(2, "Rücke vor bis auf Los!");
         ereigniskarten.add(e2);
-         e3 = new Karte(3, "Gehe 10 Felder zurück");
+         e3 = new Card(3, "Gehe 10 Felder zurück");
         ereigniskarten.add(e3);
-         e4 = new Karte(4, "Gehe 10 Felder weiter");
+         e4 = new Card(4, "Gehe 10 Felder weiter");
         ereigniskarten.add(e4);
-         e5 = new Karte(5, "Gehe 6 Felder weiter");
+         e5 = new Card(5, "Gehe 6 Felder weiter");
         ereigniskarten.add(e5);
-         e6 = new Karte(6, "Du hast deine Netflix Gebühren nicht bezahlt. Zahle 100€");
+         e6 = new Card(6, "Du hast deine Netflix Gebühren nicht bezahlt. Zahle 100€");
         ereigniskarten.add(e6);
-         e7 = new Karte(7, "Du brauchst neue Uni Bücher! Zahle 100€");
+         e7 = new Card(7, "Du brauchst neue Uni Bücher! Zahle 100€");
         ereigniskarten.add(e7);
-         e8 = new Karte(8, "Es ist Schnittwoch. Du zahlst eine Runde Bier! Zahle 20€");
+         e8 = new Card(8, "Es ist Schnittwoch. Du zahlst eine Runde Bier! Zahle 20€");
         ereigniskarten.add(e8);
-         e9 = new Karte(9, "Du brauchst ein Parkticket für die Uni. Zahle 40€");
+         e9 = new Card(9, "Du brauchst ein Parkticket für die Uni. Zahle 40€");
         ereigniskarten.add(e9);
-         e10 = new Karte(10, "Du wirst unerwartet Elternteil. Babys sind teuer! Zahle 200€");
+         e10 = new Card(10, "Du wirst unerwartet Elternteil. Babys sind teuer! Zahle 200€");
         ereigniskarten.add(e10);
-         e11 = new Karte(11, "Du druckst dir dein eigenes Geld. Ziehe 250€ ein.");
+         e11 = new Card(11, "Du druckst dir dein eigenes Geld. Ziehe 250€ ein.");
         ereigniskarten.add(e11);
-         e12 = new Karte(12, "Du gibst regelmäßig Nachhilfe in Mathe. Ziehe 100€ ein");
+         e12 = new Card(12, "Du gibst regelmäßig Nachhilfe in Mathe. Ziehe 100€ ein");
         ereigniskarten.add(e12);
-         e13 = new Karte(13, "Du Glückspilz hast 100€ am Boden gefunden!");
+         e13 = new Card(13, "Du Glückspilz hast 100€ am Boden gefunden!");
         ereigniskarten.add(e13);
-         e14 = new Karte(14, "Du hilfst als Kellner aus. Ziehe 100€ ein. ");
+         e14 = new Card(14, "Du hilfst als Kellner aus. Ziehe 100€ ein. ");
         ereigniskarten.add(e14);
-         e15 = new Karte(15, "Du hast eine App programmiert und verkauft. Ziehe 500€ ein");
+         e15 = new Card(15, "Du hast eine App programmiert und verkauft. Ziehe 500€ ein");
         ereigniskarten.add(e15);
-         e16 = new Karte(16, "Steuer Hinterziehung! Gehe direkt ins Gefängnis! Gehe nicht über Los!");
+         e16 = new Card(16, "Steuer Hinterziehung! Gehe direkt ins Gefängnis! Gehe nicht über Los!");
         ereigniskarten.add(e16);
-         e17 = new Karte(17, "Rücke vor bis zur Münchnerstraße"); //index 16
+         e17 = new Card(17, "Rücke vor bis zur Münchnerstraße"); //index 16
         ereigniskarten.add(e17);
-         e18 = new Karte(18, "Rücke vor bis zum Opernplatz"); //24
+         e18 = new Card(18, "Rücke vor bis zum Opernplatz"); //24
         ereigniskarten.add(e18);
-         e19 = new Karte(19, "Rücke vor bis zur Turmstraße"); //3
+         e19 = new Card(19, "Rücke vor bis zur Turmstraße"); //3
         ereigniskarten.add(e19);
-         e20 = new Karte(20, "Betrunken Auto gefahren? Ab ins Gefängnis!");
+         e20 = new Card(20, "Betrunken Auto gefahren? Ab ins Gefängnis!");
         ereigniskarten.add(e20);
 
-        gemeinschaftskarten = new Kartenstapel();
-         g1=new Karte(21, "Es ist dein Geburtstag. Ziehe 220€ ein.");
+        gemeinschaftskarten = new Deck();
+         g1=new Card(21, "Es ist dein Geburtstag. Ziehe 220€ ein.");
         gemeinschaftskarten.add(g1);
-         g2=new Karte(22, "Du verkaufst dein altes Zeug auf Spock. Du erhältst 170€");
+         g2=new Card(22, "Du verkaufst dein altes Zeug auf Spock. Du erhältst 170€");
         gemeinschaftskarten.add(g2);
-         g3=new Karte(23, "Du erbst 550€");
+         g3=new Card(23, "Du erbst 550€");
         gemeinschaftskarten.add(g3);
-         g4=new Karte(24, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
+         g4=new Card(24, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
         gemeinschaftskarten.add(g4);
-         g5=new Karte(25, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 200€ ein.");
+         g5=new Card(25, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 200€ ein.");
         gemeinschaftskarten.add(g5);
-         g6=new Karte(26, "Rücke vor bis auf Los!");
+         g6=new Card(26, "Rücke vor bis auf Los!");
         gemeinschaftskarten.add(g6);
-         g7=new Karte(27, "Bank Irrtum zu deinem Gunsten. Ziehe 300€ ein.");
+         g7=new Card(27, "Bank Irrtum zu deinem Gunsten. Ziehe 300€ ein.");
         gemeinschaftskarten.add(g7);
-         g8=new Karte(28, "Gehe vor bis zur Parkstraße."); //index 37
+         g8=new Card(28, "Gehe vor bis zur Parkstraße."); //index 37
         gemeinschaftskarten.add(g8);
-         g9=new Karte(29, "Du hattest ein gutes Jahr und bekommst eine Bonuszahlung von 510€");
+         g9=new Card(29, "Du hattest ein gutes Jahr und bekommst eine Bonuszahlung von 510€");
         gemeinschaftskarten.add(g9);
-         g10=new Karte(30, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
+         g10=new Card(30, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
         gemeinschaftskarten.add(g10);
-         g11=new Karte(31, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 222€ ein.");
+         g11=new Card(31, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 222€ ein.");
         gemeinschaftskarten.add(g11);
-         g12=new Karte(32, "Steuernachzahlung. Bezahle 250€");
+         g12=new Card(32, "Steuernachzahlung. Bezahle 250€");
         gemeinschaftskarten.add(g12);
-         g13=new Karte(33, "Arzt Kosten: Zahle 100€");
+         g13=new Card(33, "Arzt Kosten: Zahle 100€");
         gemeinschaftskarten.add(g13);
-         g14=new Karte(34, "Dein Auto braucht ein Service. Zahle 250€");
+         g14=new Card(34, "Dein Auto braucht ein Service. Zahle 250€");
         gemeinschaftskarten.add(g14);
-         g15=new Karte(35, "Du gehst Shoppen. Zahle 200€");
+         g15=new Card(35, "Du gehst Shoppen. Zahle 200€");
         gemeinschaftskarten.add(g15);
-         g16=new Karte(36, "Du hast ein gutes Herz und spendest an eine Hilfsorganisation 100€");
+         g16=new Card(36, "Du hast ein gutes Herz und spendest an eine Hilfsorganisation 100€");
         gemeinschaftskarten.add(g16);
     }
 
@@ -123,7 +122,7 @@ public class SpielfigurTest {
 
     @Test
     public void testSpielfigur(){
-        Spielfigur testFigur=new Spielfigur(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
+        Player testFigur=new Player(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
         Assert.assertNotNull(testFigur);
     }
 
@@ -149,53 +148,53 @@ public class SpielfigurTest {
     }
     @Test
     public void testSetKontostand(){
-        rot.setKontostand(1200);
-        Assert.assertEquals(rot.getKontostand(), 1200);
+        rot.setBankBalance(1200);
+        Assert.assertEquals(rot.getBankBalance(), 1200);
     }
     @Test
     public void testGetKontostand(){
-        Assert.assertEquals(rot.getKontostand(), 2000);
+        Assert.assertEquals(rot.getBankBalance(), 2000);
     }
     @Test
     public void testGetMeineGrundstuecke(){
-        Assert.assertEquals(rot.getMeineGrundstuecke(),meineGrundstuecke);
+        Assert.assertEquals(rot.getMyProperties(),meineGrundstuecke);
     }
     @Test
     public void testSetMeineGrundstuecke(){
-        ArrayList<Grundstueck> meineGrundstuecke2=new ArrayList<>();
+        ArrayList<Property> meineGrundstuecke2=new ArrayList<>();
         meineGrundstuecke2.add(nordbahnhof);
         meineGrundstuecke2.add(hauptstraße);
-        rot.setMeineGrundstuecke(meineGrundstuecke2);
-        Assert.assertEquals(rot.getMeineGrundstuecke(),meineGrundstuecke2);
+        rot.setMyProperties(meineGrundstuecke2);
+        Assert.assertEquals(rot.getMyProperties(),meineGrundstuecke2);
     }
     @Test
     public void testGetAnzahlBahnhoefe(){
-        Assert.assertEquals(rot.getAnzahlBahnhoefe(),1);
+        Assert.assertEquals(rot.getNumOfTrainstaitions(),1);
     }
 
     @Test
     public void testSetAnzahlBahnhoefe(){
-        rot.setAnzahlBahnhoefe(4);
-        Assert.assertEquals(rot.getAnzahlBahnhoefe(),4);
+        rot.setNumOfTrainstaitions(4);
+        Assert.assertEquals(rot.getNumOfTrainstaitions(),4);
     }
 
 
     @Test
     public void testAendereKontostandPlus(){
         rot.changeMoney(50);
-        Assert.assertEquals(rot.getKontostand(),2050);
+        Assert.assertEquals(rot.getBankBalance(),2050);
     }
 
     @Test
     public void testAendereKontostandMinus(){
         rot.changeMoney(-2000);
-        Assert.assertEquals(rot.getKontostand(),0);
+        Assert.assertEquals(rot.getBankBalance(),0);
     }
 
     @Test
     public void testAendereKontostandNull(){
         rot.changeMoney(0);
-        Assert.assertEquals(rot.getKontostand(),2000);
+        Assert.assertEquals(rot.getBankBalance(),2000);
     }
 
     @Test
