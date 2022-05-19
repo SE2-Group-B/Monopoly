@@ -9,18 +9,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
-import se2.groupb.monopoly.Bahnhof;
-import se2.groupb.monopoly.Grundstueck;
-import se2.groupb.monopoly.Karte;
-import se2.groupb.monopoly.Kartenstapel;
+import se2.groupb.monopoly.Property;
 import se2.groupb.monopoly.Monopoly;
-import se2.groupb.monopoly.Spielfigur;
-import se2.groupb.monopoly.Strasse;
-import se2.groupb.monopoly.Zahlfeld;
+import se2.groupb.monopoly.Player;
 
 public class MonopolyScreen extends GameScreenAdapter {
     Texture img;
@@ -31,7 +27,7 @@ public class MonopolyScreen extends GameScreenAdapter {
     private SpriteBatch batch1;
     private Monopoly monopoly;
 
-    private Grundstueck[] spielfeld;
+    private Property[] spielfeld;
 
     private Texture kartenHintergrund;
 
@@ -53,14 +49,14 @@ public class MonopolyScreen extends GameScreenAdapter {
         music.setVolume(100);
 
         //Spielfiguren
-        ArrayList<Grundstueck> grundstueckeRot=new ArrayList<>();
-        ArrayList<Grundstueck> grundstueckeGelb=new ArrayList<>();
-        ArrayList<Grundstueck> grundstueckeGruen=new ArrayList<>();
-        ArrayList<Grundstueck> grundstueckeBlau=new ArrayList<>();
-        Spielfigur rot = new Spielfigur(1, "Rot", 2000, grundstueckeRot, 0, Color.RED);
-        Spielfigur gelb = new Spielfigur(2, "Gelb", 2000, grundstueckeGelb, 0, Color.YELLOW);
-        Spielfigur gruen = new Spielfigur(3, "Grün", 2000, grundstueckeGruen, 0, Color.GREEN);
-        Spielfigur blau = new Spielfigur(4, "Blau", 2000, grundstueckeBlau, 0, Color.BLUE);
+        ArrayList<Property> grundstueckeRot=new ArrayList<>();
+        ArrayList<Property> grundstueckeGelb=new ArrayList<>();
+        ArrayList<Property> grundstueckeGruen=new ArrayList<>();
+        ArrayList<Property> grundstueckeBlau=new ArrayList<>();
+        Player rot = new Player(1, "Rot", 2000, grundstueckeRot, 0, Color.RED);
+        Player gelb = new Player(2, "Gelb", 2000, grundstueckeGelb, 0, Color.YELLOW);
+        Player gruen = new Player(3, "Grün", 2000, grundstueckeGruen, 0, Color.GREEN);
+        Player blau = new Player(4, "Blau", 2000, grundstueckeBlau, 0, Color.BLUE);
 
 
 

@@ -3,24 +3,24 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import se2.groupb.monopoly.Grundstueck;
+import se2.groupb.monopoly.Property;
 
-public class GrundstueckTest {
+public class propertyTest {
 
     @Test
     public void testGrundstueck(){
-        Grundstueck g=new Grundstueck("Grundstück");
+        Property g=new Property("Grundstück");
         Assert.assertNotNull(g);
     }
     @Test
     public void testGetName(){
-        Grundstueck g=new Grundstueck("Grundstück");
+        Property g=new Property("Grundstück");
         Assert.assertEquals(g.getName(), "Grundstück");
     }
 
     @Test
     public void testSetName(){
-        Grundstueck g=new Grundstueck("Grundstück");
+        Property g=new Property("Grundstück");
         g.setName("Neues Grundstück");
         Assert.assertEquals(g.getName(), "Neues Grundstück");
     }

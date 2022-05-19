@@ -8,18 +8,17 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.JsonReader;
 
 import java.util.ArrayList;
 
-public class Spielfigur {
+public class Player {
     private int id;
     private String name;
     private int position;
-    private int Kontostand;
-    private ArrayList<Grundstueck> meineGrundstuecke;
-    private int anzahlBahnhoefe;
+    private int bankBalance;
+    private ArrayList<Property> myProperties;
+    private int NumOfTrainstaitions;
     private Color color;
     ModelInstance modInstance;
     Vector3 fieldPos;
@@ -29,12 +28,12 @@ public class Spielfigur {
 
 
 
-    public Spielfigur(int id, String name, int kontostand, ArrayList<Grundstueck> meineGrundstuecke, int anzahlBahnhoefe, Color color) {
+    public Player(int id, String name, int bankBalance, ArrayList<Property> myProperties, int NumOfTrainstaitions, Color color) {
         this.id = id;
         this.name = name;
-        this.Kontostand = kontostand;
-        this.meineGrundstuecke = meineGrundstuecke;
-        this.anzahlBahnhoefe = anzahlBahnhoefe;
+        this.bankBalance = bankBalance;
+        this.myProperties = myProperties;
+        this.NumOfTrainstaitions = NumOfTrainstaitions;
         this.position = 0;
         this.color = color;
     }
@@ -67,36 +66,36 @@ public class Spielfigur {
         this.name = name;
     }
 
-    public int getKontostand() {
-        return Kontostand;
+    public int getBankBalance() {
+        return bankBalance;
     }
 
-    public void setKontostand(int kontostand) {
-        Kontostand = kontostand;
+    public void setBankBalance(int bankBalance) {
+        this.bankBalance = bankBalance;
     }
 
-    public ArrayList<Grundstueck> getMeineGrundstuecke() {
-        return meineGrundstuecke;
+    public ArrayList<Property> getMyProperties() {
+        return myProperties;
     }
 
-    public void setMeineGrundstuecke(ArrayList<Grundstueck> meineGrundstuecke) {
-        this.meineGrundstuecke = meineGrundstuecke;
+    public void setMyProperties(ArrayList<Property> myProperties) {
+        this.myProperties = myProperties;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public int getAnzahlBahnhoefe() {
-        return anzahlBahnhoefe;
+    public int getNumOfTrainstaitions() {
+        return NumOfTrainstaitions;
     }
 
-    public void setAnzahlBahnhoefe(int anzahlBahnhoefe) {
-        this.anzahlBahnhoefe = anzahlBahnhoefe;
+    public void setNumOfTrainstaitions(int numOfTrainstaitions) {
+        this.NumOfTrainstaitions = numOfTrainstaitions;
     }
 
     public void changeMoney(int betrag) {
-        setKontostand(getKontostand() + betrag);
+        setBankBalance(getBankBalance() + betrag);
     }
 
     public int getPosition() {
@@ -112,16 +111,17 @@ public class Spielfigur {
         if((getPosition() + augenzahl) > 39){
             roundmoney();
         }
-//        setPosition((getPosition() + augenzahl) % 40);
+        setPosition((getPosition() + augenzahl) % 40);
+        
     }
 
     public void roundmoney() {
-        setKontostand((getKontostand() + 200));
+        setBankBalance((getBankBalance() + 200));
     }
 
 
-    public Texture zieheKarte(Kartenstapel ks) {
-        Karte k = ks.getNextCard();
+    public Texture drawCard(Deck ks) {
+        Card k = ks.getNextCard();
         Texture kartenbild = null;
 
         switch (k.getId()) {

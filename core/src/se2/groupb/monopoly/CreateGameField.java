@@ -2,7 +2,6 @@ package se2.groupb.monopoly;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,12 +20,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Random;
-
-import se2.groupb.monopoly.screens.InputBackProcessor;
 
 
 public class CreateGameField extends ScreenAdapter {
@@ -48,19 +43,22 @@ public class CreateGameField extends ScreenAdapter {
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
     private Texture BuyButton = new Texture("images/MenuButtons/buy_building.png");
 
-    private Spielfigur spielfigur1;
-    private Spielfigur spielfigur2;
-    private Spielfigur spielfigur3;
-    private Spielfigur spielfigur4;
+    private Player player1;
+    private Player player2;
+    private Player player3;
+    private Player player4;
 
 
    // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
 
-    ArrayList<Grundstueck> arrayList1 = new ArrayList();
-    ArrayList<Grundstueck> arrayList2 = new ArrayList();
-    ArrayList<Grundstueck> arrayList3 = new ArrayList();
-    ArrayList<Grundstueck> arrayList4 = new ArrayList();
+
+    ArrayList<Property> arrayList = new ArrayList();
+
+    ArrayList<Property> arrayList1 = new ArrayList();
+    ArrayList<Property> arrayList2 = new ArrayList();
+    ArrayList<Property> arrayList3 = new ArrayList();
+    ArrayList<Property> arrayList4 = new ArrayList();
 
 
     private int buttonSizeX;
@@ -140,6 +138,8 @@ public class CreateGameField extends ScreenAdapter {
         dice1 = new Texture("images/Dice/dice_0.png");
         dice2 = new Texture("images/Dice/dice_0.png");
 
+        Property[] logicalGameField =createLogicalGameField();
+
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 //        Gdx.app.debug("GDSAFA", "Hello");
         createPositions();
@@ -163,15 +163,15 @@ public class CreateGameField extends ScreenAdapter {
         camera.far = 500000f;
         createModels();
 
+        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        player1.createSpielfigur();
+        player2 = new Player(2, "Red", 2000, arrayList, 0, Color.RED);
+        player2.createSpielfigur();
+        player3 = new Player(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        player3.createSpielfigur();
+        player4 = new Player(4, "Green", 2000, arrayList, 0, Color.GREEN);
+        player4.createSpielfigur();
 
-        spielfigur1 = new Spielfigur(1, "Blue", 2000, arrayList1, 0, Color.BLUE);
-        spielfigur1.createSpielfigur();
-        spielfigur2 = new Spielfigur(2, "Red", 2000, arrayList2, 0, Color.RED);
-        spielfigur2.createSpielfigur();
-        spielfigur3 = new Spielfigur(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
-        spielfigur3.createSpielfigur();
-        spielfigur4 = new Spielfigur(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        spielfigur4.createSpielfigur();
 
 
         camera.update();
@@ -203,10 +203,10 @@ public class CreateGameField extends ScreenAdapter {
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
 
-        modelBatch.render(spielfigur1.modInstance, environment);
-        modelBatch.render(spielfigur2.modInstance, environment);
-        modelBatch.render(spielfigur3.modInstance, environment);
-        modelBatch.render(spielfigur4.modInstance, environment);
+        modelBatch.render(player1.modInstance, environment);
+        modelBatch.render(player2.modInstance, environment);
+        modelBatch.render(player3.modInstance, environment);
+        modelBatch.render(player4.modInstance, environment);
 
 
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
@@ -218,11 +218,15 @@ public class CreateGameField extends ScreenAdapter {
                 currentPos %= 40;
 //            float posA = positions[currentPos].x;
 //            positions[currentPos].x = posA + 4;
-                spielfigur1.move(positions[currentPos]);
+
+            player1.move(positions[currentPos]);
+
+                player1.move(positions[currentPos]);
                 count++;
             }else{
                 //Some end-event
             }
+
         }
 
         renderModels();
@@ -230,15 +234,15 @@ public class CreateGameField extends ScreenAdapter {
 
         moneyfont.setColor(Color.WHITE);
         moneyfont.getData().setScale(4,4);
-        moneyfont.draw(spriteBatch, spielfigur1.getName() + ": " + String.valueOf(spielfigur1.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-100);
-        moneyfont.draw(spriteBatch, spielfigur2.getName() + ": " +String.valueOf(spielfigur2.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-150);
-        moneyfont.draw(spriteBatch, spielfigur3.getName()+ ": " + String.valueOf(spielfigur3.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-200);
-        moneyfont.draw(spriteBatch, spielfigur4.getName() + ": " +String.valueOf(spielfigur4.getKontostand()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-250);
+        moneyfont.draw(spriteBatch, player1.getName() + ": " + String.valueOf(player1.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-100);
+        moneyfont.draw(spriteBatch, player2.getName() + ": " +String.valueOf(player2.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-150);
+        moneyfont.draw(spriteBatch, player3.getName()+ ": " + String.valueOf(player3.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-200);
+        moneyfont.draw(spriteBatch, player4.getName() + ": " +String.valueOf(player4.getBankBalance()),Gdx.graphics.getWidth()-Gdx.graphics.getWidth(),Gdx.graphics.getHeight()-250);
 
         spriteBatch.draw(BuyButton, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2);
         if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth()-Gdx.graphics.getWidth(), Gdx.graphics.getHeight()-400, buttonSizeX/2, buttonSizeY/2, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
-            int pos = spielfigur1.getPosition();
+            int pos = player1.getPosition();
 
             //fields[pos]
             //spielfigur1.setMeineGrundstuecke(arrayList1.add());
@@ -412,4 +416,50 @@ public class CreateGameField extends ScreenAdapter {
     private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
         return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
     }
+
+    public Property[] createLogicalGameField(){
+        Property[] spielfeld = new Property[40];
+        spielfeld[0] = new Property("Los");
+        spielfeld[1] = new Street("Badstraße", 40,false, 0, 0, 10,  50);
+        spielfeld[2]=new Property("Gemeinschaftsfeld");
+        spielfeld[3]=new Street("Turmstraße", 80,false, 0, 0, 20,  50);
+        spielfeld[4]=new PenaltyField("Einkommenssteuer", 200);
+        spielfeld[5]=new Trainstation("Südbahnhof", false, 50);
+        spielfeld[6]=new Street("Chausseestraße", 120,false, 0, 0, 30,  50);
+        spielfeld[7]=new Property("Ereignisfeld");
+        spielfeld[8]=new Street("Elisenstraße", 120,false, 0, 0, 30,  50);
+        spielfeld[9]=new Street("Poststraße", 160,false, 0, 0, 35,  50);
+        spielfeld[10]=new Property("Gefängnis");
+        spielfeld[11]=new Street("Seestraße", 200,false, 0, 0, 60,  100);
+        spielfeld[12]=new Property("Ereignisfeld");
+        spielfeld[13]=new Street("Hafenstraße", 200,false, 0, 0, 70,  100);
+        spielfeld[14]=new Street("Neue Straße", 240,false, 0, 0, 80,  100);
+        spielfeld[15]=new Trainstation("Westbahnhof", false, 50);
+        spielfeld[16]=new Street("Münchner Straße", 280,false, 0, 0, 85,  100);
+        spielfeld[17]=new Property("Gemeinschaftsfeld");
+        spielfeld[18]=new Street("Wiener Straße", 280,false, 0, 0, 90,  100);
+        spielfeld[19]=new Street("Berliner Straße", 320,false, 0, 0, 95,  100);
+        spielfeld[20]=new Property("Sofa");
+        spielfeld[21]=new Street("Theater Straße", 360,false, 0, 0, 100,  150);
+        spielfeld[22]=new Property("Ereignisfeld");
+        spielfeld[23]=new Street("Museumsstraße", 360,false, 0, 0, 110,  150);
+        spielfeld[24]=new Street("Opernplatz", 400,false, 0, 0, 115,  150);
+        spielfeld[25]=new Trainstation("Nordbahnhof", false, 50);
+        spielfeld[26]=new Street("Lessingstraße", 440,false, 0, 0, 120,  150);
+        spielfeld[27]=new Street("Schillerstraße", 440,false, 0, 0, 122,  150);
+        spielfeld[28]=new Property("Gemeinschaftsfeld");
+        spielfeld[29]=new Street("Goethestraße", 480,false, 0, 0, 130,  150);
+        spielfeld[30]=new Property("Gehe ins Gefängnis");
+        spielfeld[31]=new Street("Rathausplatz", 520,false, 0, 0, 150,  200);
+        spielfeld[32]=new Street("Hauptstraße", 520,false, 0, 0, 155,  200);
+        spielfeld[33]=new Property("Gemeinschaftsfeld");
+        spielfeld[34]=new Street("Bahnhofstraße", 560,false, 0, 0, 160,  200);
+        spielfeld[35]=new Trainstation("Hauptbahnhof", false, 50);
+        spielfeld[36]=new Property("Ereignisfeld");
+        spielfeld[37]=new Street("Parkstraße", 650,false, 0, 0, 250,  200);
+        spielfeld[38]= new PenaltyField("Zusatzsteuer", 200);
+        spielfeld[39]=new Street("Schlossallee", 800,false, 0, 0, 350,  200);
+        return spielfeld;
+    }
+
 }
