@@ -3,14 +3,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import se2.groupb.monopoly.Strasse;
+import se2.groupb.monopoly.Street;
 
-public class StrasseTest {
-    Strasse hauptstraße;
+public class StreetTest {
+    Street hauptstraße;
 
     @Before
     public void init(){
-        hauptstraße=new Strasse("Hauptstraße", 150, false, 0,0,20,50 );
+        hauptstraße=new Street("Hauptstraße", 150, false, 0,0,20,50 );
     }
 
     @After
@@ -24,30 +24,30 @@ public class StrasseTest {
     }
     @Test
     public void testGetPreis(){
-        Assert.assertEquals(hauptstraße.getPreis(),150);
+        Assert.assertEquals(hauptstraße.getPrice(),150);
     }
     @Test
     public void testSetPreis(){
-        hauptstraße.setPreis(200);
-        Assert.assertEquals(hauptstraße.getPreis(),200);
+        hauptstraße.setPrice(200);
+        Assert.assertEquals(hauptstraße.getPrice(),200);
     }
     @Test
     public void testIsVerkauft(){
-        Assert.assertFalse(hauptstraße.isVerkauft());
+        Assert.assertFalse(hauptstraße.isSold());
     }
     @Test
     public void testSetVerkauft(){
-        hauptstraße.setVerkauft(true);
-        Assert.assertTrue(hauptstraße.isVerkauft());
+        hauptstraße.setSold(true);
+        Assert.assertTrue(hauptstraße.isSold());
     }
     @Test
     public void testGetHaus(){
-        Assert.assertEquals(hauptstraße.getHaus(),0);
+        Assert.assertEquals(hauptstraße.getHouse(),0);
     }
     @Test
     public void testSetHaus(){
-        hauptstraße.setHaus(2);
-        Assert.assertEquals(hauptstraße.getHaus(),2);
+        hauptstraße.setHouse(2);
+        Assert.assertEquals(hauptstraße.getHouse(),2);
     }
     @Test
     public void testGetHotel(){
@@ -60,20 +60,20 @@ public class StrasseTest {
     }
     @Test
     public void testGetMiete(){
-        Assert.assertEquals(hauptstraße.getMiete(),20);
+        Assert.assertEquals(hauptstraße.getRent(),20);
     }
     @Test
     public void testSetMiete(){
-        hauptstraße.setMiete(30);
-        Assert.assertEquals(hauptstraße.getMiete(),30);
+        hauptstraße.setRent(30);
+        Assert.assertEquals(hauptstraße.getRent(),30);
     }
     @Test
     public void testGetHausPreis(){
-        Assert.assertEquals(hauptstraße.getHausPreis(),50);
+        Assert.assertEquals(hauptstraße.getHousePrice(),50);
     }
     @Test
     public void testSetHausPreis(){
-        hauptstraße.setHausPreis(55);
-        Assert.assertEquals(hauptstraße.getHausPreis(),55);
+        hauptstraße.setHousePrice(55);
+        Assert.assertEquals(hauptstraße.getHousePrice(),55);
     }
 }

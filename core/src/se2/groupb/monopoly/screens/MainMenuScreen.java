@@ -152,7 +152,7 @@ public class MainMenuScreen extends GameScreenAdapter {
                 && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
 
             this.dispose();
-            monopoly.setScreen(new BuyScreen(monopoly));
+            monopoly.setScreen(new MonopolyScreen(monopoly));
 
         }
 
