@@ -5,13 +5,42 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 public class ClientFoundation {
     private Client client;
     boolean allJoined = false;
 
     public ClientFoundation(int tcpPort, int udpPort) {
+        System.setProperty("java.net.preferIPv4Stack", "true");
         this.client = new Client();
+        InetAddress ip = null;
+
+        System.out.println("Client IP: " + getLocalIpAddress());
+
+        ip = client.discoverHost(6333, 5000);
+        System.out.println("discoverHost: " + ip);
+
+        /*for (int i = 0; i < 1000000; i++) {
+
+            if (ip != null) break;
+            try{
+                Thread.currentThread().sleep(1000);
+                Enumeration interfaces = NetworkInterface.getNetworkInterfaces();
+                while (interfaces.hasMoreElements()){
+                   NetworkInterface n = (NetworkInterface) interfaces.nextElement();
+                    System.out.println(n.getDisplayName());
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }*/
+
+
         Network.register(client);
         startConnection(client, "localhost", tcpPort, udpPort, 100);
     }
@@ -32,7 +61,7 @@ public class ClientFoundation {
                     // if 4 Players (Server) connected then server sends message to all clients and starts game automatically
                     if (object.equals("START")) {
                         allJoined = true;
-                    } else if (object.equals("WAITINGFORPLAYER")){
+                    } else if (object.equals("WAITINGFORPLAYER")) {
                         allJoined = false;
                     }
                 }
@@ -47,8 +76,25 @@ public class ClientFoundation {
     /**
      * Getter Method to use in screens to see if all players joined
      */
-    public boolean allPlayersJoined(){
+    public boolean allPlayersJoined() {
         return allJoined;
+    }
+
+    public String getLocalIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
 
