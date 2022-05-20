@@ -24,29 +24,34 @@ import se2.groupb.monopoly.network.ServerFoundation;
 
 public class HostGameScreen extends GameScreenAdapter {
 
+    // input handling processor
     InputBackProcessor inputProcessor;
 
+    // network variables
     ServerFoundation instance;
     ClientFoundation client;
     private boolean isConnected = false;
+
+    // state booleans
+    private boolean buttonPressed = false;
+    private boolean allJoined = false;
+
+    // text variables
+    private BitmapFont font;
+    private GlyphLayout waitingText;
+    private GlyphLayout connectedText;
+    private GlyphLayout loadingText;
+
+    // button variables
+    private Stage stage;
+    private ImageButton connectBtn;
+    private ImageButton startBtn;
 
     private int buttonWidth;
     private int buttonHeight;
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
     private float xPosButtons;
-
-    private boolean buttonPressed = false;
-    private boolean allJoined = false;
-
-    private BitmapFont font;
-    private GlyphLayout waitingText;
-    private GlyphLayout connectedText;
-    private GlyphLayout loadingText;
-
-    private Stage stage;
-    private ImageButton connectBtn;
-    private ImageButton startBtn;
 
     public HostGameScreen(Monopoly monopoly) {
         super(monopoly);
@@ -140,8 +145,9 @@ public class HostGameScreen extends GameScreenAdapter {
                 if (client.allPlayersJoined()) {
                     allJoined = true;
                     switchScreenDelayed(getScreen(), 0.000000001f);
+                    return true;
                 } else allJoined = false;
-                return true;
+                return false;
             }
         });
     }

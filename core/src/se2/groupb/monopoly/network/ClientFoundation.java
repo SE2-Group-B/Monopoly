@@ -42,10 +42,10 @@ public class ClientFoundation {
 
 
         Network.register(client);
-        startConnection(client, "localhost", tcpPort, udpPort, 100);
+        startConnection(client, ip, tcpPort, udpPort, 100);
     }
 
-    private void startConnection(Client client, String host, int tcpPort, int udpPort, int maxBlockingTime) {
+    private void startConnection(Client client, InetAddress host, int tcpPort, int udpPort, int maxBlockingTime) {
         client.start();
         try {
             client.connect(maxBlockingTime, host, tcpPort, udpPort);
