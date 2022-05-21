@@ -31,6 +31,7 @@ public class JoinGameScreen extends GameScreenAdapter {
 
     private BitmapFont font;
     private GlyphLayout waitingText;
+    private GlyphLayout joinedText;
 
     public JoinGameScreen(Monopoly monopoly) {
         super(monopoly);
@@ -47,7 +48,8 @@ public class JoinGameScreen extends GameScreenAdapter {
         // interaction text
         font = new BitmapFont();
         font.getData().setScale(3.5f);
-        waitingText = new GlyphLayout(font, "Joined Room, Waiting for other Players");
+        waitingText = new GlyphLayout(font, "No Server found, searching server");
+        joinedText = new GlyphLayout(font, "Joined Room, Waiting for other Players");
 
         // button size and initial button positions
         buttonSize = Gdx.graphics.getWidth() / 3;
@@ -75,7 +77,7 @@ public class JoinGameScreen extends GameScreenAdapter {
                 client = new ClientFoundation(6334, 6333);
 
                 // new input processor that disconnects server if you go back
-                inputProcessor.JoinMenuServerProcessor(client.getClient());
+                // inputProcessor.JoinMenuServerProcessor(client.getClient());
                 // show Waiting for Players on screen if server was started
                 buttonPressed = true;
 
@@ -116,6 +118,12 @@ public class JoinGameScreen extends GameScreenAdapter {
             font.draw(monopoly.batch, waitingText,
                     (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
+        if (buttonPressed && allConnected) {
+            // if server found and connected
+            font.draw(monopoly.batch, joinedText,
+                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+        }
+
 
         monopoly.batch.end();
 

@@ -17,24 +17,21 @@ public class ClientFoundation {
     public ClientFoundation(int tcpPort, int udpPort) {
         System.setProperty("java.net.preferIPv4Stack", "true");
         this.client = new Client();
-        InetAddress ip;
+        InetAddress ip = null;
         boolean serverExists = false;
 
         System.out.println("Client IP: " + getLocalIpAddress());
 
-        ip = client.discoverHost(6333, 5000);
-        System.out.println("Host discovered: " + ip);
-
         for (int i = 0; i < 5; i++) {
             if (ip != null) {
+                System.out.println("Host Discovered: " + ip);
                 serverExists = true;
                 break;
             }
-
-            if (ip != null) break;
             try {
-                Thread.currentThread().sleep(1000);
-                ip = client.discoverHost(6333, 5000);
+                ip = client.discoverHost(6333, 1000);
+                if (ip != null) System.out.println("host: " + ip);
+                else System.out.println("No host discovered!");
             } catch (Exception e) {
                 e.printStackTrace();
             }
