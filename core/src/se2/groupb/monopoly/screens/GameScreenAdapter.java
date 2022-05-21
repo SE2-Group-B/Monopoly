@@ -51,12 +51,27 @@ public abstract class GameScreenAdapter implements Screen {
         return isCorrectPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
     }
 
-    protected static ImageButton drawImageButton(String texturePath){
+    /**
+     * Method for making ImageButtons with relative ease
+     * @param texturePath
+     * @param X centered positioning of the button on the X axis ->
+     *          the width of the button is already calculated in the method just give it Gdx.graphics.getWidth() / x
+     * @param Y
+     * @param size how big should the button be in the screen ->
+     *             use Gdx.graphics.getWidth() / x as size and give it to method, the rest will be done in the method
+     *             Button is as big as x of the screen size, height is automatically scaled to width
+     * @return ImageButton that is positioned and scaled
+     */
+    protected static ImageButton drawImageButton(String texturePath, float X, float Y, int size){
         Texture buttonTexture = new Texture(Gdx.files.internal(texturePath));
         TextureRegion buttonTextureRegion = new TextureRegion(buttonTexture);
         TextureRegionDrawable buttonRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
-        return new ImageButton(buttonRegionDrawable);
-
+        ImageButton button = new ImageButton(buttonRegionDrawable);
+        float scale = size/ buttonTexture.getWidth();
+        button.setSize(buttonTexture.getWidth()*scale, buttonTexture.getHeight()*scale);
+        button.setX(X - button.getWidth()/2.0f);
+        button.setY(Y);
+        return button;
     }
 
     public abstract void switchScreenDelayed(final GameScreenAdapter screen, float delay);

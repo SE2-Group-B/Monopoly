@@ -17,13 +17,30 @@ public class ClientFoundation {
     public ClientFoundation(int tcpPort, int udpPort) {
         System.setProperty("java.net.preferIPv4Stack", "true");
         this.client = new Client();
-        InetAddress ip = null;
+        InetAddress ip;
+        boolean serverExists = false;
 
         System.out.println("Client IP: " + getLocalIpAddress());
 
         ip = client.discoverHost(6333, 5000);
-        System.out.println("discoverHost: " + ip);
+        System.out.println("Host discovered: " + ip);
 
+        for (int i = 0; i < 5; i++) {
+            if (ip != null) {
+                serverExists = true;
+                break;
+            }
+
+            if (ip != null) break;
+            try {
+                Thread.currentThread().sleep(1000);
+                ip = client.discoverHost(6333, 5000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // discover network connections
         /*for (int i = 0; i < 1000000; i++) {
 
             if (ip != null) break;
@@ -41,8 +58,10 @@ public class ClientFoundation {
         }*/
 
 
-        Network.register(client);
-        startConnection(client, ip, tcpPort, udpPort, 100);
+        if (serverExists) {
+            Network.register(client);
+            startConnection(client, ip, tcpPort, udpPort, 100);
+        }
     }
 
     private void startConnection(Client client, InetAddress host, int tcpPort, int udpPort, int maxBlockingTime) {
@@ -82,9 +101,9 @@ public class ClientFoundation {
 
     public String getLocalIpAddress() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
                         return inetAddress.getHostAddress().toString();

@@ -1,18 +1,13 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -47,8 +42,7 @@ public class HostGameScreen extends GameScreenAdapter {
     private ImageButton connectBtn;
     private ImageButton startBtn;
 
-    private int buttonWidth;
-    private int buttonHeight;
+    private int buttonSize;
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
     private float xPosButtons;
@@ -74,25 +68,16 @@ public class HostGameScreen extends GameScreenAdapter {
         loadingText = new GlyphLayout(font, "Loading the Game");
 
         // button size
-        buttonWidth = Gdx.graphics.getWidth() / 3;
-        buttonHeight = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
+        buttonSize = Gdx.graphics.getWidth() / 3;
 
         // initial position of buttons and y offset
-        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonWidth / 2D);
+        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
-        // Button for connecting to Server
-        connectBtn = super.drawImageButton("images/MenuButtons/connect.png");
-        connectBtn.setX(xPosButtons);
-        connectBtn.setY(yPosInitialButtons);
-        connectBtn.setSize(buttonWidth, buttonHeight);
-
-        // Button to start Game
-        startBtn = drawImageButton("images/MenuButtons/start_game.png");
-        startBtn.setX(xPosButtons);
-        startBtn.setY(yPosInitialButtons - yPosOffsetButtons);
-        startBtn.setSize(buttonWidth, buttonHeight);
+        // Buttons for connecting to Server and starting the game
+        connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
+        startBtn = drawImageButton("images/MenuButtons/start_game.png", xPosButtons, yPosInitialButtons-yPosOffsetButtons, buttonSize);
 
         stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
         stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
@@ -166,14 +151,14 @@ public class HostGameScreen extends GameScreenAdapter {
         if (isConnected && !buttonPressed) {
 
             font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * buttonHeight));
+                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
         if (!allJoined && buttonPressed) {
             font.draw(monopoly.batch, waitingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * buttonHeight));
+                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         } else if (allJoined && buttonPressed) {
             font.draw(monopoly.batch, loadingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * buttonHeight));
+                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
 
         monopoly.batch.end();

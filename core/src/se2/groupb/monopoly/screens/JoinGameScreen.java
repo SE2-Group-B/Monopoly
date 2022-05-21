@@ -2,7 +2,6 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
-import se2.groupb.monopoly.network.ServerFoundation;
 
 public class JoinGameScreen extends GameScreenAdapter {
 
@@ -24,10 +22,8 @@ public class JoinGameScreen extends GameScreenAdapter {
 
     private Stage stage;
     private ImageButton connectBtn;
-    private ImageButton startBtn;
 
-    private int buttonWidth;
-    private int buttonHeight;
+    private int buttonSize;
     private float yPosInitialButtons;
     private float xPosButtons;
     private boolean buttonPressed = false;
@@ -54,16 +50,12 @@ public class JoinGameScreen extends GameScreenAdapter {
         waitingText = new GlyphLayout(font, "Joined Room, Waiting for other Players");
 
         // button size and initial button positions
-        buttonWidth = Gdx.graphics.getWidth() / 3;
-        buttonHeight = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
-        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonWidth / 2D);
+        buttonSize = Gdx.graphics.getWidth() / 3;
+        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
 
         // make image button
-        connectBtn = drawImageButton("images/MenuButtons/connect.png");
-        connectBtn.setX(xPosButtons);
-        connectBtn.setY(yPosInitialButtons);
-        connectBtn.setSize(buttonWidth, buttonHeight);
+        connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
 
         stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
         stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
@@ -122,7 +114,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         if (buttonPressed && !allConnected) {
             // if server response: client connected is still missing
             font.draw(monopoly.batch, waitingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * buttonHeight));
+                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
 
         monopoly.batch.end();
