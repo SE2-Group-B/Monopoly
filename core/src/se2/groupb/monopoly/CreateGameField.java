@@ -500,6 +500,10 @@ public class CreateGameField extends ScreenAdapter {
         return new Texture(path);
     }
 
+    private void move(){
+
+    }
+
     private void drawDice(Texture d1, Texture d2) {
         spriteBatch.draw(d1, xPosButtons+500 , yPosInitialButtons-400, 500, 500);
         spriteBatch.draw(d2, xPosButtons, yPosInitialButtons-400, 500, 500);
