@@ -34,6 +34,7 @@ public class CreateGameField extends ScreenAdapter {
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
     private BitmapFont moneyfont;
+    private Property[] logicalGameField;
 
     private Field[] fields = new Field[40];
 
@@ -152,7 +153,7 @@ public class CreateGameField extends ScreenAdapter {
         cheatActivated = reported = shakeCheatActivated = false;
         cheatDice = pachCount = 0;
 
-        Property[] logicalGameField =createLogicalGameField();
+        this.logicalGameField = createLogicalGameField();
 
 
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -227,19 +228,15 @@ public class CreateGameField extends ScreenAdapter {
         spriteBatch.draw(rollDice, xPosButtons+100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons+100, yPosInitialButtons-500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && onTurn) {
-            if(count <10) {
-                int pos = roll();
-                currentPos += pos;
+                currentPos += roll();
                 currentPos %= 40;
 //            float posA = positions[currentPos].x;
 //            positions[currentPos].x = posA + 4;
 
             player1.move(positions[currentPos]);
 
-                player1.move(positions[currentPos]);
-                count++;
-            }else{
-                //Some end-event
+            for (int i = 0; i < 40; i++) {
+                System.out.println(getPropertyType(i));
             }
 
         }
@@ -320,61 +317,59 @@ public class CreateGameField extends ScreenAdapter {
 
             //spielfigur.move(new Vector3(0f,0f,-6.5f));
 
-    public void createModels() {
-
-
-        Vector3 vector3 = new Vector3(0, 0, 0);
-        Vector3 boardPosition = new Vector3(0f, 0, 0);
-        Vector3 vector3Rotate = new Vector3(0, 1, 0);
-        // Rotate 0 degrees = left side
-        // Rotate 90 degrees = bot side
-        // Rotate 180 degrees = right side
-        // Rotate 270 degrees = top side
-        float distanceWidth = 6.5f;
-        vector3.set(boardPosition.add(vector3));
-        for (int i = 0; i < fields.length; i++) {
-
-            if (i <= 10) { // left side
-                vector3.x = 0f;
-                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
-                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.z = -((i) * distanceWidth); // how far up/down - i-5 is more up
-                fieldModInstance[i].transform.translate(vector3);
-                fieldModInstance[i].transform.rotate(vector3Rotate, 0);
-//                instantiatePositions(i, vector3);
-            }
-            if (i >= 11 && i < 20) { // top side
-                //vector3.x = 50;
-                vector3.z = -68f; // here
-                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
-                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.x = ((i - 9.535f) * distanceWidth) ; // more <- || less ->
-                fieldModInstance[i].transform.translate(vector3);
-                fieldModInstance[i].transform.rotate(vector3Rotate, 270);
-//                instantiatePositions(i, vector3);
-            }
-            if (i >= 20 && i <= 30) { // right side
-                //vector3.x = 100;
-                vector3.x = 71.05f; // right/left
-                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
-                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.z = ((i - 30f) * distanceWidth); // how far up/down - i-5 is more up
-                fieldModInstance[i].transform.translate(vector3);
-                fieldModInstance[i].transform.rotate(vector3Rotate, 180);
-//                instantiatePositions(i, vector3);
-
-            }
-            if (i > 30 && i < fields.length) { // bot Side
-                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
-                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                vector3.x = -((i - 40f) * distanceWidth) + 3f; // more -> || less <-
-                vector3.z = 3.25f;
-                fieldModInstance[i].transform.translate(vector3);
-                fieldModInstance[i].transform.rotate(vector3Rotate, 90);
-//                instantiatePositions(i, vector3);
-            }
-        }
-    }
+//    public void createModels() {
+//        Vector3 vector3 = new Vector3(0, 0, 0);
+//        Vector3 boardPosition = new Vector3(0f, 0, 0);
+//        Vector3 vector3Rotate = new Vector3(0, 1, 0);
+//        // Rotate 0 degrees = left side
+//        // Rotate 90 degrees = bot side
+//        // Rotate 180 degrees = right side
+//        // Rotate 270 degrees = top side
+//        float distanceWidth = 6.5f;
+//        vector3.set(boardPosition.add(vector3));
+//        for (int i = 0; i < fields.length; i++) {
+//
+//            if (i <= 10) { // left side
+//                vector3.x = 0f;
+//                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
+//                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+//                vector3.z = -((i) * distanceWidth); // how far up/down - i-5 is more up
+//                fieldModInstance[i].transform.translate(vector3);
+//                fieldModInstance[i].transform.rotate(vector3Rotate, 0);
+////                instantiatePositions(i, vector3);
+//            }
+//            if (i >= 11 && i < 20) { // top side
+//                //vector3.x = 50;
+//                vector3.z = -68f; // here
+//                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
+//                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+//                vector3.x = ((i - 9.535f) * distanceWidth) ; // more <- || less ->
+//                fieldModInstance[i].transform.translate(vector3);
+//                fieldModInstance[i].transform.rotate(vector3Rotate, 270);
+////                instantiatePositions(i, vector3);
+//            }
+//            if (i >= 20 && i <= 30) { // right side
+//                //vector3.x = 100;
+//                vector3.x = 71.05f; // right/left
+//                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
+//                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+//                vector3.z = ((i - 30f) * distanceWidth); // how far up/down - i-5 is more up
+//                fieldModInstance[i].transform.translate(vector3);
+//                fieldModInstance[i].transform.rotate(vector3Rotate, 180);
+////                instantiatePositions(i, vector3);
+//
+//            }
+//            if (i > 30 && i < fields.length) { // bot Side
+//                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
+//                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+//                vector3.x = -((i - 40f) * distanceWidth) + 3f; // more -> || less <-
+//                vector3.z = 3.25f;
+//                fieldModInstance[i].transform.translate(vector3);
+//                fieldModInstance[i].transform.rotate(vector3Rotate, 90);
+////                instantiatePositions(i, vector3);
+//            }
+//        }
+//    }
 
 //    private void instantiatePositions(int i, Vector3 vector) {
 //        positions[i] = vector;
@@ -466,6 +461,15 @@ public class CreateGameField extends ScreenAdapter {
         return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
     }
 
+    public String getPropertyType(int n){
+        return getLastSubString(""+logicalGameField[n].getClass());
+    }
+
+    private String getLastSubString(String filename){
+        String[] parts = filename.split("\\."); // String array, each element is text between dots
+        return parts[parts.length-1];
+    }
+
     public Property[] createLogicalGameField(){
         Property[] spielfeld = new Property[40];
         spielfeld[0] = new Property("Los");
@@ -509,6 +513,62 @@ public class CreateGameField extends ScreenAdapter {
         spielfeld[38]= new PenaltyField("Zusatzsteuer", 200);
         spielfeld[39]=new Street("Schlossallee", 800,false, 0, 0, 350,  200);
         return spielfeld;
+    }
+
+    public void createModels() {
+        Vector3 vector3 = new Vector3(0, 0, 0);
+        Vector3 boardPosition = new Vector3(0f, 0, 0);
+        Vector3 vector3Rotate = new Vector3(0, 1, 0);
+        float distanceWidth = 6.5f;
+        vector3.set(boardPosition.add(vector3));
+        // Rotate 0 degrees = left side
+        // Rotate 90 degrees = bot side
+        // Rotate 180 degrees = right side
+        // Rotate 270 degrees = top side
+
+
+        for (int i = 0; i < fields.length; i++) {
+
+            fieldModInstance[i] = new ModelInstance(fields[i].getModel());
+            fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+            if (i <= 10) { // left side
+                vector3.z = -((i) * distanceWidth); // how far up/down - i-5 is more up
+                fieldModInstance[i].transform.translate(vector3);
+                fieldModInstance[i].transform.rotate(vector3Rotate, 0);
+
+            }
+            if (i >= 11 && i < 20) { // top side
+                //vector3.x = 50;
+                vector3.z = -68f; // here
+                vector3.x = ((i - 9.535f) * distanceWidth) ; // more <- || less ->
+                fieldModInstance[i].transform.translate(vector3);
+                fieldModInstance[i].transform.rotate(vector3Rotate, 270);
+
+            }
+            if (i >= 20 && i <= 30) { // right side
+                //vector3.x = 100;
+                vector3.x = 71.05f; // right/left
+                vector3.z = ((i - 30f) * distanceWidth); // how far up/down - i-5 is more up
+                fieldModInstance[i].transform.translate(vector3);
+                fieldModInstance[i].transform.rotate(vector3Rotate, 180);
+
+
+            }
+            if (i > 30 && i < fields.length) { // bot Side
+                vector3.x = -((i - 40f) * distanceWidth) + 3f; // more -> || less <-
+                vector3.z = 3.25f;
+                fieldModInstance[i].transform.translate(vector3);
+                fieldModInstance[i].transform.rotate(vector3Rotate, 90);
+
+            }
+        }
+    }
+
+    public void createModelsRefactored(int start ,int end, int v3X, int v3Z, int rotation) {
+        for (int i = start; i < end; i++) {
+
+
+        }
     }
 
 }
