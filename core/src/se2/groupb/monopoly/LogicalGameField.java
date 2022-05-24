@@ -1,6 +1,6 @@
 package se2.groupb.monopoly;
 
-public class logicalGameField {
+public class LogicalGameField {
     private Property[] gameField;
 
     public Property[] logicalGameField() {
