@@ -265,7 +265,9 @@ public class CreateGameField extends ScreenAdapter {
         if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
             int pos = player1.getPosition();
+            if(!isSomeonesProperty(pos)){
 
+            }
             //fields[pos]
             //spielfigur1.setMeineGrundstuecke(arrayList1.add());
         }
@@ -406,6 +408,40 @@ public class CreateGameField extends ScreenAdapter {
     private void drawDice(Texture d1, Texture d2) {
         spriteBatch.draw(d1, xPosButtons + 500, yPosInitialButtons - 400, 500, 500);
         spriteBatch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
+    }
+
+    private void checkCurrentProperty(){
+        // Auf jetzigen Player abstimmen
+        int playerPosition = player1.getPosition();
+        String propertyType = getPropertyType(playerPosition);
+        String output = "";
+        switch (propertyType){
+            case "Street":
+                if(isSomeonesProperty(playerPosition)){
+                    Street s = (Street) logicalGameField[playerPosition];
+                    output = player1.payToOtherPlayer(player2, s.getRent());
+                }
+                break;
+            case "Trainstation":
+                if(isSomeonesProperty(playerPosition)){
+                    Trainstation t = (Trainstation) logicalGameField[playerPosition];
+                    output = player1.payToOtherPlayer(player2, t.getRent() * player2.getNumOfTrainstaitions());
+                }
+                break;
+            case "PenaltyField":
+                PenaltyField p = (PenaltyField) logicalGameField[playerPosition];
+                player1.changeMoney(p.getStrafe());
+                // in den Pot werfen
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + propertyType);
+        }
+        //output ausgeben am Screen
+    }
+
+    private boolean isSomeonesProperty(int position){
+        // Auf jetzigen Player abstimmen
+        return logicalGameField[position].getOwnerId()!=0;
     }
 
 

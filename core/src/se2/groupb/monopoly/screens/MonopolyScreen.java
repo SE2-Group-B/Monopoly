@@ -126,4 +126,9 @@ public class MonopolyScreen extends GameScreenAdapter {
     public void dispose() {
 
     }
+
+    @Override
+    public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
+
+    }
 }

@@ -2,9 +2,15 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 
 import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
@@ -13,25 +19,33 @@ import se2.groupb.monopoly.network.ServerFoundation;
 
 public class HostGameScreen extends GameScreenAdapter {
 
+    // input handling processor
     InputBackProcessor inputProcessor;
 
+    // network variables
     ServerFoundation instance;
     ClientFoundation client;
     private boolean isConnected = false;
-    private int callOnce = 0; // so that the connect button only calls server create function once
 
-    private Texture connectButton;
-    private Texture startGameButton;
-    private int buttonSizeX;
-    private int buttonSizeY;
-    private float yPosInitialButtons;
-    private float yPosOffsetButtons;
-    private float xPosButtons;
+    // state booleans
     private boolean buttonPressed = false;
+    private boolean allJoined = false;
 
+    // text variables
     private BitmapFont font;
     private GlyphLayout waitingText;
     private GlyphLayout connectedText;
+    private GlyphLayout loadingText;
+
+    // button variables
+    private Stage stage;
+    private ImageButton connectBtn;
+    private ImageButton startBtn;
+
+    private int buttonSize;
+    private float yPosInitialButtons;
+    private float yPosOffsetButtons;
+    private float xPosButtons;
 
     public HostGameScreen(Monopoly monopoly) {
         super(monopoly);
@@ -44,96 +58,107 @@ public class HostGameScreen extends GameScreenAdapter {
          * close server if leaving
          */
         inputProcessor = new InputBackProcessor(monopoly);
-        inputProcessor.backToMainMenuProcessor();
+        // inputProcessor.backToMainMenuProcessor();
 
-        connectButton = new Texture("images/MenuButtons/connect.png");
-        startGameButton = new Texture("images/MenuButtons/start_game.png");
-
-        buttonSizeX = Gdx.graphics.getWidth() / 3;
-        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
-
-        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
-        yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
-        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
-
+        // draw text
         font = new BitmapFont();
         font.getData().setScale(3.5f);
         waitingText = new GlyphLayout(font, "Waiting for other Players");
         connectedText = new GlyphLayout(font, "Connected to Server");
+        loadingText = new GlyphLayout(font, "Loading the Game");
 
+        // button size
+        buttonSize = Gdx.graphics.getWidth() / 3;
+
+        // initial position of buttons and y offset
+        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
+        yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
+        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
+
+        // Buttons for connecting to Server and starting the game
+        connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
+        startBtn = drawImageButton("images/MenuButtons/start_game.png", xPosButtons, yPosInitialButtons-yPosOffsetButtons, buttonSize);
+
+        stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
+        stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
+        Gdx.input.setInputProcessor(stage); //Start taking input from the ui
+
+        /**
+         *                                                                          *
+         * * * * * * * * * * * * * * * Button Listeners * * * * * * * * * * * * * * *
+         *                                                                          *
+         * start a server, connect as client
+         */
+        connectBtn.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (!isConnected) {
+                    // starting a server to host a game
+                    instance = new ServerFoundation(6334, 6333);
+
+                    // connect client (the host) to the server
+                    client = new ClientFoundation(6334, 6333);
+                    isConnected = true;
+
+                    // new input processor that disconnects server if you go back
+                    // inputProcessor.HostMenuServerProcessor(instance.getServer(), client.getClient());
+
+                    // send a message to server
+                    client.getClient().sendUDP("Ich will ein Spiel hosten");
+
+                    stage.addActor(startBtn);
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        /**
+         * send message to server to start game
+         * if all players joined game starts, else message on screen
+         */
+        startBtn.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                client.getClient().sendUDP("HOST");
+
+                buttonPressed = true;
+                // draw rectangle above old text since it does not vanish when loading the game
+
+                if (client.allPlayersJoined()) {
+                    allJoined = true;
+                    switchScreenDelayed(getScreen(), 0.000000001f);
+                    return true;
+                } else allJoined = false;
+                return false;
+            }
+        });
     }
 
     @Override
     public void render(float delta) {
 
-        float userPosX = (float) Gdx.input.getX();
-        float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
-
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
+        stage.draw(); //Draw the ui
+
+
         monopoly.batch.begin();
+        if (isConnected && !buttonPressed) {
 
-        // Host Game Button
-        monopoly.batch.draw(connectButton, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY);
-
-
-        /**
-         * Pressing the Host Game button leads to HostGameScreen
-         */
-        if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
-                && Gdx.input.isTouched()) {
-
-            callOnce++;
-
-            if (callOnce == 1) {
-                // starting a server to host a game
-                instance = new ServerFoundation(6333, 6333);
-
-                // connect client (the host) to the server
-                client = new ClientFoundation(6333, 6333);
-                isConnected = true;
-
-                // new input processor that disconnects server if you go back
-                inputProcessor.HostMenuServerProcessor(instance.getServer(), client.getClient());
-                // show Waiting for Players on screen if server was started
-                buttonPressed = true;
-
-                // send a message to server
-                client.getClient().sendUDP("Ich will ein Spiel hosten");
-            }
-        }
-
-
-        if (buttonPressed) {
             font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * buttonSizeY));
+                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
-
-        if (isConnected) {
-            // once player is connected draw Start Game Button
-            monopoly.batch.draw(startGameButton, xPosButtons, yPosInitialButtons - yPosOffsetButtons, buttonSizeX, buttonSizeY);
-            // check if button was pressed
-            if (isCorrectPosition(userPosX, userPosY, xPosButtons, yPosInitialButtons - yPosOffsetButtons, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
-                    && Gdx.input.isTouched()) {
-                // send the server the message to start the game
-                client.getClient().sendUDP("HOST");
-
-                buttonPressed = false;
-                font.draw(monopoly.batch, waitingText,
-                        (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * buttonSizeY));
-
-            }
-
-            // if all players joined then switch the view
-            if (client.allPlayersJoined()) {
-                /**
-                 * START THE Game
-                 * set the screen
-                 */
-                inputProcessor.backDoesNothingProcessor();
-                monopoly.setScreen(new CreateGameField(monopoly));
-            }
-
+        if (!allJoined && buttonPressed) {
+            font.draw(monopoly.batch, waitingText,
+                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+        } else if (allJoined && buttonPressed) {
+            font.draw(monopoly.batch, loadingText,
+                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
 
         monopoly.batch.end();
@@ -163,5 +188,23 @@ public class HostGameScreen extends GameScreenAdapter {
     public void dispose() {
 
     }
+
+    @Override
+    public void switchScreenDelayed(final GameScreenAdapter screen, float delay) {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                inputProcessor.backDoesNothingProcessor();
+                screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
+            }
+        }, delay);
+    }
+
+    public GameScreenAdapter getScreen() {
+        return this;
+    }
+
+
+
 
 }

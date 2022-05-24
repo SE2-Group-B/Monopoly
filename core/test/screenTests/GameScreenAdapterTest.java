@@ -60,6 +60,11 @@ public class GameScreenAdapterTest {
             public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
                 return super.testPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
             }
+
+            @Override
+            public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
+
+            }
         };
     }
 
