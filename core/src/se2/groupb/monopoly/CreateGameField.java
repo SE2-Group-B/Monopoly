@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -49,6 +50,7 @@ public class CreateGameField extends ScreenAdapter {
     private Player player2;
     private Player player3;
     private Player player4;
+    String[] placement = new String[4];
 
 
     // private CameraInputController cameraController;
@@ -536,6 +538,35 @@ public class CreateGameField extends ScreenAdapter {
             fieldModInstance[i].transform.translate(vector3);
             fieldModInstance[i].transform.rotate(vector3Rotate, degrees);
         }
+    }
+
+    public void winning(){
+        int player1mon, player2mon, player3mon, player4mon;
+        int[] sums = new int[4];
+        player1mon = player1.getBankBalance()/*+arraylist1.*/;
+        player2mon = player2.getBankBalance();
+        player3mon = player3.getBankBalance();
+        player4mon = player4.getBankBalance();
+
+        sums[0] = player1mon;
+        sums[1] = player2mon;
+        sums[2] = player3mon;
+        sums[3] = player4mon;
+        Arrays.sort(sums);
+
+        for(int i = 0; i<=3;i++){
+            if(sums[i] == player1mon){
+                placement[i] = player1.getName();
+            }else if(sums[i] == player2mon){
+                placement[i] = player2.getName();
+            }else if(sums[i] == player3mon){
+                placement[i] = player3.getName();
+            }else if(sums[i] == player4mon){
+                placement[i] = player4.getName();
+            }
+        }
+
+
     }
 
 }
