@@ -5,18 +5,63 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 public class ClientFoundation {
     private Client client;
     boolean allJoined = false;
 
     public ClientFoundation(int tcpPort, int udpPort) {
+        System.setProperty("java.net.preferIPv4Stack", "true");
         this.client = new Client();
-        Network.register(client);
-        startConnection(client, "localhost", tcpPort, udpPort, 100);
+        InetAddress ip = null;
+        boolean serverExists = false;
+
+        System.out.println("Client IP: " + getLocalIpAddress());
+
+        for (int i = 0; i < 5; i++) {
+            if (ip != null) {
+                System.out.println("Host Discovered: " + ip);
+                serverExists = true;
+                break;
+            }
+            try {
+                ip = client.discoverHost(6333, 1000);
+                if (ip != null) System.out.println("host: " + ip);
+                else System.out.println("No host discovered!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // discover network connections
+        /*for (int i = 0; i < 1000000; i++) {
+
+            if (ip != null) break;
+            try{
+                Thread.currentThread().sleep(1000);
+                Enumeration interfaces = NetworkInterface.getNetworkInterfaces();
+                while (interfaces.hasMoreElements()){
+                   NetworkInterface n = (NetworkInterface) interfaces.nextElement();
+                    System.out.println(n.getDisplayName());
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }*/
+
+
+        if (serverExists) {
+            Network.register(client);
+            startConnection(client, ip, tcpPort, udpPort, 100);
+        }
     }
 
-    private void startConnection(Client client, String host, int tcpPort, int udpPort, int maxBlockingTime) {
+    private void startConnection(Client client, InetAddress host, int tcpPort, int udpPort, int maxBlockingTime) {
         client.start();
         try {
             client.connect(maxBlockingTime, host, tcpPort, udpPort);
@@ -32,7 +77,7 @@ public class ClientFoundation {
                     // if 4 Players (Server) connected then server sends message to all clients and starts game automatically
                     if (object.equals("START")) {
                         allJoined = true;
-                    } else if (object.equals("WAITINGFORPLAYER")){
+                    } else if (object.equals("WAITINGFORPLAYER")) {
                         allJoined = false;
                     }
                 }
@@ -47,8 +92,25 @@ public class ClientFoundation {
     /**
      * Getter Method to use in screens to see if all players joined
      */
-    public boolean allPlayersJoined(){
+    public boolean allPlayersJoined() {
         return allJoined;
+    }
+
+    public String getLocalIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
 

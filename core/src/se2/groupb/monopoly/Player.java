@@ -47,6 +47,20 @@ public class Player {
         modInstance.transform.translate(fieldPos);
     }
 
+    public String payToOtherPlayer(Player p, int value){
+        String output = "";
+        if(this.getBankBalance() < value){
+            output = this.getName() + " ist Bankrott";
+            this.setBankBalance(0);
+            p.changeMoney(value);
+        }else{
+            this.changeMoney(-value);
+            p.changeMoney(value);
+            output = this.getName() + " steppen on " + p.getName() + "'s Property and payed " + value + " rent.";
+        }
+        return output;
+    }
+
     public void move(Vector3 vector3) {
         this.fieldPos = vector3;
         modInstance.transform.setTranslation(vector3);
