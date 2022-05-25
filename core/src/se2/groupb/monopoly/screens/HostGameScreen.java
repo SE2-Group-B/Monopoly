@@ -88,6 +88,9 @@ public class HostGameScreen extends GameScreenAdapter {
          * * * * * * * * * * * * * * * Button Listeners * * * * * * * * * * * * * * *
          *                                                                          *
          * start a server, connect as client
+         *
+         * TODO: show ports on user screen
+         * sometimes crashes when connecting?
          */
         connectBtn.addListener(new EventListener() {
             @Override

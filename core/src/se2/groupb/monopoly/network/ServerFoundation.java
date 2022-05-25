@@ -46,6 +46,7 @@ public class ServerFoundation {
 
         try {
             this.server.bind(tcpPort, udpPort);
+            System.out.println("Ports opened at: " + tcpPort + " : " + udpPort);
             // System.out.println("Server IP: " + getLocalIpAddress());
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +76,9 @@ public class ServerFoundation {
     }
 
     private int randomizePorts() {
-        return new Random().nextInt() % 6000 + 1000;
+        int r = new Random().nextInt() % 6000 + 1000;
+        if (r < 0) r *= -1;
+        return r;
     }
 
     public void setTcpPort(int tcpPort) {
