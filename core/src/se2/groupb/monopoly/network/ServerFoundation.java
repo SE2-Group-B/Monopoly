@@ -15,10 +15,12 @@ public class ServerFoundation {
     private Server server;
     int tcpPort;
     int udpPort;
+    Random random;
 
     private int currentPlayerID = 0;
 
     public ServerFoundation() {
+        random = new Random();
         System.setProperty("java.net.preferIPv4Stack", "true");
         this.server = new Server(1_000_000, 1_000_000);
         try {
@@ -73,7 +75,7 @@ public class ServerFoundation {
     }
 
     private int randomizePorts() {
-        int r = new Random().nextInt() % 6000 + 1000;
+        int r = random.nextInt() % 6000 + 1000;
         if (r < 0) r *= -1;
         return r;
     }
