@@ -7,17 +7,31 @@ import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
+import java.net.UnknownHostException;
+import java.util.Random;
 
 public class ServerFoundation {
 
     private Server server;
+    int tcpPort;
+    int udpPort;
+    Random random;
 
-    public ServerFoundation(int tcpPort, int udpPort) {
+    private int currentPlayerID = 0;
+
+    public ServerFoundation() {
+        random = new Random();
         System.setProperty("java.net.preferIPv4Stack", "true");
         this.server = new Server(1_000_000, 1_000_000);
+        try {
+            System.out.println(InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        setTcpPort(randomizePorts());
+        setUdpPort(getTcpPort());
+
         // register kryo network
         Network.register(server);
         // starting a tcp server connection
@@ -31,7 +45,8 @@ public class ServerFoundation {
 
         try {
             this.server.bind(tcpPort, udpPort);
-            System.out.println("Server IP: " + getLocalIpAddress());
+            System.out.println("Ports opened at: " + tcpPort + " : " + udpPort);
+            // System.out.println("Server IP: " + getLocalIpAddress());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,25 +74,29 @@ public class ServerFoundation {
 
     }
 
+    private int randomizePorts() {
+        int r = random.nextInt() % 6000 + 1000;
+        if (r < 0) r *= -1;
+        return r;
+    }
+
+    public void setTcpPort(int tcpPort) {
+        this.tcpPort = tcpPort;
+    }
+
+    public void setUdpPort(int udpPort) {
+        this.udpPort = udpPort;
+    }
+
     public Server getServer() {
         return server;
     }
 
-    public String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
-        }
-        return null;
+    public int getTcpPort() {
+        return tcpPort;
     }
 
+    public int getUdpPort() {
+        return udpPort;
+    }
 }

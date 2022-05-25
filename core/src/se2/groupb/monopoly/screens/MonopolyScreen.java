@@ -6,17 +6,14 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
-
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
-import se2.groupb.monopoly.Property;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.Player;
+import se2.groupb.monopoly.Property;
 
 public class MonopolyScreen extends GameScreenAdapter {
     Texture img;

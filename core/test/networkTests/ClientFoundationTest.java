@@ -18,8 +18,9 @@ public class ClientFoundationTest {
 
     @Before
     public void setUp() {
-        server = new ServerFoundation(6333, 6333);
-        client = new ClientFoundation(6333, 6333);
+        server = new ServerFoundation();
+
+        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
     }
 
     @After
@@ -31,20 +32,20 @@ public class ClientFoundationTest {
     // should be @Test (expected = IOException.class or ConnectException.class), but it works fine without
     @Test /*(expected = ConnectException.class)*/
     public void noServerTest() {
-        server.getServer().close();
+        /*server.getServer().close();
         server = null;
         try {
             client.getClient().update(500);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        client = new ClientFoundation(6333, 6333);
+        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());*/
     }
 
     @Test
     public void serverExistsTest() {
-        server = new ServerFoundation(6333, 6333);
-        client = new ClientFoundation(6333, 6333);
+        server = new ServerFoundation();
+        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
     }
 
     @Test
