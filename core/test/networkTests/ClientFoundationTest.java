@@ -18,8 +18,9 @@ public class ClientFoundationTest {
 
     @Before
     public void setUp() {
-        server = new ServerFoundation(6333, 6333);
-        client = new ClientFoundation(6333, 6333);
+        server = new ServerFoundation();
+
+        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
     }
 
     @After
@@ -38,13 +39,13 @@ public class ClientFoundationTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        client = new ClientFoundation(6333, 6333);
+        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
     }
 
     @Test
     public void serverExistsTest() {
-        server = new ServerFoundation(6333, 6333);
-        client = new ClientFoundation(6333, 6333);
+        server = new ServerFoundation();
+        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
     }
 
     @Test

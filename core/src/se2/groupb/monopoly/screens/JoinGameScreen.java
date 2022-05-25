@@ -8,8 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
 
@@ -72,30 +74,27 @@ public class JoinGameScreen extends GameScreenAdapter {
         connectBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                // button press
-                // connect client (new client) to the server
-                client = new ClientFoundation(6334, 6333);
 
-                // new input processor that disconnects server if you go back
-                // inputProcessor.JoinMenuServerProcessor(client.getClient());
-                // show Waiting for Players on screen if server was started
-                buttonPressed = true;
+                if (!isConnected){
+                    // button press
+                    // connect client (new client) to the server
+                    // TODO get input from user ->
+                    //  user should enter Port by themselves for hosting a room with friends
+                    //  send port on messenger
+                    client = new ClientFoundation(6334, 6333);
+                    isConnected = true;
 
-                // send a message to server
-                client.getClient().sendUDP("Ich will einem Spiel beitreten");
+                    // new input processor that disconnects server if you go back
+                    // inputProcessor.JoinMenuServerProcessor(client.getClient());
+                    // show Waiting for Players on screen if server was started
+                    buttonPressed = true;
 
-
-                if (client.allPlayersJoined()) {
-                    /**
-                     * START THE GAME
-                     * set the screen
-                     */
-                    allConnected = true;
-                    monopoly.setScreen(new MonopolyScreen(monopoly));
+                    // send a message to server
+                    client.getClient().sendUDP("Ich will einem Spiel beitreten");
                     return true;
-                } else {
-                    allConnected = false;
                 }
+
+
                 return false;
 
             }
@@ -122,6 +121,19 @@ public class JoinGameScreen extends GameScreenAdapter {
             // if server found and connected
             font.draw(monopoly.batch, joinedText,
                     (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+        }
+
+        if (isConnected){
+            if (client.allPlayersJoined()) {
+                /**
+                 * START THE GAME
+                 * set the screen
+                 */
+                allConnected = true;
+                switchScreenDelayed(this, 0.00000001f);
+            } else {
+                allConnected = false;
+            }
         }
 
 
@@ -156,8 +168,14 @@ public class JoinGameScreen extends GameScreenAdapter {
     }
 
     @Override
-    public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
-
+    public void switchScreenDelayed(final GameScreenAdapter screen, float delay) {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                inputProcessor.backDoesNothingProcessor();
+                screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
+            }
+        }, delay);
     }
 
 }

@@ -94,10 +94,10 @@ public class HostGameScreen extends GameScreenAdapter {
             public boolean handle(Event event) {
                 if (!isConnected) {
                     // starting a server to host a game
-                    instance = new ServerFoundation(6334, 6333);
+                    instance = new ServerFoundation();
 
                     // connect client (the host) to the server
-                    client = new ClientFoundation(6334, 6333);
+                    client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
                     isConnected = true;
 
                     // new input processor that disconnects server if you go back

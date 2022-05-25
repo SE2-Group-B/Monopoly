@@ -20,9 +20,9 @@ public class ServerFoundationTest {
 
     @Before
     public void setUp() {
-        server = new ServerFoundation(6333, 6333);
-        client1 = new ClientFoundation(6333, 6333);
-        client2 = new ClientFoundation(6333, 6333);
+        server = new ServerFoundation();
+        client1 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
 
     }
 
@@ -43,8 +43,8 @@ public class ServerFoundationTest {
     @Test
     public void startGameTest() {
         client1.getClient().sendUDP("HOST");
-        client3 = new ClientFoundation(6333, 6333);
-        client4 = new ClientFoundation(6333, 6333);
+        client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
 
         client1.getClient().sendUDP("HOST");
     }

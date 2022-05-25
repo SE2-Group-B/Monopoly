@@ -3,6 +3,10 @@ package screenTests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +69,11 @@ public class GameScreenAdapterTest {
             public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
             }
+
+            @Override
+            public ImageButton drawImageButtonTester(String texturePath, float X, float Y, int size) {
+                return super.drawImageButtonTester(texturePath, X, Y, size);
+            }
         };
     }
 
@@ -119,5 +128,11 @@ public class GameScreenAdapterTest {
         assertFalse(screen.testPosition(x + 15, y + yOffset + 15, x, y, 10, 10, yOffset));
         // if no offset, its out of the button area, so it doesn't click
         assertFalse(screen.testPosition(x + 15, y + 15, x, y, 10, 10, yOffset));
+    }
+
+    // Gdx.files throws error in unit test
+    @Test
+    public void drawImageTester(){
+        //screen.drawImageButtonTester("images/MenuButtons/connect.png", 0,0,1920/3);
     }
 }
