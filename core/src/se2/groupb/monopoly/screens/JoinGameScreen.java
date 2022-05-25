@@ -32,10 +32,12 @@ public class JoinGameScreen extends GameScreenAdapter {
     private float xPosButtons;
     private boolean buttonPressed = false;
     private boolean allConnected = false;
+    private boolean isValidInput;
 
     private BitmapFont font;
-    private GlyphLayout waitingText;
-    private GlyphLayout joinedText;
+    private GlyphLayout loadingText;
+    private GlyphLayout connectedText;
+    private GlyphLayout groupText;
 
     // text input from user
     private TextField userInput;
@@ -55,8 +57,9 @@ public class JoinGameScreen extends GameScreenAdapter {
         // interaction text
         font = new BitmapFont();
         font.getData().setScale(3.5f);
-        waitingText = new GlyphLayout(font, "No Server found, searching server");
-        joinedText = new GlyphLayout(font, "Joined Room, Waiting for other Players");
+        connectedText = new GlyphLayout(font, "");
+        loadingText = new GlyphLayout(font, "Loading the Game");
+        groupText = new GlyphLayout(font, "");
 
         // button size and initial button positions
         buttonSize = Gdx.graphics.getWidth() / 3;
@@ -69,7 +72,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         // textField for user input
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         userInput = new TextField("", skin);
-        userInput.setPosition(Gdx.graphics.getWidth() / 2f - Gdx.graphics.getWidth() / 8f, Gdx.graphics.getHeight() / 2f - Gdx.graphics.getHeight() / 16f);
+        userInput.setPosition(Gdx.graphics.getWidth() / 2f - Gdx.graphics.getWidth() / 8f, Gdx.graphics.getHeight() * 0.75f - Gdx.graphics.getHeight() / 16f);
         userInput.setSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 8f);
         TextField.TextFieldStyle textFieldStyle = skin.get(TextField.TextFieldStyle.class);
         textFieldStyle.font.getData().setScale(4.0f);
@@ -91,27 +94,36 @@ public class JoinGameScreen extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 String inputText = userInput.getText();
+                // show Waiting for Players on screen if server was started
+                buttonPressed = true;
                 int port = 0;
-                if (isParsable(inputText)){
+                if (isParsable(inputText)) {
                     port = Integer.parseInt(inputText);
                 }
 
                 if (!inputText.isEmpty() && port >= 1000 && port <= 7000) {
+                    isValidInput = true;
                     if (!isConnected) {
                         // button press
                         // connect client (new client) to the server
                         client = new ClientFoundation(port, port);
-                        isConnected = true;
+                        if (client.getClient().isConnected()) {
+                            isConnected = true;
+                            connectedText.setText(font, "Joined server, waiting for players");
+                        } else {isConnected = false;
+                        connectedText.setText(font, "Could not connect, please retry!");}
 
                         // new input processor that disconnects server if you go back
                         // inputProcessor.JoinMenuServerProcessor(client.getClient());
-                        // show Waiting for Players on screen if server was started
-                        buttonPressed = true;
 
-                        // send a message to server
-                        client.getClient().sendUDP("Ich will einem Spiel beitreten");
                         return true;
                     }
+                } else {
+                    isValidInput = false;
+                }
+
+                if (!isValidInput){
+                    groupText.setText(font, "The Groups range from 1000 to 7000");
                 }
 
 
@@ -134,13 +146,17 @@ public class JoinGameScreen extends GameScreenAdapter {
 
         if (buttonPressed && !allConnected) {
             // if server response: client connected is still missing
-            font.draw(monopoly.batch, waitingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+            font.draw(monopoly.batch, connectedText,
+                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
-        if (buttonPressed && allConnected) {
+        if (buttonPressed && allConnected && isConnected) {
             // if server found and connected
-            font.draw(monopoly.batch, joinedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+            font.draw(monopoly.batch, loadingText,
+                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+        }
+        if (buttonPressed && !isConnected && !isValidInput) {
+            font.draw(monopoly.batch, groupText,
+                    (float) (Gdx.graphics.getWidth() / 2D - groupText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
 
         if (isConnected) {
@@ -198,11 +214,11 @@ public class JoinGameScreen extends GameScreenAdapter {
         }, delay);
     }
 
-    public boolean isParsable(String s){
-        try{
+    public boolean isParsable(String s) {
+        try {
             Integer.parseInt(s);
             return true;
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }

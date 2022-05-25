@@ -173,7 +173,7 @@ color-picker-selector-vertical
 cursor
   rotate: false
   xy: 369, 239
-  size: 1, 1
+  size: 100, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
