@@ -38,9 +38,14 @@ public class JoinGameScreen extends GameScreenAdapter {
     private GlyphLayout loadingText;
     private GlyphLayout connectedText;
     private GlyphLayout groupText;
+    private GlyphLayout enterGroupNumberText;
 
     // text input from user
     private TextField userInput;
+    private float xPosInput;
+    private float yPosInput;
+    private float inputWidth;
+    private float inputHeight;
 
     public JoinGameScreen(Monopoly monopoly) {
         super(monopoly);
@@ -60,6 +65,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         connectedText = new GlyphLayout(font, "");
         loadingText = new GlyphLayout(font, "Loading the Game");
         groupText = new GlyphLayout(font, "");
+        enterGroupNumberText = new GlyphLayout(font, "Please enter group number:");
 
         // button size and initial button positions
         buttonSize = Gdx.graphics.getWidth() / 3;
@@ -69,11 +75,17 @@ public class JoinGameScreen extends GameScreenAdapter {
         // make image button
         connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
 
+        // input position and size
+        inputHeight = Gdx.graphics.getHeight() / 8f;
+        inputWidth = Gdx.graphics.getWidth() / 4f;
+        yPosInput = Gdx.graphics.getHeight() * 0.75f - inputHeight / 2f;
+        xPosInput = Gdx.graphics.getWidth() / 2f - inputWidth / 2f;
+
         // textField for user input
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         userInput = new TextField("", skin);
-        userInput.setPosition(Gdx.graphics.getWidth() / 2f - Gdx.graphics.getWidth() / 8f, Gdx.graphics.getHeight() * 0.75f - Gdx.graphics.getHeight() / 16f);
-        userInput.setSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 8f);
+        userInput.setPosition(xPosInput, yPosInput);
+        userInput.setSize(inputWidth, inputHeight);
         TextField.TextFieldStyle textFieldStyle = skin.get(TextField.TextFieldStyle.class);
         textFieldStyle.font.getData().setScale(4.0f);
         userInput.setAlignment(1);
@@ -110,8 +122,10 @@ public class JoinGameScreen extends GameScreenAdapter {
                         if (client.getClient().isConnected()) {
                             isConnected = true;
                             connectedText.setText(font, "Joined server, waiting for players");
-                        } else {isConnected = false;
-                        connectedText.setText(font, "Could not connect, please retry!");}
+                        } else {
+                            isConnected = false;
+                            connectedText.setText(font, "Could not connect, please retry!");
+                        }
 
                         // new input processor that disconnects server if you go back
                         // inputProcessor.JoinMenuServerProcessor(client.getClient());
@@ -122,7 +136,7 @@ public class JoinGameScreen extends GameScreenAdapter {
                     isValidInput = false;
                 }
 
-                if (!isValidInput){
+                if (!isValidInput) {
                     groupText.setText(font, "The Groups range from 1000 to 7000");
                 }
 
@@ -158,6 +172,9 @@ public class JoinGameScreen extends GameScreenAdapter {
             font.draw(monopoly.batch, groupText,
                     (float) (Gdx.graphics.getWidth() / 2D - groupText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
         }
+
+        font.draw(monopoly.batch, enterGroupNumberText,
+                (float) (Gdx.graphics.getWidth() / 2D - enterGroupNumberText.width / 2D), (yPosInput + 1.5f * inputHeight));
 
         if (isConnected) {
             if (client.allPlayersJoined()) {
