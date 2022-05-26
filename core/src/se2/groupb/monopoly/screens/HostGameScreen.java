@@ -116,6 +116,7 @@ public class HostGameScreen extends GameScreenAdapter {
 
                     return true;
                 }
+                if (!client.getClient().isConnected()) isConnected=false;
 
                 return false;
             }
@@ -154,9 +155,9 @@ public class HostGameScreen extends GameScreenAdapter {
 
 
         monopoly.batch.begin();
-        if (isConnected && !buttonPressed) {
+        if (isConnected) {
             font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight()));
         }
         if (!allJoined && buttonPressed) {
             font.draw(monopoly.batch, waitingText,
