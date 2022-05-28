@@ -1,9 +1,11 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -57,10 +59,10 @@ public class JoinGameScreen extends GameScreenAdapter {
          * instead of closing the App go to Main Menu
          */
         inputProcessor = new InputBackProcessor(monopoly);
-        /*inputProcessor.backToMainMenuProcessor();*/
 
         // interaction text
         font = new BitmapFont();
+
         font.getData().setScale(3.5f);
         connectedText = new GlyphLayout(font, "");
         loadingText = new GlyphLayout(font, "Loading the Game");
@@ -86,15 +88,14 @@ public class JoinGameScreen extends GameScreenAdapter {
         userInput = new TextField("", skin);
         userInput.setPosition(xPosInput, yPosInput);
         userInput.setSize(inputWidth, inputHeight);
-        TextField.TextFieldStyle textFieldStyle = skin.get(TextField.TextFieldStyle.class);
-        textFieldStyle.font.getData().setScale(4.0f);
         userInput.setAlignment(1);
 
 
         stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
         stage.addActor(userInput);
         stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
-        Gdx.input.setInputProcessor(stage); //Start taking input from the ui
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backToMainMenuProcessor(), stage);
+        Gdx.input.setInputProcessor(inputMultiplexer); //Start taking input from the ui
 
         /**
          *                                                                          *
@@ -120,15 +121,15 @@ public class JoinGameScreen extends GameScreenAdapter {
                         // connect client (new client) to the server
                         client = new ClientFoundation(port, port);
                         if (client.getClient().isConnected()) {
+                            // new input processor that disconnects from server if user goes back
+                            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.joinMenuServerProcessor(client.getClient()), stage);
+                            Gdx.input.setInputProcessor(inputMultiplexer);
                             isConnected = true;
                             connectedText.setText(font, "Joined server, waiting for players");
                         } else {
                             isConnected = false;
                             connectedText.setText(font, "Could not connect, please retry!");
                         }
-
-                        // new input processor that disconnects server if you go back
-                        // inputProcessor.JoinMenuServerProcessor(client.getClient());
 
                         return true;
                     }
@@ -180,8 +181,10 @@ public class JoinGameScreen extends GameScreenAdapter {
             if (client.allPlayersJoined()) {
                 /**
                  * START THE GAME
-                 * set the screen
+                 * set the screen, user can't go to main menu anymore
                  */
+                InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+                Gdx.input.setInputProcessor(inputMultiplexer);
                 allConnected = true;
                 switchScreenDelayed(this, 0.00000001f);
             } else {
@@ -225,7 +228,6 @@ public class JoinGameScreen extends GameScreenAdapter {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                inputProcessor.backDoesNothingProcessor();
                 screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
             }
         }, delay);

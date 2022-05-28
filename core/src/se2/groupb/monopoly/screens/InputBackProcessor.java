@@ -21,7 +21,7 @@ public class InputBackProcessor {
      * Handling the back button of the phone
      * instead of closing the App do nothing
      */
-    public void backDoesNothingProcessor() {
+    public InputProcessor backDoesNothingProcessor() {
         InputProcessor backProcessor = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -32,14 +32,15 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        Gdx.input.setInputProcessor(backProcessor);
+        /*Gdx.input.setInputProcessor(backProcessor);*/
+        return backProcessor;
     }
 
     /**
      * Handling the back button of the phone
      * instead of closing the App go to Main Menu
      */
-    public void backToMainMenuProcessor() {
+    public InputProcessor backToMainMenuProcessor() {
         InputProcessor backProcessor = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -50,7 +51,8 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        Gdx.input.setInputProcessor(backProcessor);
+        /*Gdx.input.setInputProcessor(backProcessor);*/
+        return backProcessor;
     }
 
     /**
@@ -59,7 +61,7 @@ public class InputBackProcessor {
      * disconnect the server and disconnect the client
      * TO-DO unregister from Kryo
      */
-    public void HostMenuServerProcessor(final Server server, final Client client) {
+    public InputProcessor hostMenuServerProcessor(final Server server, final Client client) {
         InputProcessor backProcessor = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -72,7 +74,8 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        Gdx.input.setInputProcessor(backProcessor);
+        /*Gdx.input.setInputProcessor(backProcessor);*/
+        return backProcessor;
     }
 
     /**
@@ -81,7 +84,7 @@ public class InputBackProcessor {
      * disconnect the client
      * TO-DO unregister from Kryo
      */
-    public void JoinMenuServerProcessor(final Client client) {
+    public InputProcessor joinMenuServerProcessor(final Client client) {
         InputProcessor backProcessor = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -93,6 +96,7 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        Gdx.input.setInputProcessor(backProcessor);
+        /*Gdx.input.setInputProcessor(backProcessor);*/
+        return backProcessor;
     }
 }
