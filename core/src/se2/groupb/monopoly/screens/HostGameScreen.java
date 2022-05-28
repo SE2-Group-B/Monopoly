@@ -1,6 +1,7 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -58,7 +59,6 @@ public class HostGameScreen extends GameScreenAdapter {
          * close server if leaving
          */
         inputProcessor = new InputBackProcessor(monopoly);
-        // inputProcessor.backToMainMenuProcessor();
 
         // draw text
         font = new BitmapFont();
@@ -81,7 +81,8 @@ public class HostGameScreen extends GameScreenAdapter {
 
         stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
         stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
-        Gdx.input.setInputProcessor(stage); //Start taking input from the ui
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backToMainMenuProcessor(), stage);
+        Gdx.input.setInputProcessor(inputMultiplexer); //Start taking input from the ui
 
         /**
          *                                                                          *
@@ -107,7 +108,8 @@ public class HostGameScreen extends GameScreenAdapter {
                         connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
 
                         // new input processor that disconnects server if you go back
-                        // inputProcessor.HostMenuServerProcessor(instance.getServer(), client.getClient());
+                        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
+                        Gdx.input.setInputProcessor(inputMultiplexer);
 
                         stage.addActor(startBtn);
                     } else {isConnected = false;
@@ -116,6 +118,7 @@ public class HostGameScreen extends GameScreenAdapter {
 
                     return true;
                 }
+                if (!client.getClient().isConnected()) isConnected=false;
 
                 return false;
             }
@@ -134,6 +137,12 @@ public class HostGameScreen extends GameScreenAdapter {
                 // draw rectangle above old text since it does not vanish when loading the game
 
                 if (client.allPlayersJoined()) {
+                    /**
+                     * START THE GAME
+                     * set the screen, user can't go to main menu anymore
+                     */
+                    InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+                    Gdx.input.setInputProcessor(inputMultiplexer);
                     allJoined = true;
                     switchScreenDelayed(getScreen(), 0.000000001f);
                     return true;
@@ -154,9 +163,9 @@ public class HostGameScreen extends GameScreenAdapter {
 
 
         monopoly.batch.begin();
-        if (isConnected && !buttonPressed) {
+        if (isConnected) {
             font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight()));
         }
         if (!allJoined && buttonPressed) {
             font.draw(monopoly.batch, waitingText,
@@ -199,7 +208,6 @@ public class HostGameScreen extends GameScreenAdapter {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                inputProcessor.backDoesNothingProcessor();
                 screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
             }
         }, delay);
