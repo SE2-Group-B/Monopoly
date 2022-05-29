@@ -96,29 +96,34 @@ public class HostGameScreen extends GameScreenAdapter {
         connectBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (!isConnected) {
-                    // starting a server to host a game
-                    instance = new ServerFoundation();
+                // justTouched() is used so button only does action once, when clicked
+                if (Gdx.input.justTouched()) {
+                    if (!isConnected) {
+                        // starting a server to host a game
+                        instance = new ServerFoundation();
 
-                    // connect client (the host) to the server
-                    client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
-                    System.out.println(client.getClient().isConnected());
-                    if (client.getClient().isConnected()) {
-                        isConnected = true;
-                        connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
+                        // connect client (the host) to the server
+                        client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
+                        System.out.println(client.getClient().isConnected());
+                        if (client.getClient().isConnected()) {
+                            isConnected = true;
+                            connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
 
-                        // new input processor that disconnects server if you go back
-                        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
-                        Gdx.input.setInputProcessor(inputMultiplexer);
+                            // new input processor that disconnects server if you go back
+                            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
+                            Gdx.input.setInputProcessor(inputMultiplexer);
 
-                        stage.addActor(startBtn);
-                    } else {isConnected = false;
-                        connectedText.setText(font, "Could not connect, please retry!");
+                            stage.addActor(startBtn);
+                        } else {
+                            isConnected = false;
+                            connectedText.setText(font, "Could not connect, please retry!");
+                        }
+
+                        return true;
                     }
-
-                    return true;
+                    if (!client.getClient().isConnected()) isConnected = false;
                 }
-                if (!client.getClient().isConnected()) isConnected=false;
+
 
                 return false;
             }
@@ -131,22 +136,25 @@ public class HostGameScreen extends GameScreenAdapter {
         startBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                client.getClient().sendUDP("HOST");
+                // justTouched() is used so button only does action once, when clicked
+                if (Gdx.input.justTouched()) {
+                    client.getClient().sendUDP("HOST");
 
-                buttonPressed = true;
-                // draw rectangle above old text since it does not vanish when loading the game
+                    buttonPressed = true;
+                    // draw rectangle above old text since it does not vanish when loading the game
 
-                if (client.allPlayersJoined()) {
-                    /**
-                     * START THE GAME
-                     * set the screen, user can't go to main menu anymore
-                     */
-                    InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
-                    Gdx.input.setInputProcessor(inputMultiplexer);
-                    allJoined = true;
-                    switchScreenDelayed(getScreen(), 0.000000001f);
-                    return true;
-                } else allJoined = false;
+                    if (client.allPlayersJoined()) {
+                        /**
+                         * START THE GAME
+                         * set the screen, user can't go to main menu anymore
+                         */
+                        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+                        Gdx.input.setInputProcessor(inputMultiplexer);
+                        allJoined = true;
+                        switchScreenDelayed(getScreen(), 0.000000001f);
+                        return true;
+                    } else allJoined = false;
+                }
                 return false;
             }
         });

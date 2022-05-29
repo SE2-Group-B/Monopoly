@@ -58,6 +58,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         /**
          * instead of closing the App go to Main Menu
          */
+        // setup custom InputProcessor
         inputProcessor = new InputBackProcessor(monopoly);
 
         // interaction text
@@ -90,12 +91,14 @@ public class JoinGameScreen extends GameScreenAdapter {
         userInput.setSize(inputWidth, inputHeight);
         userInput.setAlignment(1);
 
-
-        stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
+        // set up a stage for the ui
+        stage = new Stage(new ScreenViewport());
+        // add button and input to stage to perform rendering and take input
         stage.addActor(userInput);
-        stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
+        stage.addActor(connectBtn);
+        // add a inputProcessor multiplexer so you get button input have a custom InputProcessor
         InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backToMainMenuProcessor(), stage);
-        Gdx.input.setInputProcessor(inputMultiplexer); //Start taking input from the ui
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         /**
          *                                                                          *
@@ -106,44 +109,47 @@ public class JoinGameScreen extends GameScreenAdapter {
         connectBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                String inputText = userInput.getText();
-                // show Waiting for Players on screen if server was started
-                buttonPressed = true;
-                int port = 0;
-                if (isParsable(inputText)) {
-                    port = Integer.parseInt(inputText);
-                }
-
-                if (!inputText.isEmpty() && port >= 1000 && port <= 7000) {
-                    isValidInput = true;
-                    if (!isConnected) {
-                        // button press
-                        // connect client (new client) to the server
-                        client = new ClientFoundation(port, port);
-                        if (client.getClient().isConnected()) {
-                            // new input processor that disconnects from server if user goes back
-                            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.joinMenuServerProcessor(client.getClient()), stage);
-                            Gdx.input.setInputProcessor(inputMultiplexer);
-                            isConnected = true;
-                            connectedText.setText(font, "Joined server, waiting for players");
-                        } else {
-                            isConnected = false;
-                            connectedText.setText(font, "Could not connect, please retry!");
-                        }
-
-                        return true;
+                // justTouched() is used so button only does action once, when clicked
+                if (Gdx.input.justTouched()) {
+                    String inputText = userInput.getText();
+                    // show Waiting for Players on screen if server was started
+                    buttonPressed = true;
+                    int port = 0;
+                    if (isParsable(inputText)) {
+                        port = Integer.parseInt(inputText);
                     }
-                } else {
-                    isValidInput = false;
-                }
 
-                if (!isValidInput) {
-                    groupText.setText(font, "The Groups range from 1000 to 7000");
-                }
+                    if (!inputText.isEmpty() && port >= 1000 && port <= 7000) {
+                        // bool for checking if user enters valid input
+                        isValidInput = true;
+                        if (!isConnected) {
+                            // button press
+                            // connect client (new client) to the server
+                            client = new ClientFoundation(port, port);
+                            if (client.getClient().isConnected()) {
+                                // new input processor that disconnects from server if user goes back
+                                InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.joinMenuServerProcessor(client.getClient()), stage);
+                                Gdx.input.setInputProcessor(inputMultiplexer);
+                                // if client is connected, show player that he has connection
+                                isConnected = true;
+                                connectedText.setText(font, "Joined server, waiting for players");
+                            } else {
+                                isConnected = false;
+                                connectedText.setText(font, "Could not connect, please retry!");
+                            }
+                            return true;
+                        }
+                    } else {
+                        isValidInput = false;
+                    }
 
+                    // if user enters invalid input show text
+                    if (!isValidInput) {
+                        groupText.setText(font, "The Groups range from 1000 to 7000");
+                    }
+                }
 
                 return false;
-
             }
         });
 
