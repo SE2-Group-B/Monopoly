@@ -22,6 +22,8 @@ public class Player {
     private Color color;
     ModelInstance modInstance;
     Vector3 fieldPos;
+    private boolean prison = false;
+    private int prisoncount = 0;
 
     private String buildingPath = "Spielfeld\\char.g3dj";
     private CreateGameField field;
@@ -121,12 +123,33 @@ public class Player {
     }
 
 
+    public boolean getPrison() {
+        return prison;
+    }
+
+    public void setPrison(boolean prison) {
+        this.prison = prison;
+    }
+
     public void move(int augenzahl) {
-        if((getPosition() + augenzahl) > 39){
-            roundmoney();
+        if(!this.getPrison()) {
+            if ((getPosition() + augenzahl) > 39) {
+                roundmoney();
+            }
+
+            setPosition((getPosition() + augenzahl) % 40);
+        }else{
+            prisoncount++;
         }
-        setPosition((getPosition() + augenzahl) % 40);
-        
+
+        if(prisoncount == 3){
+            this.setPrison(false);
+        }
+    }
+
+    public void gotojail(){
+        setPosition(10);
+        prison = true;
     }
 
     public void roundmoney() {
@@ -201,7 +224,7 @@ public class Player {
                 break;
             case 16:
                 kartenbild = new Texture("images/KartenImages/Karte16.png");
-                setPosition(10);
+                gotojail();
                 break;
             case 17:
                 kartenbild = new Texture("images/KartenImages/Karte17.png");
@@ -217,7 +240,7 @@ public class Player {
                 break;
             case 20:
                 kartenbild = new Texture("images/KartenImages/Karte20.png");
-                setPosition(10);
+                gotojail();
                 break;
             case 21:
                 kartenbild = new Texture("images/KartenImages/Karte21.png");
