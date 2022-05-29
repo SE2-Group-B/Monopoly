@@ -79,6 +79,9 @@ public class CreateGameField extends ScreenAdapter {
     private Random random = new Random();
     private int cheatDice;
     private int pachCount;
+    private int currentPlayerId;
+    private int playerCount;
+    private String screenOutput;
 
     private Texture dice1;
     private Texture dice2;
@@ -158,6 +161,9 @@ public class CreateGameField extends ScreenAdapter {
         onTurn = true;
         cheatActivated = reported = shakeCheatActivated = false;
         cheatDice = pachCount = 0;
+        currentPlayerId = 1;
+        playerCount = 4;
+        screenOutput = "Test123";
 
         this.logicalGameField = createLogicalGameField();
 
@@ -194,7 +200,6 @@ public class CreateGameField extends ScreenAdapter {
         player4 = new Player(4, "Green", 2000, arrayList, 0, Color.GREEN);
         player4.createSpielfigur();
 
-
         camera.update();
 
 //        cameraController = new CameraInputController(camera);
@@ -229,16 +234,29 @@ public class CreateGameField extends ScreenAdapter {
         modelBatch.render(player3.modInstance, environment);
         modelBatch.render(player4.modInstance, environment);
 
+        /**
+         * Set pach Cheat
+         */
+        if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
+            cheatDice++;
+        }
 
+        /**
+         * Pressing the Roll Dice Button
+         */
         spriteBatch.draw(rollDice, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && onTurn) {
-            currentPos += roll();
-            currentPos %= 40;
-//            float posA = positions[currentPos].x;
-//            positions[currentPos].x = posA + 4;
+            //currentPos = (currentPos + roll()) % 40;
+            getCurrentPlayer().setPosition((getCurrentPlayer().getPosition()+roll())%40);
+            //player1.move(positions[currentPos]);
+            //getCurrentPlayer().move(positions[currentPos]);
+            getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
 
-            player1.move(positions[currentPos]);
+
+            if(!onTurn){
+                nextPlayer();
+            }
 
             for (int i = 0; i < 40; i++) {
                 // test if method works
@@ -256,6 +274,8 @@ public class CreateGameField extends ScreenAdapter {
         moneyfont.draw(spriteBatch, player2.getName() + ": " + String.valueOf(player2.getBankBalance()), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 150);
         moneyfont.draw(spriteBatch, player3.getName() + ": " + String.valueOf(player3.getBankBalance()), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 200);
         moneyfont.draw(spriteBatch, player4.getName() + ": " + String.valueOf(player4.getBankBalance()), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 250);
+        moneyfont.draw(spriteBatch, screenOutput, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 500);
+
 
         spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2);
         if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
@@ -275,7 +295,7 @@ public class CreateGameField extends ScreenAdapter {
         if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons + 150, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && !reported) {
             if (cheatActivated) {
-                player1.changeMoney(-100);
+                getCurrentPlayer().changeMoney(-200);
                 player2.changeMoney(100);
             } else {
                 player2.changeMoney(-100);
@@ -292,7 +312,7 @@ public class CreateGameField extends ScreenAdapter {
                 yAccel = Gdx.input.getAccelerometerY();
                 zAccel = Gdx.input.getAccelerometerZ();
                 if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
-                    player1.changeMoney(100);
+                    getCurrentPlayer().changeMoney(100);
                     cheatActivated = shakeCheatActivated = true;
                 }
             }
@@ -408,31 +428,32 @@ public class CreateGameField extends ScreenAdapter {
 
     private void checkCurrentProperty(){
         // Auf jetzigen Player abstimmen
-        int playerPosition = player1.getPosition();
+        int playerPosition = getCurrentPlayer().getPosition();
         String propertyType = getPropertyType(playerPosition);
         String output = "";
         switch (propertyType){
             case "Street":
-                if(isSomeonesProperty(playerPosition)){
+                if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
                     Street s = (Street) logicalGameField[playerPosition];
-                    output = player1.payToOtherPlayer(player2, s.getRent());
+                    output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), s.getRent());
                 }
                 break;
             case "Trainstation":
-                if(isSomeonesProperty(playerPosition)){
+                if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
                     Trainstation t = (Trainstation) logicalGameField[playerPosition];
-                    output = player1.payToOtherPlayer(player2, t.getRent() * player2.getNumOfTrainstaitions());
+                    output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), t.getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
                 }
                 break;
             case "PenaltyField":
                 PenaltyField p = (PenaltyField) logicalGameField[playerPosition];
-                player1.changeMoney(p.getStrafe());
+                getCurrentPlayer().changeMoney(p.getStrafe());
                 // in den Pot werfen
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + propertyType);
         }
         //output ausgeben am Screen
+        screenOutput = output;
     }
 
     private boolean isSomeonesProperty(int position){
@@ -440,6 +461,51 @@ public class CreateGameField extends ScreenAdapter {
         return logicalGameField[position].getOwnerId()!=0;
     }
 
+    private Player getPropertyOwner(int pos){
+        return getPlayerById(logicalGameField[pos].getOwnerId());
+    }
+
+    private void nextPlayer(){
+        if(currentPlayerId == playerCount){
+            currentPlayerId = 1;
+        }else{
+            currentPlayerId++;
+        }
+        screenOutput = "Test";
+        reset();
+    }
+
+    private Player getCurrentPlayer(){
+        return getPlayerById(currentPlayerId);
+    }
+
+    private Player getPlayerById(int id){
+        Player p;
+        switch (id){
+            case 1:
+                p = player1;
+                break;
+            case 2:
+                p = player2;
+                break;
+            case 3:
+                p = player3;
+                break;
+            case 4:
+                p = player4;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + currentPlayerId);
+        }
+        return p;
+    }
+
+    private void reset(){
+        cheatActivated = shakeCheatActivated = reported = false;
+        onTurn = true;
+        cheatDice = 0;
+        pachCount = 0;
+    }
 
     private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
         return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
