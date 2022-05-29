@@ -16,16 +16,16 @@ public class WinningScreen extends GameScreenAdapter{
     private GlyphLayout waitingText;
 
 
-    CreateGameField placement;
+    CreateGameField createGameField = new CreateGameField();
 
     SpriteBatch spriteBatch;
 
-    private String text = "Hallo";/*
-    private String first = "Sieger: " + placement[0] + " with:" + player.getBankBalance();
-    private String second = "Zweiter: " + CreateGameField.player2.getName() + " with:" + CreateGameField.player2.getBankBalance();
-    private String third = "Dritter: " + CreateGameField.player3.getName() + " with:" + CreateGameField.player3.getBankBalance();
-    private String fourth = "Vierter: " + CreateGameField.player4.getName() + " with:" + CreateGameField.player4.getBankBalance();
-*/
+    private String text = "Hallo";
+    private String first = "Sieger: " + createGameField.placement[0] + " with:" + createGameField.sums[0];
+    private String second = "Zweiter: " + createGameField.placement[1] + " with:" + createGameField.sums[1];
+    private String third = "Dritter: " + createGameField.placement[2] + " with:" + createGameField.sums[2];
+    private String fourth = "Vierter: " + createGameField.placement[3] + " with:" + createGameField.sums[3];
+
 
     public WinningScreen(Monopoly monopoly) {
         super(monopoly);
@@ -38,9 +38,6 @@ public class WinningScreen extends GameScreenAdapter{
          */
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
         inputProcessor.backToMainMenuProcessor();
-
-
-
 
         font = new BitmapFont();
         spriteBatch = new SpriteBatch();
@@ -60,8 +57,10 @@ public class WinningScreen extends GameScreenAdapter{
         font.draw(spriteBatch, text, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()/2);
         font.draw(spriteBatch, text, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+50);
         font.draw(spriteBatch, text, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+75);
-        font.draw(spriteBatch, text, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+100);
-        font.draw(spriteBatch, text, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+125);
+        /*font.draw(spriteBatch, first, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+50);
+        font.draw(spriteBatch, second, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+75);
+        font.draw(spriteBatch, third, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+100);
+        font.draw(spriteBatch, fourth, Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth()+125);*/
 
         spriteBatch.end();
         monopoly.batch.end();
@@ -97,7 +96,4 @@ public class WinningScreen extends GameScreenAdapter{
 
     }
 
-    public CreateGameField getPlacement() {
-        return placement;
-    }
 }

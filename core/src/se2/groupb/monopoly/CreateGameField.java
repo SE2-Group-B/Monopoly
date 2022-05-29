@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import se2.groupb.monopoly.screens.MonopolyScreen;
+import se2.groupb.monopoly.screens.WinningScreen;
+
 
 public class CreateGameField extends ScreenAdapter {
 
@@ -50,7 +53,9 @@ public class CreateGameField extends ScreenAdapter {
     private Player player2;
     private Player player3;
     private Player player4;
-    String[] placement = new String[4];
+    public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0;
+    public int[] sums = new int[4];
+    public String[] placement = new String[4];
 
 
     // private CameraInputController cameraController;
@@ -193,11 +198,11 @@ public class CreateGameField extends ScreenAdapter {
 
         player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
         player1.createSpielfigur();
-        player2 = new Player(2, "Red", 2000, arrayList, 0, Color.RED);
+        player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
         player2.createSpielfigur();
-        player3 = new Player(3, "Yellow", 2000, arrayList, 0, Color.YELLOW);
+        player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
         player3.createSpielfigur();
-        player4 = new Player(4, "Green", 2000, arrayList, 0, Color.GREEN);
+        player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
         player4.createSpielfigur();
 
 
@@ -258,20 +263,39 @@ public class CreateGameField extends ScreenAdapter {
 
         moneyfont.setColor(Color.WHITE);
         moneyfont.getData().setScale(4, 4);
-        moneyfont.draw(spriteBatch, player1.getName() + ": " + String.valueOf(player1.getBankBalance()), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 100);
-        moneyfont.draw(spriteBatch, player2.getName() + ": " + String.valueOf(player2.getBankBalance()), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 150);
-        moneyfont.draw(spriteBatch, player3.getName() + ": " + String.valueOf(player3.getBankBalance()), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 200);
-        moneyfont.draw(spriteBatch, player4.getName() + ": " + String.valueOf(player4.getBankBalance()), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 250);
+        moneyfont.draw(spriteBatch, player1.getName() + ": " + String.valueOf(player1.getBankBalance()), 0, Gdx.graphics.getHeight() - 100);
+        moneyfont.draw(spriteBatch, player2.getName() + ": " + String.valueOf(player2.getBankBalance()), 0, Gdx.graphics.getHeight() - 150);
+        moneyfont.draw(spriteBatch, player3.getName() + ": " + String.valueOf(player3.getBankBalance()), 0, Gdx.graphics.getHeight() - 200);
+        moneyfont.draw(spriteBatch, player4.getName() + ": " + String.valueOf(player4.getBankBalance()), 0, Gdx.graphics.getHeight() - 250);
 
         spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2);
         if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
             int pos = player1.getPosition();
             if(!isSomeonesProperty(pos)){
+                String propertyType = getPropertyType(pos);
+                switch (propertyType){
+                    case "Street":
+                            Street s = (Street) logicalGameField[pos];
+                            player1.changeMoney(-s.getPrice());
+                            logicalGameField[pos].setOwnerId(1);
 
+                        break;
+                    case "Trainstation":
+
+                            Trainstation t = (Trainstation) logicalGameField[pos];
+                            player1.changeMoney(-t.getPrice());
+                            logicalGameField[pos].setOwnerId(1);
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + propertyType);
+                }
+            }else{
+                String propertyType = getPropertyType(pos);
+                Street s = (Street) logicalGameField[pos];
+                player1.changeMoney(-s.getHousePrice());
+                ((Street) logicalGameField[pos]).setHouse(1);
             }
-            //fields[pos]
-            //spielfigur1.setMeineGrundstuecke(arrayList1.add());
         }
 
         /**
@@ -371,6 +395,7 @@ public class CreateGameField extends ScreenAdapter {
         if (firstDice == secondDice) {
             onTurn = true;
             pachCount++;
+            player1.setPrison(false);
         }
         if (pachCount > 2) {
             onTurn = false;
@@ -439,6 +464,13 @@ public class CreateGameField extends ScreenAdapter {
                 throw new IllegalStateException("Unexpected value: " + propertyType);
         }
         //output ausgeben am Screen
+    }
+
+    private void checkPrison(){
+        int playerPosition = player1.getPosition();
+        if(playerPosition == 30){
+            player1.setPrison(true);
+        }
     }
 
     private boolean isSomeonesProperty(int position){
@@ -540,13 +572,37 @@ public class CreateGameField extends ScreenAdapter {
         }
     }
 
+    //Letzter Methodenaufruf vor Spielende
     public void winning(){
-        int player1mon, player2mon, player3mon, player4mon;
-        int[] sums = new int[4];
-        player1mon = player1.getBankBalance()/*+arraylist1.*/;
-        player2mon = player2.getBankBalance();
-        player3mon = player3.getBankBalance();
-        player4mon = player4.getBankBalance();
+        int amount = 0;
+
+        for(int i = 0;i<=40;i++) {
+            if (logicalGameField[i].getOwnerId() == 1) {
+                String propertyType = getPropertyType(i);
+                switch (propertyType) {
+                    case "Street":
+                            Street s = (Street) logicalGameField[i];
+                            amount = s.getPrice();
+                            amount += s.getHousePrice();
+                            amount += s.getHotel();
+                            player1mon += amount;
+                            amount = 0;
+                        break;
+                    case "Trainstation":
+                            Trainstation t = (Trainstation) logicalGameField[i];
+                            amount = t.getPrice();
+                            player1mon += amount;
+                            amount = 0;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + propertyType);
+                }
+            }
+        }
+        player1mon += player1.getBankBalance();
+        player2mon += player2.getBankBalance();
+        player3mon += player3.getBankBalance();
+        player4mon += player4.getBankBalance();
 
         sums[0] = player1mon;
         sums[1] = player2mon;
@@ -554,18 +610,21 @@ public class CreateGameField extends ScreenAdapter {
         sums[3] = player4mon;
         Arrays.sort(sums);
 
-        for(int i = 0; i<=3;i++){
-            if(sums[i] == player1mon){
-                placement[i] = player1.getName();
-            }else if(sums[i] == player2mon){
-                placement[i] = player2.getName();
-            }else if(sums[i] == player3mon){
-                placement[i] = player3.getName();
-            }else if(sums[i] == player4mon){
-                placement[i] = player4.getName();
+        for(int j = 0; j<=3;j++){
+            if(sums[j] == player1mon){
+                placement[j] = player1.getName();
+            }else if(sums[j] == player2mon){
+                placement[j] = player2.getName();
+            }else if(sums[j] == player3mon){
+                placement[j] = player3.getName();
+            }else if(sums[j] == player4mon){
+                placement[j] = player4.getName();
             }
         }
 
+        monopoly.setScreen(new WinningScreen(monopoly));
+    }
+    public CreateGameField(){
 
     }
 

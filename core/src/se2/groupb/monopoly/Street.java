@@ -41,7 +41,6 @@ public class Street extends Property {
 
     public void setHouse(int house) {
         this.house = house;
-        //Spielfigur.decreaseMoney(getHausPreis());
         increasemiete();
     }
 
@@ -51,7 +50,7 @@ public class Street extends Property {
 
     public void setHotel(int hotel) {
         this.hotel = hotel;
-        //Spielfigur.decreaseMoney(getHausPreis()*2);
+        //player1.decreaseMoney(getHausPreis()*2);
         increasemiete();
     }
 
