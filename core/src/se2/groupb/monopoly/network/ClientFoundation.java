@@ -6,9 +6,6 @@ import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 
 public class ClientFoundation {
     private Client client;
@@ -20,39 +17,19 @@ public class ClientFoundation {
         InetAddress ip = null;
         boolean serverExists = false;
 
-        System.out.println("Client IP: " + getLocalIpAddress());
-
         for (int i = 0; i < 5; i++) {
             if (ip != null) {
-                System.out.println("Host Discovered: " + ip);
                 serverExists = true;
                 break;
             }
             try {
-                ip = client.discoverHost(6333, 1000);
+                ip = client.discoverHost(udpPort, 1000);
                 if (ip != null) System.out.println("host: " + ip);
                 else System.out.println("No host discovered!");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        // discover network connections
-        /*for (int i = 0; i < 1000000; i++) {
-
-            if (ip != null) break;
-            try{
-                Thread.currentThread().sleep(1000);
-                Enumeration interfaces = NetworkInterface.getNetworkInterfaces();
-                while (interfaces.hasMoreElements()){
-                   NetworkInterface n = (NetworkInterface) interfaces.nextElement();
-                    System.out.println(n.getDisplayName());
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }*/
 
 
         if (serverExists) {
@@ -94,23 +71,6 @@ public class ClientFoundation {
      */
     public boolean allPlayersJoined() {
         return allJoined;
-    }
-
-    public String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
-        }
-        return null;
     }
 
 

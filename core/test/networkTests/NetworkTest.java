@@ -17,8 +17,8 @@ public class NetworkTest {
     @Before
     public void setUp() {
         network = new Network();
-        server = new ServerFoundation(6333, 6333);
-        client = new ClientFoundation(6333, 6333);
+        server = new ServerFoundation();
+        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
     }
 
     @After

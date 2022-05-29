@@ -1,6 +1,7 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -58,13 +59,12 @@ public class HostGameScreen extends GameScreenAdapter {
          * close server if leaving
          */
         inputProcessor = new InputBackProcessor(monopoly);
-        // inputProcessor.backToMainMenuProcessor();
 
         // draw text
         font = new BitmapFont();
         font.getData().setScale(3.5f);
         waitingText = new GlyphLayout(font, "Waiting for other Players");
-        connectedText = new GlyphLayout(font, "Connected to Server");
+        connectedText = new GlyphLayout(font, "");
         loadingText = new GlyphLayout(font, "Loading the Game");
 
         // button size
@@ -77,39 +77,48 @@ public class HostGameScreen extends GameScreenAdapter {
 
         // Buttons for connecting to Server and starting the game
         connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
-        startBtn = drawImageButton("images/MenuButtons/start_game.png", xPosButtons, yPosInitialButtons-yPosOffsetButtons, buttonSize);
+        startBtn = drawImageButton("images/MenuButtons/start_game.png", xPosButtons, yPosInitialButtons - yPosOffsetButtons, buttonSize);
 
         stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
         stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
-        Gdx.input.setInputProcessor(stage); //Start taking input from the ui
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backToMainMenuProcessor(), stage);
+        Gdx.input.setInputProcessor(inputMultiplexer); //Start taking input from the ui
 
         /**
          *                                                                          *
          * * * * * * * * * * * * * * * Button Listeners * * * * * * * * * * * * * * *
          *                                                                          *
          * start a server, connect as client
+         *
+         * TODO: show ports on user screen
+         * sometimes crashes when connecting?
          */
         connectBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 if (!isConnected) {
                     // starting a server to host a game
-                    instance = new ServerFoundation(6334, 6333);
+                    instance = new ServerFoundation();
 
                     // connect client (the host) to the server
-                    client = new ClientFoundation(6334, 6333);
-                    isConnected = true;
+                    client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
+                    System.out.println(client.getClient().isConnected());
+                    if (client.getClient().isConnected()) {
+                        isConnected = true;
+                        connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
 
-                    // new input processor that disconnects server if you go back
-                    // inputProcessor.HostMenuServerProcessor(instance.getServer(), client.getClient());
+                        // new input processor that disconnects server if you go back
+                        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
+                        Gdx.input.setInputProcessor(inputMultiplexer);
 
-                    // send a message to server
-                    client.getClient().sendUDP("Ich will ein Spiel hosten");
-
-                    stage.addActor(startBtn);
+                        stage.addActor(startBtn);
+                    } else {isConnected = false;
+                        connectedText.setText(font, "Could not connect, please retry!");
+                    }
 
                     return true;
                 }
+                if (!client.getClient().isConnected()) isConnected=false;
 
                 return false;
             }
@@ -128,6 +137,12 @@ public class HostGameScreen extends GameScreenAdapter {
                 // draw rectangle above old text since it does not vanish when loading the game
 
                 if (client.allPlayersJoined()) {
+                    /**
+                     * START THE GAME
+                     * set the screen, user can't go to main menu anymore
+                     */
+                    InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+                    Gdx.input.setInputProcessor(inputMultiplexer);
                     allJoined = true;
                     switchScreenDelayed(getScreen(), 0.000000001f);
                     return true;
@@ -148,10 +163,9 @@ public class HostGameScreen extends GameScreenAdapter {
 
 
         monopoly.batch.begin();
-        if (isConnected && !buttonPressed) {
-
+        if (isConnected) {
             font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight()));
         }
         if (!allJoined && buttonPressed) {
             font.draw(monopoly.batch, waitingText,
@@ -194,7 +208,6 @@ public class HostGameScreen extends GameScreenAdapter {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                inputProcessor.backDoesNothingProcessor();
                 screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
             }
         }, delay);
@@ -203,8 +216,6 @@ public class HostGameScreen extends GameScreenAdapter {
     public GameScreenAdapter getScreen() {
         return this;
     }
-
-
 
 
 }
