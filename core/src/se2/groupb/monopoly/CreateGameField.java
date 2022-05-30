@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class CreateGameField extends ScreenAdapter {
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
     private BitmapFont moneyfont;
+    private ImageButton testbutton;
+    private ImageButton testbutton2;
     private Property[] logicalGameField;
 
     private Field[] fields = new Field[40];
@@ -269,12 +272,13 @@ public class CreateGameField extends ScreenAdapter {
 
         moneyfont.setColor(Color.WHITE);
         moneyfont.getData().setScale(4, 4);
-        moneyfont.draw(spriteBatch, player1.getName() + ": " + player1.getBankBalance(), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 100);
-        moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 150);
-        moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 200);
-        moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 250);
-        moneyfont.draw(spriteBatch, screenOutput, Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/2 -450, Gdx.graphics.getHeight() - 850);
-        moneyfont.draw(spriteBatch, "Pot: " + pot, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400);
+        moneyfont.draw(spriteBatch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
+        moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
+        moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
+        moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
+        moneyfont.draw(spriteBatch, screenOutput, (Gdx.graphics.getWidth()/2)-100, yPosInitialButtons + 250);
+        moneyfont.draw(spriteBatch, "Pot: " + pot, 0, Gdx.graphics.getHeight() - 400);
+
 
 
         spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2);
@@ -297,21 +301,20 @@ public class CreateGameField extends ScreenAdapter {
                             logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + propertyType);
+                        screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
                 }
             }else{
                 String propertyType = getPropertyType(pos);
                 Street s = (Street) logicalGameField[pos];
-                getCurrentPlayer().changeMoney(-s.getHousePrice());
-                ((Street) logicalGameField[pos]).setHouse(getCurrentPlayer().getId());
+                getCurrentPlayer().changeMoney(-s.getRent());
             }
         }
 
         /**
          * Pressing the Report Cheat Button
          */
-        spriteBatch.draw(reportCheat, xPosButtons + 100, yPosInitialButtons + 150, buttonSizeX, buttonSizeY);
-        if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons + 150, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
+        spriteBatch.draw(reportCheat, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY);
+        if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && !reported) {
             if (cheatActivated) {
                 getCurrentPlayer().changeMoney(-200);
