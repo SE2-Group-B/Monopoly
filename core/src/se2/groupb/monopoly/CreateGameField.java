@@ -299,9 +299,20 @@ public class CreateGameField extends ScreenAdapter {
                             Trainstation t = (Trainstation) logicalGameField[pos];
                             getCurrentPlayer().changeMoney(-t.getPrice());
                             logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
+                            t.increaseRent();
                         break;
                     default:
-                        screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
+                        if(logicalGameField[pos].getOwnerId() == getCurrentPlayer().getId()){
+                            if(propertyType == "Street"){
+                                Street s1 = (Street) logicalGameField[pos];
+                                getCurrentPlayer().changeMoney(-s1.getHousePrice());
+                                s1.buyhouse();
+                            }else{
+
+                            }
+                        }else {
+                            screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
+                        }
                 }
             }else{
                 String propertyType = getPropertyType(pos);

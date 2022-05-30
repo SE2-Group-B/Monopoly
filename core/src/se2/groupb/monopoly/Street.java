@@ -75,8 +75,14 @@ public class Street extends Property {
 
 
     //Haus bezahlen?
-    public void buyhouse() {if(getHouse() < 2){
-        setHouse(getHouse()+1); increasemiete();}else{errormsg();}}
+    public void buyhouse() {
+        if(getHouse() < 2){
+            setHouse(getHouse()+1); increasemiete();
+        }else if(getHouse() == 2 && getHotel() == 0) {
+            setHotel(1); setHouse(0); increasemiete();
+        }
+        else{errormsg();}
+    }
 
     //bezahlen?
     public void buyhotel() {if(getHouse() == 2 && getHotel() == 0) {setHotel(1); setHouse(0); increasemiete();}else{errormsg();}}
