@@ -146,6 +146,7 @@ public class Player {
             }
 
             this.setPosition((this.getPosition() + augenzahl) % 40);
+
         }else{
             this.setPrisonCount(this.getPrisonCount()+1);
         }

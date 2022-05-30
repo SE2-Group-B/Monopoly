@@ -42,8 +42,8 @@ public class CreateGameField extends ScreenAdapter {
 
     //private String buildingPath = "Spielfeld\\field.g3dj";
 
-    private Deck ereignisDeck;
-    private Deck gemeinschaftsDeck;
+    private Deck ereignisDeck = new Deck();
+    private Deck gemeinschaftsDeck = new Deck();
 
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
     private Texture reportCheat = new Texture("images/MenuButtons/report_cheat.png");
@@ -86,6 +86,7 @@ public class CreateGameField extends ScreenAdapter {
     private boolean shakeCheatActivated;
     private boolean onTurn;
     private boolean reported;
+    private boolean keyVolumeUp;
 
     private Random random = new Random();
     private int cheatDice;
@@ -170,6 +171,7 @@ public class CreateGameField extends ScreenAdapter {
         dice2 = new Texture("images/Dice/dice_0.png");
 
         onTurn = true;
+        keyVolumeUp = false;
         cheatActivated = reported = shakeCheatActivated = false;
         cheatDice = pachCount = 0;
         currentPlayerId = 1;
@@ -177,6 +179,7 @@ public class CreateGameField extends ScreenAdapter {
         screenOutput = "";
 
         this.logicalGameField = createLogicalGameField();
+
         this.ereignisDeck.initializeEreigniskartenStapel();
         this.gemeinschaftsDeck.initializeGemeinschaftskartenStapel();
 
@@ -250,8 +253,14 @@ public class CreateGameField extends ScreenAdapter {
         /**
          * Set pach Cheat
          */
-        if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
-            cheatDice++;
+        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
+            if(!keyVolumeUp){
+                keyVolumeUp = true;
+                cheatDice++;
+
+            }
+        }else{
+            keyVolumeUp = false;
         }
 
         /**
@@ -279,7 +288,7 @@ public class CreateGameField extends ScreenAdapter {
         moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
         moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
         moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
-        moneyfont.draw(spriteBatch, screenOutput, (Gdx.graphics.getWidth()/2)-100, yPosInitialButtons + 250);
+        moneyfont.draw(spriteBatch, screenOutput, 300, yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Pot: " + pot, 0, Gdx.graphics.getHeight() - 400);
 
 
@@ -729,6 +738,10 @@ public class CreateGameField extends ScreenAdapter {
     }
     public CreateGameField(){
 
+    }
+
+    public Vector3 getVectorPositions(int pos){
+        return this.positions[pos];
     }
 
 }
