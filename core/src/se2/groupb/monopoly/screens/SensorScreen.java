@@ -80,7 +80,10 @@ public class SensorScreen extends GameScreenAdapter {
         monopoly.batch.draw(rollDice, xPosButtons-500, yPosInitialButtons, buttonSizeX, buttonSizeY);
         monopoly.batch.draw(reportCheat, xPosButtons+500, yPosInitialButtons, buttonSizeX, buttonSizeY);
 
-
+        if(Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)){
+            cheatDice++;
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :  "+cheatDice);
+        }
         /**
          * Pressing the Roll Dice Button
          */
@@ -89,11 +92,7 @@ public class SensorScreen extends GameScreenAdapter {
 
             roll();
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :  "+cheatDice);
-            cheatDice++;
 
-        }
         /**
          * Pressing the Report Cheat Button
          */
@@ -203,7 +202,6 @@ public class SensorScreen extends GameScreenAdapter {
         dice1 = setDice(0);
         dice2 = setDice(0);
         drawDice(dice1, dice2);
-        cheatDice = 0;
     }
 
     @Override

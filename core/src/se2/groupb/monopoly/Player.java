@@ -131,29 +131,39 @@ public class Player {
         this.prison = prison;
     }
 
+    public int getPrisonCount() {
+        return prisoncount;
+    }
+
+    public void setPrisonCount(int prisoncount) {
+        this.prisoncount = prisoncount;
+    }
+
     public void move(int augenzahl) {
         if(!this.getPrison()) {
-            if ((getPosition() + augenzahl) > 39) {
+            if ((this.getPosition() + augenzahl) > 39) {
                 roundmoney();
             }
 
-            setPosition((getPosition() + augenzahl) % 40);
+            this.setPosition((this.getPosition() + augenzahl) % 40);
         }else{
-            prisoncount++;
+            this.setPrisonCount(this.getPrisonCount()+1);
         }
 
-        if(prisoncount == 3){
+        if(this.getPrisonCount() == 4){
             this.setPrison(false);
         }
     }
 
-    public void gotojail(){
-        setPosition(10);
-        prison = true;
+    public void goToJail(){
+        this.setPosition(10);
+
+        this.move(this.getPosition());
+        this.setPrison(true);
     }
 
     public void roundmoney() {
-        setBankBalance((getBankBalance() + 200));
+        this.setBankBalance((this.getBankBalance() + 200));
     }
 
 
@@ -224,7 +234,7 @@ public class Player {
                 break;
             case 16:
                 kartenbild = new Texture("images/KartenImages/Karte16.png");
-                gotojail();
+                goToJail();
                 break;
             case 17:
                 kartenbild = new Texture("images/KartenImages/Karte17.png");
@@ -240,7 +250,7 @@ public class Player {
                 break;
             case 20:
                 kartenbild = new Texture("images/KartenImages/Karte20.png");
-                gotojail();
+                goToJail();
                 break;
             case 21:
                 kartenbild = new Texture("images/KartenImages/Karte21.png");
