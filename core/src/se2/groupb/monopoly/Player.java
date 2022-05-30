@@ -58,7 +58,7 @@ public class Player {
         }else{
             this.changeMoney(-value);
             p.changeMoney(value);
-            output = this.getName() + " steppen on " + p.getName() + "'s Property and payed " + value + " rent.";
+            output = this.getName() + " ist auf " + p.getName() + "'s Grundstück getreten und zahlt " + value + "€ Miete.";
         }
         return output;
     }

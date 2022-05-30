@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import se2.groupb.monopoly.screens.MonopolyScreen;
 import se2.groupb.monopoly.screens.WinningScreen;
 
 
@@ -40,6 +39,8 @@ public class CreateGameField extends ScreenAdapter {
 
     //private String buildingPath = "Spielfeld\\field.g3dj";
 
+    private Deck ereignisDeck;
+    private Deck gemeinschaftsDeck;
 
     private Texture rollDice = new Texture("images/MenuButtons/roll.png");
     private Texture reportCheat = new Texture("images/MenuButtons/report_cheat.png");
@@ -173,6 +174,8 @@ public class CreateGameField extends ScreenAdapter {
         screenOutput = "";
 
         this.logicalGameField = createLogicalGameField();
+        this.ereignisDeck.initializeEreigniskartenStapel();
+        this.gemeinschaftsDeck.initializeGemeinschaftskartenStapel();
 
 
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -471,7 +474,7 @@ public class CreateGameField extends ScreenAdapter {
                 PenaltyField p = (PenaltyField) logicalGameField[playerPosition];
                 getCurrentPlayer().changeMoney(-p.getStrafe());
                 pot += p.getStrafe();
-                output = getCurrentPlayer().getName() + " wirft " + p.getStrafe() + " in den Pot.";
+                output = getCurrentPlayer().getName() + " wirft " + p.getStrafe() + "€ in den Pot.";
                 break;
             case "Property":
                 Property prop = logicalGameField[playerPosition];
