@@ -170,7 +170,7 @@ public class CreateGameField extends ScreenAdapter {
         cheatDice = pachCount = 0;
         currentPlayerId = 1;
         playerCount = 4;
-        screenOutput = "Test123";
+        screenOutput = "";
 
         this.logicalGameField = createLogicalGameField();
 
@@ -273,7 +273,7 @@ public class CreateGameField extends ScreenAdapter {
         moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 150);
         moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 200);
         moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 250);
-        moneyfont.draw(spriteBatch, screenOutput, Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 850);
+        moneyfont.draw(spriteBatch, screenOutput, Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/2 -450, Gdx.graphics.getHeight() - 850);
         moneyfont.draw(spriteBatch, "Pot: " + pot, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400);
 
 
@@ -409,6 +409,7 @@ public class CreateGameField extends ScreenAdapter {
         if (pachCount > 2) {
             onTurn = false;
             getCurrentPlayer().goToJail();
+            getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
         }
         cheatDice = 0;
         return firstDice + secondDice;
@@ -453,12 +454,14 @@ public class CreateGameField extends ScreenAdapter {
         String output = "";
         switch (propertyType){
             case "Street":
+                output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + logicalGameField[getCurrentPlayer().getPosition()].getName();
                 if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
                     Street s = (Street) logicalGameField[playerPosition];
                     output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), s.getRent());
                 }
                 break;
             case "Trainstation":
+                output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + logicalGameField[getCurrentPlayer().getPosition()].getName();
                 if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
                     Trainstation t = (Trainstation) logicalGameField[playerPosition];
                     output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), t.getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
@@ -468,10 +471,11 @@ public class CreateGameField extends ScreenAdapter {
                 PenaltyField p = (PenaltyField) logicalGameField[playerPosition];
                 getCurrentPlayer().changeMoney(-p.getStrafe());
                 pot += p.getStrafe();
+                output = getCurrentPlayer().getName() + " wirft " + p.getStrafe() + " in den Pot.";
                 break;
             case "Property":
                 Property prop = logicalGameField[playerPosition];
-                checkSoleProperty(prop);
+                output = checkSoleProperty(prop);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + propertyType);
@@ -485,29 +489,34 @@ public class CreateGameField extends ScreenAdapter {
         return playerName + " befindet sich bei " + playerPosition;
     }
 
-    private void checkSoleProperty(Property property){
+    private String checkSoleProperty(Property property){
+        String output = "Spieler " + getCurrentPlayer().getName();
         switch (property.getName()){
             case "Los":
                 getCurrentPlayer().changeMoney(400);
+                output += " ist direkt auf Los gekommen und zieht 400€ ein.";
                 break;
             case "Gemeinschaftsfeld":
-
+                output += " ist auf einem Gemeinschaftsfeld.";
                 break;
             case "Ereignisfeld":
-
+                output += " ist auf einem Ereignisfeld.";
                 break;
             case "Gefängnis":
-
+                output += " ist nur zu Besuch im Gefägnis.";
                 break;
             case "Sofa":
                 getCurrentPlayer().changeMoney(pot);
                 pot = 0;
-                screenOutput = "Spieler " + getCurrentPlayer().getName() + " hat den Pot mit " + pot + "€ gewonnen.";
+                output += " hat den Pot mit " + pot + "€ gewonnen.";
                 break;
             case "Gehe ins Gefängnis":
+                getCurrentPlayer().move(positions[10]);
                 getCurrentPlayer().goToJail();
+                output += " sitzt jetzt im Gefägnis.";
                 break;
         }
+        return output;
     }
 
     private void checkPrison(){
@@ -518,7 +527,6 @@ public class CreateGameField extends ScreenAdapter {
     }
 
     private boolean isSomeonesProperty(int position){
-        // Auf jetzigen Player abstimmen
         return logicalGameField[position].getOwnerId()!=0;
     }
 
