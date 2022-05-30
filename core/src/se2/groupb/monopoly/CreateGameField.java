@@ -507,8 +507,8 @@ public class CreateGameField extends ScreenAdapter {
                 break;
             case "Sofa":
                 getCurrentPlayer().changeMoney(pot);
-                pot = 0;
                 output += " hat den Pot mit " + pot + "€ gewonnen.";
+                pot = 0;
                 break;
             case "Gehe ins Gefängnis":
                 getCurrentPlayer().move(positions[10]);
