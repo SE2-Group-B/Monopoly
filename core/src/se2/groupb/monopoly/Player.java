@@ -157,8 +157,6 @@ public class Player {
 
     public void goToJail(){
         this.setPosition(10);
-
-        //this.move(this.getPosition());
         this.setPrison(true);
     }
 
