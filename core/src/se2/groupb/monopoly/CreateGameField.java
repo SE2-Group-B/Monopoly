@@ -37,7 +37,7 @@ public class CreateGameField extends ScreenAdapter {
     private BitmapFont moneyfont;
     private ImageButton testbutton;
     private ImageButton testbutton2;
-    private Property[] logicalGameField;
+    private LogicalGameField gameField;
 
     private Field[] fields = new Field[40];
 
@@ -175,7 +175,7 @@ public class CreateGameField extends ScreenAdapter {
         playerCount = 4;
         screenOutput = "";
 
-        this.logicalGameField = createLogicalGameField();
+        gameField = new LogicalGameField();
 
 
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -289,23 +289,23 @@ public class CreateGameField extends ScreenAdapter {
                 String propertyType = getPropertyType(pos);
                 switch (propertyType){
                     case "Street":
-                            Street s = (Street) logicalGameField[pos];
+                            Street s = (Street) gameField.getGameField()[pos];
                             getCurrentPlayer().changeMoney(-s.getPrice());
-                            logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
+                        gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
 
                         break;
                     case "Trainstation":
 
-                            Trainstation t = (Trainstation) logicalGameField[pos];
+                            Trainstation t = (Trainstation) gameField.getGameField()[pos];
                             getCurrentPlayer().changeMoney(-t.getPrice());
-                            logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
+                        gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
                         break;
                     default:
                         screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
                 }
             }else{
                 String propertyType = getPropertyType(pos);
-                Street s = (Street) logicalGameField[pos];
+                Street s = (Street) gameField.getGameField()[pos];
                 getCurrentPlayer().changeMoney(-s.getRent());
             }
         }
@@ -457,27 +457,27 @@ public class CreateGameField extends ScreenAdapter {
         String output = "";
         switch (propertyType){
             case "Street":
-                output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + logicalGameField[getCurrentPlayer().getPosition()].getName();
+                output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
                 if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
-                    Street s = (Street) logicalGameField[playerPosition];
+                    Street s = (Street) gameField.getGameField()[playerPosition];
                     output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), s.getRent());
                 }
                 break;
             case "Trainstation":
-                output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + logicalGameField[getCurrentPlayer().getPosition()].getName();
+                output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
                 if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
-                    Trainstation t = (Trainstation) logicalGameField[playerPosition];
+                    Trainstation t = (Trainstation) gameField.getGameField()[playerPosition];
                     output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), t.getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
                 }
                 break;
             case "PenaltyField":
-                PenaltyField p = (PenaltyField) logicalGameField[playerPosition];
+                PenaltyField p = (PenaltyField) gameField.getGameField()[playerPosition];
                 getCurrentPlayer().changeMoney(-p.getStrafe());
                 pot += p.getStrafe();
                 output = getCurrentPlayer().getName() + " wirft " + p.getStrafe() + " in den Pot.";
                 break;
             case "Property":
-                Property prop = logicalGameField[playerPosition];
+                Property prop = gameField.getGameField()[playerPosition];
                 output = checkSoleProperty(prop);
                 break;
             default:
@@ -488,7 +488,7 @@ public class CreateGameField extends ScreenAdapter {
 
     private String screenOutputCheck(){
         String playerName = getCurrentPlayer().getName();
-        String playerPosition = logicalGameField[getCurrentPlayer().getPosition()].getName();
+        String playerPosition = gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
         return playerName + " befindet sich bei " + playerPosition;
     }
 
@@ -530,11 +530,11 @@ public class CreateGameField extends ScreenAdapter {
     }
 
     private boolean isSomeonesProperty(int position){
-        return logicalGameField[position].getOwnerId()!=0;
+        return gameField.getGameField()[position].getOwnerId()!=0;
     }
 
     private Player getPropertyOwner(int pos){
-        return getPlayerById(logicalGameField[pos].getOwnerId());
+        return getPlayerById(gameField.getGameField()[pos].getOwnerId());
     }
 
     private void nextPlayer(){
@@ -584,7 +584,7 @@ public class CreateGameField extends ScreenAdapter {
     }
 
     public String getPropertyType(int n) {
-        return getLastSubString("" + logicalGameField[n].getClass());
+        return getLastSubString("" + gameField.getGameField()[n].getClass());
     }
 
     private String getLastSubString(String filename) {
@@ -677,11 +677,11 @@ public class CreateGameField extends ScreenAdapter {
         int amount = 0;
 
         for(int i = 0;i<=40;i++) {
-            if (logicalGameField[i].getOwnerId() == 1) {
+            if (gameField.getGameField()[i].getOwnerId() == 1) {
                 String propertyType = getPropertyType(i);
                 switch (propertyType) {
                     case "Street":
-                            Street s = (Street) logicalGameField[i];
+                            Street s = (Street) gameField.getGameField()[i];
                             amount = s.getPrice();
                             amount += s.getHousePrice();
                             amount += s.getHotel();
@@ -689,7 +689,7 @@ public class CreateGameField extends ScreenAdapter {
                             amount = 0;
                         break;
                     case "Trainstation":
-                            Trainstation t = (Trainstation) logicalGameField[i];
+                            Trainstation t = (Trainstation) gameField.getGameField()[i];
                             amount = t.getPrice();
                             player1mon += amount;
                             amount = 0;
