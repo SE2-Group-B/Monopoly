@@ -36,9 +36,6 @@ public class Trainstation extends Property {
         this.rent = rent;
     }
 
-      public boolean errormsg() {return false;}
-    //Fehlermeldung als eigenes Fenster(Screen) im nächsten Sprint einfügen
-
     public void increaseRent() {
         int rent1 = getRent();
         int anzahl = 0; //Spielfigur.getAnzahlBahnhoefe()
