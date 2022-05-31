@@ -80,14 +80,16 @@ public class SensorScreen extends GameScreenAdapter {
         monopoly.batch.draw(rollDice, xPosButtons-500, yPosInitialButtons, buttonSizeX, buttonSizeY);
         monopoly.batch.draw(reportCheat, xPosButtons+500, yPosInitialButtons, buttonSizeX, buttonSizeY);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)){
             cheatDice++;
-           }
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :  "+cheatDice);
+        }
         /**
          * Pressing the Roll Dice Button
          */
         if (isCorrectPosition(userPosX, userPosY, xPosButtons-500, yPosInitialButtons, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && onTurn) {
+
             roll();
         }
 
@@ -125,8 +127,8 @@ public class SensorScreen extends GameScreenAdapter {
         monopoly.batch.end();
     }
 
-    public int[] roll(){
-
+    public void roll(){
+        System.out.println("dddddddddddddddddd  d d  "+cheatDice);
         int firstDice = random.nextInt(6) + 1;
         int secondDice = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice ==0) {
@@ -159,7 +161,6 @@ public class SensorScreen extends GameScreenAdapter {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         }
         cheatDice =0;
-        return new int[] {firstDice, secondDice};
     }
 
     private Texture setDice(int value) {
@@ -201,7 +202,6 @@ public class SensorScreen extends GameScreenAdapter {
         dice1 = setDice(0);
         dice2 = setDice(0);
         drawDice(dice1, dice2);
-        cheatDice = 0;
     }
 
     @Override

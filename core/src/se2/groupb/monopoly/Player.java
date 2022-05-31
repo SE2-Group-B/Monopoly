@@ -22,6 +22,8 @@ public class Player {
     private Color color;
     ModelInstance modInstance;
     Vector3 fieldPos;
+    private boolean prison = false;
+    private int prisoncount = 0;
 
     private String buildingPath = "Spielfeld\\char.g3dj";
     private CreateGameField field;
@@ -121,16 +123,45 @@ public class Player {
     }
 
 
+    public boolean getPrison() {
+        return prison;
+    }
+
+    public void setPrison(boolean prison) {
+        this.prison = prison;
+    }
+
+    public int getPrisonCount() {
+        return prisoncount;
+    }
+
+    public void setPrisonCount(int prisoncount) {
+        this.prisoncount = prisoncount;
+    }
+
     public void move(int augenzahl) {
-        if((getPosition() + augenzahl) > 39){
-            roundmoney();
+        if(!this.getPrison()) {
+            if ((this.getPosition() + augenzahl) > 39) {
+                roundmoney();
+            }
+
+            this.setPosition((this.getPosition() + augenzahl) % 40);
+        }else{
+            this.setPrisonCount(this.getPrisonCount()+1);
         }
-        setPosition((getPosition() + augenzahl) % 40);
-        
+
+        if(this.getPrisonCount() == 4){
+            this.setPrison(false);
+        }
+    }
+
+    public void goToJail(){
+        this.setPosition(10);
+        this.setPrison(true);
     }
 
     public void roundmoney() {
-        setBankBalance((getBankBalance() + 200));
+        this.setBankBalance((this.getBankBalance() + 200));
     }
 
 
@@ -201,7 +232,7 @@ public class Player {
                 break;
             case 16:
                 kartenbild = new Texture("images/KartenImages/Karte16.png");
-                setPosition(10);
+                goToJail();
                 break;
             case 17:
                 kartenbild = new Texture("images/KartenImages/Karte17.png");
@@ -217,7 +248,7 @@ public class Player {
                 break;
             case 20:
                 kartenbild = new Texture("images/KartenImages/Karte20.png");
-                setPosition(10);
+                goToJail();
                 break;
             case 21:
                 kartenbild = new Texture("images/KartenImages/Karte21.png");
