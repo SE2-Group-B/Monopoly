@@ -35,9 +35,15 @@ public class CreateGameField extends ScreenAdapter {
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
     private BitmapFont moneyfont;
-    private ImageButton testbutton;
-    private ImageButton testbutton2;
     private Property[] logicalGameField;
+
+    /*private Stage stage;
+    private Texture myTexture;
+    private TextureRegion myTextureRegion;
+    private TextureRegionDrawable myTextureRegionDrawable;
+    private ImageButton testbutton;
+    private ImageButton testbutton2;*/
+
 
     private Field[] fields = new Field[40];
 
@@ -226,6 +232,7 @@ public class CreateGameField extends ScreenAdapter {
 
         spriteBatch2 = new SpriteBatch();
         moneyfont = new BitmapFont();
+        //testbutton = new ImageButton()
 
         ScreenUtils.clear(0, 0, 0, 1);
         // cameraController.update();
@@ -292,7 +299,6 @@ public class CreateGameField extends ScreenAdapter {
                             Street s = (Street) logicalGameField[pos];
                             getCurrentPlayer().changeMoney(-s.getPrice());
                             logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
-
                         break;
                     case "Trainstation":
 
@@ -305,8 +311,12 @@ public class CreateGameField extends ScreenAdapter {
                         if(logicalGameField[pos].getOwnerId() == getCurrentPlayer().getId()){
                             if(propertyType == "Street"){
                                 Street s1 = (Street) logicalGameField[pos];
-                                getCurrentPlayer().changeMoney(-s1.getHousePrice());
-                                s1.buyhouse();
+                                boolean bought = s1.buyhouse();
+                                if(bought = true) {
+                                    getCurrentPlayer().changeMoney(-s1.getHousePrice());
+                                }else{
+                                    break;
+                                }
                             }else{
 
                             }
@@ -315,9 +325,7 @@ public class CreateGameField extends ScreenAdapter {
                         }
                 }
             }else{
-                String propertyType = getPropertyType(pos);
-                Street s = (Street) logicalGameField[pos];
-                getCurrentPlayer().changeMoney(-s.getRent());
+                screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
             }
         }
 

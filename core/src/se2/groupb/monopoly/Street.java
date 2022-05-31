@@ -70,26 +70,16 @@ public class Street extends Property {
         this.housePrice = housePrice;
     }
 
-    public void verkauft() {if(isSold() == false) {
-        setSold(true);}else{errormsg();}}
-
-
-    //Haus bezahlen?
-    public void buyhouse() {
+    public boolean buyhouse() {
         if(getHouse() < 2){
             setHouse(getHouse()+1); increasemiete();
+            return true;
         }else if(getHouse() == 2 && getHotel() == 0) {
             setHotel(1); setHouse(0); increasemiete();
+            return true;
         }
-        else{errormsg();}
+        else{return false;}
     }
-
-    //bezahlen?
-    public void buyhotel() {if(getHouse() == 2 && getHotel() == 0) {setHotel(1); setHouse(0); increasemiete();}else{errormsg();}}
-
-    public boolean errormsg() {return false;}
-    //Fehlermeldung als eigenes Fenster(Screen) im nächsten Sprint einfügen
-
 
 
     public void increasemiete() {
