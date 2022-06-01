@@ -41,7 +41,7 @@ public class Player {
     }
 
 
-    public void createSpielfigur() {
+    public void createSpielfigur() { //Methode noch nicht getestet
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);
         modInstance.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
@@ -52,13 +52,15 @@ public class Player {
     public String payToOtherPlayer(Player p, int value){
         String output = "";
         if(this.getBankBalance() < value){
-            output = this.getName() + " ist Bankrott";
+            output = this.getName() + " ist Bankrott.";
+            //Auscheiden aus dem Spiel?! So kann er einfach weiter spielen?
+            //Wenn Spieler 1 bankrott ist kriegt Spieler 2 trotzdem den ganzen Betrag ?!
             this.setBankBalance(0);
             p.changeMoney(value);
         }else{
             this.changeMoney(-value);
             p.changeMoney(value);
-            output = this.getName() + " steppen on " + p.getName() + "'s Property and payed " + value + " rent.";
+            output = this.getName() + " stepped on " + p.getName() + "'s Property and payed " + value + " rent.";
         }
         return output;
     }
@@ -144,14 +146,14 @@ public class Player {
             if ((this.getPosition() + augenzahl) > 39) {
                 roundmoney();
             }
-
             this.setPosition((this.getPosition() + augenzahl) % 40);
         }else{
             this.setPrisonCount(this.getPrisonCount()+1);
         }
-
         if(this.getPrisonCount() == 4){
             this.setPrison(false);
+            this.setPrisonCount(0);
+
         }
     }
 
