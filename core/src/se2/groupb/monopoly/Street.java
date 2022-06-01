@@ -27,6 +27,7 @@ public class Street extends Property {
     public void setPrice(int price) {
         this.price = price;
     }
+
     public boolean isSold() {
         return sold;
     }
@@ -50,7 +51,6 @@ public class Street extends Property {
 
     public void setHotel(int hotel) {
         this.hotel = hotel;
-        //player1.decreaseMoney(getHausPreis()*2);
         increasemiete();
     }
 

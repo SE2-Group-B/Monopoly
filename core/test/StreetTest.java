@@ -19,33 +19,33 @@ public class StreetTest {
     }
 
     @Test
-    public void testStrasse(){
+    public void testStreet(){
         Assert.assertNotNull(hauptstraße);
     }
     @Test
-    public void testGetPreis(){
+    public void testGetPrice(){
         Assert.assertEquals(hauptstraße.getPrice(),150);
     }
     @Test
-    public void testSetPreis(){
+    public void testSetPrice(){
         hauptstraße.setPrice(200);
         Assert.assertEquals(hauptstraße.getPrice(),200);
     }
     @Test
-    public void testIsVerkauft(){
+    public void testIsSold(){
         Assert.assertFalse(hauptstraße.isSold());
     }
     @Test
-    public void testSetVerkauft(){
+    public void testSetSold(){
         hauptstraße.setSold(true);
         Assert.assertTrue(hauptstraße.isSold());
     }
     @Test
-    public void testGetHaus(){
+    public void testGetHouse(){
         Assert.assertEquals(hauptstraße.getHouse(),0);
     }
     @Test
-    public void testSetHaus(){
+    public void testSetHouse(){
         hauptstraße.setHouse(2);
         Assert.assertEquals(hauptstraße.getHouse(),2);
     }
@@ -59,20 +59,20 @@ public class StreetTest {
         Assert.assertEquals(hauptstraße.getHotel(),2);
     }
     @Test
-    public void testGetMiete(){
+    public void testGetRent(){
         Assert.assertEquals(hauptstraße.getRent(),20);
     }
     @Test
-    public void testSetMiete(){
+    public void testSetRent(){
         hauptstraße.setRent(30);
         Assert.assertEquals(hauptstraße.getRent(),30);
     }
     @Test
-    public void testGetHausPreis(){
+    public void testGetHousePrice(){
         Assert.assertEquals(hauptstraße.getHousePrice(),50);
     }
     @Test
-    public void testSetHausPreis(){
+    public void testSetHousePrice(){
         hauptstraße.setHousePrice(55);
         Assert.assertEquals(hauptstraße.getHousePrice(),55);
     }
