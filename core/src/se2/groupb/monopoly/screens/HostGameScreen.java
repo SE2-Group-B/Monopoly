@@ -1,6 +1,7 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -43,7 +44,7 @@ public class HostGameScreen extends GameScreenAdapter {
     private ImageButton connectBtn;
     private ImageButton startBtn;
 
-    private int buttonSize;
+    private float buttonSize;
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
     private float xPosButtons;
@@ -68,7 +69,7 @@ public class HostGameScreen extends GameScreenAdapter {
         loadingText = new GlyphLayout(font, "Loading the Game");
 
         // button size
-        buttonSize = Gdx.graphics.getWidth() / 3;
+        buttonSize = Gdx.graphics.getWidth() / 4;
 
         // initial position of buttons and y offset
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
@@ -171,16 +172,15 @@ public class HostGameScreen extends GameScreenAdapter {
 
 
         monopoly.batch.begin();
-        if (isConnected) {
-            font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight()));
-        }
+        font.draw(monopoly.batch, connectedText,
+                (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
+
         if (!allJoined && buttonPressed) {
             font.draw(monopoly.batch, waitingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         } else if (allJoined && buttonPressed) {
             font.draw(monopoly.batch, loadingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
 
         monopoly.batch.end();
