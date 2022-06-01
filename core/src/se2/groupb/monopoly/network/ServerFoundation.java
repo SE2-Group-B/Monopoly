@@ -66,6 +66,7 @@ public class ServerFoundation {
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");
                         }
+
                     }
                 }
             }
