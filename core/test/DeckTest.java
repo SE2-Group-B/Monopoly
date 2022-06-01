@@ -79,14 +79,14 @@ public class DeckTest {
     }
 
     @Test
-    public void testGetKartenstapel(){
+    public void testGetDeck(){
         Assert.assertEquals(deck.getDeck().get(0), k1);
         Assert.assertEquals(deck.getDeck().get(1), k2);
         Assert.assertEquals(deck.getDeck().get(2), k3);
     }
 
     @Test
-    public void testSetKartenstapelNotNull(){
+    public void testSetDeckNotNull(){
         ArrayList<Card> cardArraylist =new ArrayList<>();
         cardArraylist.add(k1);
         cardArraylist.add(k2);
@@ -95,7 +95,7 @@ public class DeckTest {
     }
 
     @Test
-    public void testSetKartenstapel(){
+    public void testSetDeck(){
         ArrayList<Card> cardArraylist =new ArrayList<>();
         cardArraylist.add(k1);
         cardArraylist.add(k2);
@@ -156,8 +156,30 @@ public class DeckTest {
         Assert.assertNotNull(deck.getNextCard());
     }
     @Test
-    public void testInitializeEreigniskartenStapelCard1(){
-
+    public void testInitializeEreigniskartenDeck(){
+        Deck ereigniskartenDeck=new Deck();
+        ereigniskartenDeck.initializeEreigniskartenStapel();
+        Assert.assertNotNull(ereigniskartenDeck.getNextCard());
     }
+    @Test
+    public void testInitializeEreigniskartenDeckCard1(){
+        Deck ereigniskartenDeck=new Deck();
+        ereigniskartenDeck.initializeEreigniskartenStapel();
+        Card c1=new Card(1, "Gehe 3 Felder zurück");
+        Assert.assertEquals(ereigniskartenDeck.getDeck().get(0).getId(), c1.getId());
+    }
+    @Test
+    public void testInitializeGemeinschaftskartenDeck(){
+        Deck gemeinschaftsDeck=new Deck();
+        gemeinschaftsDeck.initializeGemeinschaftskartenStapel();
+        Assert.assertNotNull(gemeinschaftsDeck.getNextCard());
+    }
+    @Test
+    public void testInitializesGemeinschaftskartenDeckCard1(){
+        Deck gemeinschaftsDeck=new Deck();
+        gemeinschaftsDeck.initializeGemeinschaftskartenStapel();
+        Assert.assertEquals(gemeinschaftsDeck.getDeck().get(0).getId(), 21);
+    }
+
 
 }
