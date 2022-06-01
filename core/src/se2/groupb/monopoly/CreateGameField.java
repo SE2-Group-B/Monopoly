@@ -15,18 +15,13 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-import se2.groupb.monopoly.screens.MonopolyScreen;
 import se2.groupb.monopoly.screens.WinningScreen;
 
 
@@ -520,9 +515,9 @@ public class CreateGameField extends ScreenAdapter {
                 break;
             case "PenaltyField":
                 PenaltyField p = (PenaltyField) logicalGameField[playerPosition];
-                getCurrentPlayer().changeMoney(-p.getStrafe());
-                pot += p.getStrafe();
-                output = getCurrentPlayer().getName() + " wirft " + p.getStrafe() + " in den Pot.";
+                getCurrentPlayer().changeMoney(-p.getPenalty());
+                pot += p.getPenalty();
+                output = getCurrentPlayer().getName() + " wirft " + p.getPenalty() + " in den Pot.";
                 break;
             case "Property":
                 Property prop = logicalGameField[playerPosition];
