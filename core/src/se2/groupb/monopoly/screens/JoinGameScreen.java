@@ -71,7 +71,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         enterGroupNumberText = new GlyphLayout(font, "Please enter group number:");
 
         // button size and initial button positions
-        buttonSize = Gdx.graphics.getWidth() / 4;
+        buttonSize = (float) (Gdx.graphics.getWidth() / 4D);
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
 

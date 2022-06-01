@@ -69,7 +69,7 @@ public class HostGameScreen extends GameScreenAdapter {
         loadingText = new GlyphLayout(font, "Loading the Game");
 
         // button size
-        buttonSize = Gdx.graphics.getWidth() / 4;
+        buttonSize = (float) (Gdx.graphics.getWidth() / 4D);
 
         // initial position of buttons and y offset
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);

@@ -45,7 +45,7 @@ public class MainMenuScreen extends GameScreenAdapter {
     public void show() {
 
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        buttonSize = Gdx.graphics.getWidth()/3;
+        buttonSize = (float) (Gdx.graphics.getWidth()/3D);
 
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
