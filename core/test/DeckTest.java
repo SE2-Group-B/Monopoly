@@ -181,5 +181,4 @@ public class DeckTest {
         Assert.assertEquals(gemeinschaftsDeck.getDeck().get(0).getId(), 21);
     }
 
-
 }
