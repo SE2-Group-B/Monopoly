@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +70,7 @@ public class CreateGameField extends ScreenAdapter {
     private Deck gemeinschaftskartenDeck = new Deck();
     private Texture kartenHintergrund;
     public boolean showCard;
+    private Timer timerCard=new Timer();
 
 
     // private CameraInputController cameraController;
@@ -186,6 +188,7 @@ public class CreateGameField extends ScreenAdapter {
         gemeinschaftskartenDeck.initializeGemeinschaftskartenStapel();
         kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
         showCard = false;
+
 
         onTurn = true;
         cheatActivated = reported = shakeCheatActivated = false;
@@ -376,10 +379,12 @@ public class CreateGameField extends ScreenAdapter {
         */
         if (showCard) {
             spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) - 1000 / 2, (Gdx.graphics.getHeight() / 2) - 1300 / 2, 1000, 1300);
-            }
-        if (isCorrectPosition(userPosX, userPosY, ((Gdx.graphics.getWidth() / 2) - 1000 / 2), ((Gdx.graphics.getHeight() / 2) - 1300 / 2), 1000, 1300, 0 * yPosOffsetButtons)
-                && Gdx.input.justTouched() && showCard) {
-            showCard=false;
+            timerCard.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    showCard=false;
+                }
+            }, 5); timerCard.stop();
         }
 
 
