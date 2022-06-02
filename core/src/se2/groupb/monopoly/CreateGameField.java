@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class CreateGameField extends ScreenAdapter {
     private Player player2;
     private Player player3;
     private Player player4;
+    private ArrayList<Player> players = new ArrayList();
     public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0, pot = 0;
     public int[] sums = new int[4];
     public String[] placement = new String[4];
@@ -98,7 +100,7 @@ public class CreateGameField extends ScreenAdapter {
 
     private int currentPos = 0;
 
-// variables for fieldoffsets
+    // variables for fieldoffsets
     public float leftX = 9.535f;
     public float leftZ = 68f;
     public float topX = 71.05f;
@@ -108,7 +110,7 @@ public class CreateGameField extends ScreenAdapter {
 //////////////////////////////////
 
     Model[] fieldModel = new Model[40];
-    ModelInstance[] fieldModInstance = new ModelInstance[40]; // DON'T FORGET TO UPDATE ARRAY
+    ModelInstance[] fieldModInstance = new ModelInstance[40];
 
     private void createBotPositions() {
         float[] botPos = {0, -6.5f, -13f, -19.5f, -26f, -32.5f, -39f, -45.5f, -52f, -58.5f, -65f};
@@ -216,6 +218,40 @@ public class CreateGameField extends ScreenAdapter {
 //        Gdx.input.setInputProcessor(cameraController);
     }
 
+    public void checkIfPlayerIsAlone(Player player) {
+        ArrayList<Player> playersToPosition = new ArrayList<>();
+        if (player.getPosition() == player1.getPosition() && player != player1) {
+            playersToPosition.add(player1);
+        }
+        if (player.getPosition() == player2.getPosition() && player != player2) {
+            playersToPosition.add(player2);
+        }
+        if (player.getPosition() == player3.getPosition() && player != player3) {
+            playersToPosition.add(player3);
+        }
+        if (player.getPosition() == player4.getPosition() && player != player4) {
+            playersToPosition.add(player4);
+        }
+        setMultiplePlayersOnField(playersToPosition);
+    }
+
+    public void setMultiplePlayersOnField(ArrayList<Player> playersToPosition) {
+
+
+
+        
+
+//        if (players.size() > 0) {
+//            for (Player player : players) {
+//                if (currentPlayerId != player.getId()) {
+//                    if (currentPlayerId < 10) {
+//                        positions[player.getPosition()].x -= 1;
+//                        player.move(positions[player.getPosition()]);
+//                    }
+//                }
+//            }
+//        }
+    }
 
     @Override
     public void render(float delta) {
@@ -259,10 +295,11 @@ public class CreateGameField extends ScreenAdapter {
                 && Gdx.input.justTouched() && onTurn) {
             int dice = roll();
             getCurrentPlayer().move(dice);
+//                checkIfPlayerIsAlone(getCurrentPlayer());
             //getCurrentPlayer().setPosition((getCurrentPlayer().getPosition() + dice) % 40);
             getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
             checkCurrentProperty();
-            if(!onTurn){
+            if (!onTurn) {
                 nextPlayer();
             }
         }
@@ -276,39 +313,44 @@ public class CreateGameField extends ScreenAdapter {
         moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
         moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
         moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
-        moneyfont.draw(spriteBatch, screenOutput, (Gdx.graphics.getWidth()/2)-100, yPosInitialButtons + 250);
+        moneyfont.draw(spriteBatch, screenOutput, (Gdx.graphics.getWidth() / 2) - 100, yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Pot: " + pot, 0, Gdx.graphics.getHeight() - 400);
 
+        spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth() - 20, Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2);
+        if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
+                && Gdx.input.justTouched()) {
 
+        }
 
         spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2);
         if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
             int pos = getCurrentPlayer().getPosition();
-            if(!isSomeonesProperty(pos)){
+            if (!isSomeonesProperty(pos)) {
                 String propertyType = getPropertyType(pos);
-                switch (propertyType){
+                switch (propertyType) {
                     case "Street":
-                            Street s = (Street) gameField.getGameField()[pos];
-                            getCurrentPlayer().changeMoney(-s.getPrice());
+                        Street s = (Street) gameField.getGameField()[pos];
+                        getCurrentPlayer().changeMoney(-s.getPrice());
                         gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
 
                         break;
                     case "Trainstation":
 
-                            Trainstation t = (Trainstation) gameField.getGameField()[pos];
-                            getCurrentPlayer().changeMoney(-t.getPrice());
+                        Trainstation t = (Trainstation) gameField.getGameField()[pos];
+                        getCurrentPlayer().changeMoney(-t.getPrice());
                         gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
                         break;
                     default:
                         screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
                 }
-            }else{
+            } else {
                 String propertyType = getPropertyType(pos);
                 Street s = (Street) gameField.getGameField()[pos];
                 getCurrentPlayer().changeMoney(-s.getRent());
             }
         }
+
 
         /**
          * Pressing the Report Cheat Button
@@ -339,6 +381,7 @@ public class CreateGameField extends ScreenAdapter {
                 }
             }
         }
+
 
         spriteBatch.end();
         modelBatch.end();
@@ -451,21 +494,21 @@ public class CreateGameField extends ScreenAdapter {
         spriteBatch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
     }
 
-    private void checkCurrentProperty(){
+    private void checkCurrentProperty() {
         int playerPosition = getCurrentPlayer().getPosition();
         String propertyType = getPropertyType(playerPosition);
         String output = "";
-        switch (propertyType){
+        switch (propertyType) {
             case "Street":
                 output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
-                if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
+                if (isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId() != getPropertyOwner(playerPosition).getId())) {
                     Street s = (Street) gameField.getGameField()[playerPosition];
                     output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), s.getRent());
                 }
                 break;
             case "Trainstation":
                 output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
-                if(isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId()!=getPropertyOwner(playerPosition).getId())){
+                if (isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId() != getPropertyOwner(playerPosition).getId())) {
                     Trainstation t = (Trainstation) gameField.getGameField()[playerPosition];
                     output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), t.getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
                 }
@@ -486,15 +529,15 @@ public class CreateGameField extends ScreenAdapter {
         screenOutput = output;
     }
 
-    private String screenOutputCheck(){
+    private String screenOutputCheck() {
         String playerName = getCurrentPlayer().getName();
         String playerPosition = gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
         return playerName + " befindet sich bei " + playerPosition;
     }
 
-    private String checkSoleProperty(Property property){
+    private String checkSoleProperty(Property property) {
         String output = "Spieler " + getCurrentPlayer().getName();
-        switch (property.getName()){
+        switch (property.getName()) {
             case "Los":
                 getCurrentPlayer().changeMoney(400);
                 output += " ist direkt auf Los gekommen und zieht 400€ ein.";
@@ -522,38 +565,38 @@ public class CreateGameField extends ScreenAdapter {
         return output;
     }
 
-    private void checkPrison(){
+    private void checkPrison() {
         int playerPosition = getCurrentPlayer().getPosition();
-        if(playerPosition == 30){
+        if (playerPosition == 30) {
             getCurrentPlayer().setPrison(true);
         }
     }
 
-    private boolean isSomeonesProperty(int position){
-        return gameField.getGameField()[position].getOwnerId()!=0;
+    private boolean isSomeonesProperty(int position) {
+        return gameField.getGameField()[position].getOwnerId() != 0;
     }
 
-    private Player getPropertyOwner(int pos){
+    private Player getPropertyOwner(int pos) {
         return getPlayerById(gameField.getGameField()[pos].getOwnerId());
     }
 
-    private void nextPlayer(){
-        if(currentPlayerId == playerCount){
+    private void nextPlayer() {
+        if (currentPlayerId == playerCount) {
             currentPlayerId = 1;
-        }else{
+        } else {
             currentPlayerId++;
         }
         //screenOutput = "";
         reset();
     }
 
-    private Player getCurrentPlayer(){
+    private Player getCurrentPlayer() {
         return getPlayerById(currentPlayerId);
     }
 
-    private Player getPlayerById(int id){
+    private Player getPlayerById(int id) {
         Player p;
-        switch (id){
+        switch (id) {
             case 1:
                 p = player1;
                 break;
@@ -572,14 +615,15 @@ public class CreateGameField extends ScreenAdapter {
         return p;
     }
 
-    private void reset(){
+    private void reset() {
         cheatActivated = shakeCheatActivated = reported = false;
         onTurn = true;
         cheatDice = 0;
         pachCount = 0;
     }
 
-    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
+    private static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton,
+                                             float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
         return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
     }
 
@@ -601,7 +645,8 @@ public class CreateGameField extends ScreenAdapter {
     }
 
 
-    public void transformModelsOnField(int start, int end, float v3X, float v3Z, int degrees, int offset) {
+    public void transformModelsOnField(int start, int end, float v3X, float v3Z, int degrees,
+                                       int offset) {
         Vector3 vector3 = new Vector3(0, 0, 0);
         Vector3 vector3Rotate = new Vector3(0, 1, 0);
         float distanceWidth = 6.5f;
@@ -629,26 +674,26 @@ public class CreateGameField extends ScreenAdapter {
     }
 
     //Letzter Methodenaufruf vor Spielende
-    public void winning(){
+    public void winning() {
         int amount = 0;
 
-        for(int i = 0;i<=40;i++) {
+        for (int i = 0; i <= 40; i++) {
             if (gameField.getGameField()[i].getOwnerId() == 1) {
                 String propertyType = getPropertyType(i);
                 switch (propertyType) {
                     case "Street":
-                            Street s = (Street) gameField.getGameField()[i];
-                            amount = s.getPrice();
-                            amount += s.getHousePrice();
-                            amount += s.getHotel();
-                            player1mon += amount;
-                            amount = 0;
+                        Street s = (Street) gameField.getGameField()[i];
+                        amount = s.getPrice();
+                        amount += s.getHousePrice();
+                        amount += s.getHotel();
+                        player1mon += amount;
+                        amount = 0;
                         break;
                     case "Trainstation":
-                            Trainstation t = (Trainstation) gameField.getGameField()[i];
-                            amount = t.getPrice();
-                            player1mon += amount;
-                            amount = 0;
+                        Trainstation t = (Trainstation) gameField.getGameField()[i];
+                        amount = t.getPrice();
+                        player1mon += amount;
+                        amount = 0;
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + propertyType);
@@ -666,21 +711,22 @@ public class CreateGameField extends ScreenAdapter {
         sums[3] = player4mon;
         Arrays.sort(sums);
 
-        for(int j = 0; j<=3;j++){
-            if(sums[j] == player1mon){
+        for (int j = 0; j <= 3; j++) {
+            if (sums[j] == player1mon) {
                 placement[j] = player1.getName();
-            }else if(sums[j] == player2mon){
+            } else if (sums[j] == player2mon) {
                 placement[j] = player2.getName();
-            }else if(sums[j] == player3mon){
+            } else if (sums[j] == player3mon) {
                 placement[j] = player3.getName();
-            }else if(sums[j] == player4mon){
+            } else if (sums[j] == player4mon) {
                 placement[j] = player4.getName();
             }
         }
 
         monopoly.setScreen(new WinningScreen(monopoly));
     }
-    public CreateGameField(){
+
+    public CreateGameField() {
 
     }
 
