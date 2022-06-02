@@ -62,6 +62,7 @@ public class ClientFoundation {
         });
     }
 
+
     public Client getClient() {
         return client;
     }

@@ -66,7 +66,7 @@ public abstract class GameScreenAdapter implements Screen {
         TextureRegion buttonTextureRegion = new TextureRegion(buttonTexture);
         TextureRegionDrawable buttonRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
         ImageButton button = new ImageButton(buttonRegionDrawable);
-        float scale = (float) size / buttonTexture.getWidth();
+        float scale = size / buttonTexture.getWidth();
         button.getImage().setFillParent(true);
         button.getImage().setScale(scale, scale);
         button.setX(X - (((button.getWidth()*scale) / 2.0f)));
