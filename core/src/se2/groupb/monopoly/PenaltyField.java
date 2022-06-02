@@ -1,16 +1,16 @@
 package se2.groupb.monopoly;
 
 public class PenaltyField extends Property {
-    private int strafe;
+    private int penalty;
 
 
     public PenaltyField(String name, int strafe) {
         super(name);
-        this.strafe = strafe;
+        this.penalty = strafe;
 
     }
 
-    public int getStrafe() {return strafe;}
+    public int getPenalty() {return penalty;}
 
-    public void setStrafe(int strafe) {this.strafe = strafe;}
+    public void setPenalty(int strafe) {this.penalty = strafe;}
 }
