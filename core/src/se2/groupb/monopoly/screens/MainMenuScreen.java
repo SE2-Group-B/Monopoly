@@ -4,6 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
 import se2.groupb.monopoly.CreateGameField;
@@ -19,6 +24,11 @@ public class MainMenuScreen extends GameScreenAdapter {
     private Texture kartenButton;
     private Texture gameFieldButton;
     private Texture BuyButton;
+
+    private TextureRegion textureRegion;
+    private TextureRegionDrawable textureRegionDrawable;
+    private ImageButton imgButton;
+    private Stage stage;
 
     private int buttonSizeX;
     private int buttonSizeY;
@@ -44,6 +54,16 @@ public class MainMenuScreen extends GameScreenAdapter {
         sensorButton = new Texture("images/MenuButtons/switch_view.png");
         gameFieldButton=new Texture("images/MenuButtons/switch_view.png");
         BuyButton = new Texture("images/MenuButtons/switch_view.png");
+        Texture BuyButton2 = new Texture("images/MenuButtons/buy_building.png");
+
+        //textureRegion = new TextureRegion(BuyButton2, xPosButtons, yPosInitialButtons, buttonSizeX, buttonSizeY);
+        textureRegion = new TextureRegion(BuyButton2, 2000, 2000, 1000, 200);
+        textureRegion = new TextureRegion(BuyButton2);
+        textureRegionDrawable = new TextureRegionDrawable(textureRegion);
+        imgButton = new ImageButton(textureRegionDrawable);
+        stage = new Stage();
+        stage.addActor(imgButton);
+        Gdx.input.setInputProcessor(stage);
 
         buttonSizeX = Gdx.graphics.getWidth() / 3;
         buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
@@ -152,7 +172,7 @@ public class MainMenuScreen extends GameScreenAdapter {
                 && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
 
             this.dispose();
-            monopoly.setScreen(new MonopolyScreen(monopoly));
+            monopoly.setScreen(new WinningScreen(monopoly));
 
         }
 
@@ -170,6 +190,7 @@ public class MainMenuScreen extends GameScreenAdapter {
     }
 
         monopoly.batch.end();
+        stage.draw();
     }
 
     @Override
