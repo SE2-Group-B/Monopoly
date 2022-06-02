@@ -41,6 +41,7 @@ public class Player {
     }
 
 
+
     public void createSpielfigur() { //Methode noch nicht getestet
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);
@@ -53,8 +54,7 @@ public class Player {
         String output = "";
         if(this.getBankBalance() < value){
             output = this.getName() + " ist Bankrott.";
-            //Auscheiden aus dem Spiel?! So kann er einfach weiter spielen?
-            //Wenn Spieler 1 bankrott ist kriegt Spieler 2 trotzdem den ganzen Betrag ?!
+            //Auscheiden aus dem Spiel?! So kann er einfach weiter spielen
             this.setBankBalance(0);
             p.changeMoney(value);
         }else{

@@ -108,6 +108,7 @@ public class CreateGameField extends ScreenAdapter {
     private boolean shakeCheatActivated;
     private boolean onTurn;
     private boolean reported;
+    private boolean keyVolumeUp;
 
     private Random random = new Random();
     private int cheatDice;
@@ -195,6 +196,7 @@ public class CreateGameField extends ScreenAdapter {
         gemeinschaftskartenDeck.initializeGemeinschaftskartenStapel();
         kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
         showCard = false;
+        keyVolumeUp = false;
 
 
         onTurn = true;
@@ -324,8 +326,13 @@ public class CreateGameField extends ScreenAdapter {
         /**
          * Set pach Cheat
          */
-        if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
-            cheatDice++;
+        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
+            if(!keyVolumeUp){
+                keyVolumeUp = true;
+                cheatDice++;
+            }
+        }else{
+            keyVolumeUp = false;
         }
 
         /**
@@ -333,7 +340,7 @@ public class CreateGameField extends ScreenAdapter {
          */
         spriteBatch.draw(rollDice, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
-                && Gdx.input.justTouched() && onTurn) {
+                && Gdx.input.justTouched()) {
             int dice = roll();
             getCurrentPlayer().move(dice);
 //                checkIfPlayerIsAlone(getCurrentPlayer());
@@ -684,6 +691,9 @@ public class CreateGameField extends ScreenAdapter {
             reset();
         }
 
+    /**
+     * Change Method with Server
+     */
         private Player getCurrentPlayer () {
             return getPlayerById(currentPlayerId);
         }
