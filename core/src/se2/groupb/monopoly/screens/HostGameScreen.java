@@ -1,6 +1,7 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -43,7 +44,7 @@ public class HostGameScreen extends GameScreenAdapter {
     private ImageButton connectBtn;
     private ImageButton startBtn;
 
-    private int buttonSize;
+    private float buttonSize;
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
     private float xPosButtons;
@@ -68,7 +69,7 @@ public class HostGameScreen extends GameScreenAdapter {
         loadingText = new GlyphLayout(font, "Loading the Game");
 
         // button size
-        buttonSize = Gdx.graphics.getWidth() / 3;
+        buttonSize = (float) (Gdx.graphics.getWidth() / 4D);
 
         // initial position of buttons and y offset
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
@@ -96,29 +97,36 @@ public class HostGameScreen extends GameScreenAdapter {
         connectBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (!isConnected) {
-                    // starting a server to host a game
-                    instance = new ServerFoundation();
+                // justTouched() is used so button only does action once, when clicked
+                if (Gdx.input.justTouched()) {
+                    if (!isConnected) {
+                        // starting a server to host a game
+                        instance = new ServerFoundation();
 
-                    // connect client (the host) to the server
-                    client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
-                    System.out.println(client.getClient().isConnected());
-                    if (client.getClient().isConnected()) {
-                        isConnected = true;
-                        connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
+                        // connect client (the host) to the server
+                        client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
+                        System.out.println(client.getClient().isConnected());
+                        if (client.getClient().isConnected()) {
+                            // add client to monopoly
+                            monopoly.addClient(client);
+                            isConnected = true;
+                            connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
 
-                        // new input processor that disconnects server if you go back
-                        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
-                        Gdx.input.setInputProcessor(inputMultiplexer);
+                            // new input processor that disconnects server if you go back
+                            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
+                            Gdx.input.setInputProcessor(inputMultiplexer);
 
-                        stage.addActor(startBtn);
-                    } else {isConnected = false;
-                        connectedText.setText(font, "Could not connect, please retry!");
+                            stage.addActor(startBtn);
+                        } else {
+                            isConnected = false;
+                            connectedText.setText(font, "Could not connect, please retry!");
+                        }
+
+                        return true;
                     }
-
-                    return true;
+                    if (!client.getClient().isConnected()) isConnected = false;
                 }
-                if (!client.getClient().isConnected()) isConnected=false;
+
 
                 return false;
             }
@@ -131,22 +139,25 @@ public class HostGameScreen extends GameScreenAdapter {
         startBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                client.getClient().sendUDP("HOST");
+                // justTouched() is used so button only does action once, when clicked
+                if (Gdx.input.justTouched()) {
+                    client.getClient().sendUDP("HOST");
 
-                buttonPressed = true;
-                // draw rectangle above old text since it does not vanish when loading the game
+                    buttonPressed = true;
+                    // draw rectangle above old text since it does not vanish when loading the game
 
-                if (client.allPlayersJoined()) {
-                    /**
-                     * START THE GAME
-                     * set the screen, user can't go to main menu anymore
-                     */
-                    InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
-                    Gdx.input.setInputProcessor(inputMultiplexer);
-                    allJoined = true;
-                    switchScreenDelayed(getScreen(), 0.000000001f);
-                    return true;
-                } else allJoined = false;
+                    if (client.allPlayersJoined()) {
+                        /**
+                         * START THE GAME
+                         * set the screen, user can't go to main menu anymore
+                         */
+                        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+                        Gdx.input.setInputProcessor(inputMultiplexer);
+                        allJoined = true;
+                        switchScreenDelayed(getScreen(), 0.000000001f);
+                        return true;
+                    } else allJoined = false;
+                }
                 return false;
             }
         });
@@ -163,44 +174,18 @@ public class HostGameScreen extends GameScreenAdapter {
 
 
         monopoly.batch.begin();
-        if (isConnected) {
-            font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight()));
-        }
+        font.draw(monopoly.batch, connectedText,
+                (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
+
         if (!allJoined && buttonPressed) {
             font.draw(monopoly.batch, waitingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         } else if (allJoined && buttonPressed) {
             font.draw(monopoly.batch, loadingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
 
         monopoly.batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     @Override

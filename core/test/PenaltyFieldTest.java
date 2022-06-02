@@ -17,16 +17,17 @@ public class PenaltyFieldTest {
         einkommenssteuer=null;
     }
     @Test
-    public void testZahlfeld(){
-        Assert.assertNotNull(einkommenssteuer);
+    public void testPenalty(){
+        PenaltyField einkommenssteuer2=new PenaltyField("ab",500);
+        Assert.assertNotNull(einkommenssteuer2);
     }
     @Test
-    public void testGetStrafe(){
-        Assert.assertEquals(einkommenssteuer.getStrafe(), 200);
+    public void testGetPenalty(){
+        Assert.assertEquals(einkommenssteuer.getPenalty(), 200);
     }
     @Test
-    public void testSetStrafe(){
-        einkommenssteuer.setStrafe(300);
-        Assert.assertEquals(einkommenssteuer.getStrafe(), 300);
+    public void testSetPenalty(){
+        einkommenssteuer.setPenalty(300);
+        Assert.assertEquals(einkommenssteuer.getPenalty(), 300);
     }
 }

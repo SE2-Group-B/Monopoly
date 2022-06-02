@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.network.ServerFoundation;
 
@@ -52,5 +54,11 @@ public class ServerFoundationTest {
     @Test
     public void getServerTest() {
         Assert.assertEquals(Server.class, server.getServer().getClass());
+    }
+
+    @Test
+    public void randomizeTest(){
+        ServerFoundation server2 = new ServerFoundation();
+        Assert.assertNotEquals(server2.getTcpPort(), server.getTcpPort());
     }
 }

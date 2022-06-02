@@ -27,6 +27,7 @@ public class Street extends Property {
     public void setPrice(int price) {
         this.price = price;
     }
+
     public boolean isSold() {
         return sold;
     }
@@ -50,7 +51,6 @@ public class Street extends Property {
 
     public void setHotel(int hotel) {
         this.hotel = hotel;
-        //player1.decreaseMoney(getHausPreis()*2);
         increasemiete();
     }
 
@@ -70,20 +70,16 @@ public class Street extends Property {
         this.housePrice = housePrice;
     }
 
-    public void verkauft() {if(isSold() == false) {
-        setSold(true);}else{errormsg();}}
-
-
-    //Haus bezahlen?
-    public void buyhouse() {if(getHouse() < 2){
-        setHouse(getHouse()+1); increasemiete();}else{errormsg();}}
-
-    //bezahlen?
-    public void buyhotel() {if(getHouse() == 2 && getHotel() == 0) {setHotel(1); setHouse(0); increasemiete();}else{errormsg();}}
-
-    public boolean errormsg() {return false;}
-    //Fehlermeldung als eigenes Fenster(Screen) im nächsten Sprint einfügen
-
+    public boolean buyhouse() {
+        if(getHouse() < 2){
+            setHouse(getHouse()+1); increasemiete();
+            return true;
+        }else if(getHouse() == 2 && getHotel() == 0) {
+            setHotel(1); setHouse(0); increasemiete();
+            return true;
+        }
+        else{return false;}
+    }
 
 
     public void increasemiete() {

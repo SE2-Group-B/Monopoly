@@ -2,6 +2,7 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -9,34 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import se2.groupb.monopoly.Monopoly;
 
-public abstract class GameScreenAdapter implements Screen {
+public abstract class GameScreenAdapter extends ScreenAdapter implements Screen {
 
     Monopoly monopoly;
 
     public GameScreenAdapter(Monopoly monopoly) {
         this.monopoly = monopoly;
     }
-
-    @Override
-    abstract public void show();
-
-    @Override
-    abstract public void render(float delta);
-
-    @Override
-    abstract public void resize(int width, int height);
-
-    @Override
-    abstract public void pause();
-
-    @Override
-    abstract public void resume();
-
-    @Override
-    abstract public void hide();
-
-    @Override
-    abstract public void dispose();
 
     /****************** Methods ******************/
 
@@ -61,14 +41,15 @@ public abstract class GameScreenAdapter implements Screen {
      *                    Button is as big as x of the screen size, height is automatically scaled to width
      * @return ImageButton that is positioned and scaled
      */
-    protected static ImageButton drawImageButton(String texturePath, float X, float Y, int size) {
+    protected static ImageButton drawImageButton(String texturePath, float X, float Y, float size) {
         Texture buttonTexture = new Texture(Gdx.files.internal(texturePath));
         TextureRegion buttonTextureRegion = new TextureRegion(buttonTexture);
         TextureRegionDrawable buttonRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
         ImageButton button = new ImageButton(buttonRegionDrawable);
-        float scale = (float) size / buttonTexture.getWidth();
-        button.setSize(buttonTexture.getWidth() * scale, buttonTexture.getHeight() * scale);
-        button.setX(X - button.getWidth() / 2.0f);
+        float scale = size / buttonTexture.getWidth();
+        button.getImage().setFillParent(true);
+        button.getImage().setScale(scale, scale);
+        button.setX(X - (((button.getWidth()*scale) / 2.0f)));
         button.setY(Y);
         return button;
     }

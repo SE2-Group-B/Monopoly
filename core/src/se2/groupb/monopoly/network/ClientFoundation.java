@@ -23,7 +23,7 @@ public class ClientFoundation {
                 break;
             }
             try {
-                ip = client.discoverHost(udpPort, 1000);
+                ip = client.discoverHost(udpPort, 500);
                 if (ip != null) System.out.println("host: " + ip);
                 else System.out.println("No host discovered!");
             } catch (Exception e) {
@@ -61,6 +61,7 @@ public class ClientFoundation {
             }
         });
     }
+
 
     public Client getClient() {
         return client;
