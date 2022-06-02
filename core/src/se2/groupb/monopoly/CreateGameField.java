@@ -7,16 +7,30 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,12 +50,12 @@ public class CreateGameField extends ScreenAdapter {
     private BitmapFont moneyfont;
     private Property[] logicalGameField;
 
-    /*private Stage stage;
+    private Stage stage;
     private Texture myTexture;
     private TextureRegion myTextureRegion;
     private TextureRegionDrawable myTextureRegionDrawable;
     private ImageButton testbutton;
-    private ImageButton testbutton2;*/
+    private ImageButton testbutton2;
 
 
     private Field[] fields = new Field[40];
@@ -202,7 +216,16 @@ public class CreateGameField extends ScreenAdapter {
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
         modelBatch = new ModelBatch();
+        TextureRegion textureBuy = new TextureRegion(BuyButton,0, 0, 10, 10);
+        //textureBuy.setRegion(0, Gdx.graphics.getHeight() - 400, (buttonSizeX/2)-50, buttonSizeY / 2);
+        TextureRegionDrawable textureRegionBuy = new TextureRegionDrawable(textureBuy);
+        ImageButton imgbutton = new ImageButton(textureRegionBuy);
 
+
+
+        stage = new Stage(new ScreenViewport());
+        stage.addActor(imgbutton);
+        Gdx.input.setInputProcessor(stage);
 
         camera = new OrthographicCamera(100, 100);
         camera.rotate(90);
@@ -245,7 +268,15 @@ public class CreateGameField extends ScreenAdapter {
         moneyfont = new BitmapFont();
         //testbutton = new ImageButton()
 
-        ScreenUtils.clear(0, 0, 0, 1);
+
+        /*imgbutton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+            }
+        });*/
+
+                ScreenUtils.clear(0, 0, 0, 1);
         // cameraController.update();
 
         // Clear the stuff that is left over from the previous render cycle
@@ -288,17 +319,23 @@ public class CreateGameField extends ScreenAdapter {
         renderModels();
         drawDice(dice1, dice2);
 
+        /**
+         * Fonts for the Accounts of players
+         */
         moneyfont.setColor(Color.WHITE);
         moneyfont.getData().setScale(4, 4);
         moneyfont.draw(spriteBatch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
         moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
         moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
         moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
-        moneyfont.draw(spriteBatch, screenOutput, (Gdx.graphics.getWidth() / 2) - 100, yPosInitialButtons + 250);
+        moneyfont.draw(spriteBatch, screenOutput, (float) (Gdx.graphics.getWidth()/3.75), yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Pot: " + pot, 0, Gdx.graphics.getHeight() - 400);
 
 
-        spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2);
+        /**
+         * Buy-Button and his method for buying buildings
+         */
+        spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, (buttonSizeX/2)-50, buttonSizeY / 2);
         if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
             int pos = getCurrentPlayer().getPosition();
@@ -385,11 +422,17 @@ public class CreateGameField extends ScreenAdapter {
 
         spriteBatch.end();
         modelBatch.end();
+
+        stage.draw();
     }
 
     @Override
     public void dispose() {
         modelBatch.dispose();
+        spriteBatch.dispose();
+        moneyfont.dispose();
+        stage.dispose();
+
 //        ml1.dispose();
 //        ml2.dispose();
         disposeModels();
@@ -494,7 +537,10 @@ public class CreateGameField extends ScreenAdapter {
         spriteBatch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
     }
 
-    private void checkCurrentProperty() {
+    /**
+     * Method for output of the field on the Screen
+     */
+    private void checkCurrentProperty(){
         int playerPosition = getCurrentPlayer().getPosition();
         String propertyType = getPropertyType(playerPosition);
         String output = "";
@@ -535,7 +581,12 @@ public class CreateGameField extends ScreenAdapter {
         return playerName + " befindet sich bei " + playerPosition;
     }
 
-    private String checkSoleProperty(Property property) {
+    /**
+     * Method for controll of special fields as well as their methods
+     * @param property to be controlled
+     * @return additional Output text for the screen for special fields
+     */
+    private String checkSoleProperty(Property property){
         String output = "Spieler " + getCurrentPlayer().getName();
         switch (property.getName()) {
             case "Los":
@@ -570,7 +621,10 @@ public class CreateGameField extends ScreenAdapter {
         return output;
     }
 
-    private void checkPrison() {
+    /**
+     * method for the prison
+     */
+    private void checkPrison(){
         int playerPosition = getCurrentPlayer().getPosition();
         if (playerPosition == 30) {
             getCurrentPlayer().setPrison(true);
@@ -720,8 +774,10 @@ public class CreateGameField extends ScreenAdapter {
         }
     }
 
-    //Letzter Methodenaufruf vor Spielende
-    public void winning() {
+    /**
+     * Winning Condition which changes to the final Screen of the game
+     */
+    public void winning(){
         int amount = 0;
 
         for (int i = 0; i <= 40; i++) {
@@ -773,7 +829,7 @@ public class CreateGameField extends ScreenAdapter {
         monopoly.setScreen(new WinningScreen(monopoly));
     }
 
-    public CreateGameField() {
+    public CreateGameField(){
 
     }
 
