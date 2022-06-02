@@ -66,6 +66,7 @@ public class InputBackProcessor {
             @Override
             public boolean keyDown(int keycode) {
                 if ((keycode == Input.Keys.BACK) || (keycode == Input.Keys.ESCAPE)) {
+                    monopoly.removeClient();
                     monopoly.setScreen(new MainMenuScreen(monopoly));
                     server.close();
                     client.close();
@@ -89,6 +90,7 @@ public class InputBackProcessor {
             @Override
             public boolean keyDown(int keycode) {
                 if ((keycode == Input.Keys.BACK) || (keycode == Input.Keys.ESCAPE)) {
+                    monopoly.removeClient();
                     monopoly.setScreen(new MainMenuScreen(monopoly));
                     client.close();
                 }

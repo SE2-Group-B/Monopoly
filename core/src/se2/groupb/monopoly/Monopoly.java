@@ -4,6 +4,7 @@ package se2.groupb.monopoly;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.screens.MainMenuScreen;
 import se2.groupb.monopoly.screens.SensorScreen;
 
@@ -13,6 +14,7 @@ public class Monopoly extends Game {
     Property[] arr;
     SensorScreen sensors;
     int[] diceRoll;
+    private ClientFoundation client;
 
 
 
@@ -42,4 +44,15 @@ public class Monopoly extends Game {
 
     }
 
+    public void addClient(ClientFoundation client){
+        this.client = client;
+    }
+
+    public ClientFoundation getClient(){
+        return this.client;
+    }
+
+    public void removeClient(){
+        this.client = null;
+    }
 }
