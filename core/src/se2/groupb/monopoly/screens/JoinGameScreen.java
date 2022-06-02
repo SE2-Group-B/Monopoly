@@ -29,7 +29,7 @@ public class JoinGameScreen extends GameScreenAdapter {
     private Stage stage;
     private ImageButton connectBtn;
 
-    private int buttonSize;
+    private float buttonSize;
     private float yPosInitialButtons;
     private float xPosButtons;
     private boolean buttonPressed = false;
@@ -58,6 +58,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         /**
          * instead of closing the App go to Main Menu
          */
+        // setup custom InputProcessor
         inputProcessor = new InputBackProcessor(monopoly);
 
         // interaction text
@@ -70,7 +71,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         enterGroupNumberText = new GlyphLayout(font, "Please enter group number:");
 
         // button size and initial button positions
-        buttonSize = Gdx.graphics.getWidth() / 3;
+        buttonSize = (float) (Gdx.graphics.getWidth() / 4D);
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
 
@@ -90,12 +91,14 @@ public class JoinGameScreen extends GameScreenAdapter {
         userInput.setSize(inputWidth, inputHeight);
         userInput.setAlignment(1);
 
-
-        stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
+        // set up a stage for the ui
+        stage = new Stage(new ScreenViewport());
+        // add button and input to stage to perform rendering and take input
         stage.addActor(userInput);
-        stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
+        stage.addActor(connectBtn);
+        // add a inputProcessor multiplexer so you get button input have a custom InputProcessor
         InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backToMainMenuProcessor(), stage);
-        Gdx.input.setInputProcessor(inputMultiplexer); //Start taking input from the ui
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         /**
          *                                                                          *
@@ -106,44 +109,49 @@ public class JoinGameScreen extends GameScreenAdapter {
         connectBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                String inputText = userInput.getText();
-                // show Waiting for Players on screen if server was started
-                buttonPressed = true;
-                int port = 0;
-                if (isParsable(inputText)) {
-                    port = Integer.parseInt(inputText);
-                }
-
-                if (!inputText.isEmpty() && port >= 1000 && port <= 7000) {
-                    isValidInput = true;
-                    if (!isConnected) {
-                        // button press
-                        // connect client (new client) to the server
-                        client = new ClientFoundation(port, port);
-                        if (client.getClient().isConnected()) {
-                            // new input processor that disconnects from server if user goes back
-                            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.joinMenuServerProcessor(client.getClient()), stage);
-                            Gdx.input.setInputProcessor(inputMultiplexer);
-                            isConnected = true;
-                            connectedText.setText(font, "Joined server, waiting for players");
-                        } else {
-                            isConnected = false;
-                            connectedText.setText(font, "Could not connect, please retry!");
-                        }
-
-                        return true;
+                // justTouched() is used so button only does action once, when clicked
+                if (Gdx.input.justTouched()) {
+                    String inputText = userInput.getText();
+                    // show Waiting for Players on screen if server was started
+                    buttonPressed = true;
+                    int port = 0;
+                    if (isParsable(inputText)) {
+                        port = Integer.parseInt(inputText);
                     }
-                } else {
-                    isValidInput = false;
-                }
 
-                if (!isValidInput) {
-                    groupText.setText(font, "The Groups range from 1000 to 7000");
-                }
+                    if (!inputText.isEmpty() && port >= 1000 && port <= 7000) {
+                        // bool for checking if user enters valid input
+                        isValidInput = true;
+                        if (!isConnected) {
+                            // button press
+                            // connect client (new client) to the server
+                            client = new ClientFoundation(port, port);
+                            if (client.getClient().isConnected()) {
+                                // add client to monopoly
+                                monopoly.addClient(client);
+                                // new input processor that disconnects from server if user goes back
+                                InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.joinMenuServerProcessor(client.getClient()), stage);
+                                Gdx.input.setInputProcessor(inputMultiplexer);
+                                // if client is connected, show player that he has connection
+                                isConnected = true;
+                                connectedText.setText(font, "Joined server, waiting for players");
+                            } else {
+                                isConnected = false;
+                                connectedText.setText(font, "Could not connect, please retry!");
+                            }
+                            return true;
+                        }
+                    } else {
+                        isValidInput = false;
+                    }
 
+                    // if user enters invalid input show text
+                    if (!isValidInput) {
+                        groupText.setText(font, "The Groups range from 1000 to 7000");
+                    }
+                }
 
                 return false;
-
             }
         });
 
@@ -157,25 +165,27 @@ public class JoinGameScreen extends GameScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
         stage.draw(); //Draw the ui
 
+
+        // start drawing text
         monopoly.batch.begin();
 
         if (buttonPressed && !allConnected) {
             // if server response: client connected is still missing
             font.draw(monopoly.batch, connectedText,
-                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
         if (buttonPressed && allConnected && isConnected) {
             // if server found and connected
             font.draw(monopoly.batch, loadingText,
-                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
         if (buttonPressed && !isConnected && !isValidInput) {
             font.draw(monopoly.batch, groupText,
-                    (float) (Gdx.graphics.getWidth() / 2D - groupText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight()));
+                    (float) (Gdx.graphics.getWidth() / 2D - groupText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
 
         font.draw(monopoly.batch, enterGroupNumberText,
-                (float) (Gdx.graphics.getWidth() / 2D - enterGroupNumberText.width / 2D), (yPosInput + 1.5f * inputHeight));
+                (float) (Gdx.graphics.getWidth() / 2D - enterGroupNumberText.width / 2D), (yPosInput + 1.5f * inputHeight ));
 
         if (isConnected) {
             if (client.allPlayersJoined()) {
@@ -191,8 +201,6 @@ public class JoinGameScreen extends GameScreenAdapter {
                 allConnected = false;
             }
         }
-
-
         monopoly.batch.end();
 
 

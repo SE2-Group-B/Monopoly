@@ -61,14 +61,15 @@ public abstract class GameScreenAdapter implements Screen {
      *                    Button is as big as x of the screen size, height is automatically scaled to width
      * @return ImageButton that is positioned and scaled
      */
-    protected static ImageButton drawImageButton(String texturePath, float X, float Y, int size) {
+    protected static ImageButton drawImageButton(String texturePath, float X, float Y, float size) {
         Texture buttonTexture = new Texture(Gdx.files.internal(texturePath));
         TextureRegion buttonTextureRegion = new TextureRegion(buttonTexture);
         TextureRegionDrawable buttonRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
         ImageButton button = new ImageButton(buttonRegionDrawable);
-        float scale = (float) size / buttonTexture.getWidth();
-        button.setSize(buttonTexture.getWidth() * scale, buttonTexture.getHeight() * scale);
-        button.setX(X - button.getWidth() / 2.0f);
+        float scale = size / buttonTexture.getWidth();
+        button.getImage().setFillParent(true);
+        button.getImage().setScale(scale, scale);
+        button.setX(X - (((button.getWidth()*scale) / 2.0f)));
         button.setY(Y);
         return button;
     }

@@ -1,4 +1,5 @@
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -9,120 +10,52 @@ import java.util.ArrayList;
 
 import se2.groupb.monopoly.Trainstation;
 import se2.groupb.monopoly.Property;
-import se2.groupb.monopoly.Card;
 import se2.groupb.monopoly.Deck;
 import se2.groupb.monopoly.Player;
 import se2.groupb.monopoly.Street;
 
 public class PlayerTest {
     Player rot;
-    ArrayList<Property> meineGrundstuecke;
+    Player gelb;
+    ArrayList<Property> myPropertiesRot;
+    ArrayList<Property> myPropertiesGelb;
     Street hauptstraße;
     Trainstation nordbahnhof;
     Deck ereigniskarten;
-    Card e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11,e12,e13,e14, e15,e16,e17,e18,e19,e20;
-    Card g1, g2, g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16;
     Deck gemeinschaftskarten;
 
 
 
     @Before
     public void init(){
-        meineGrundstuecke=new ArrayList<>();
+        myPropertiesRot =new ArrayList<>();
+        myPropertiesGelb=new ArrayList<>();
         hauptstraße=new Street("Hauptstraße", 220, false, 0,0,20, 50);
-        meineGrundstuecke.add(hauptstraße);
+        myPropertiesRot.add(hauptstraße);
         nordbahnhof=new Trainstation("Nordbahnhof", false, 50);
-        meineGrundstuecke.add(nordbahnhof);
-        rot=new Player(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
+        myPropertiesRot.add(nordbahnhof);
+
+        rot=new Player(1, "Rot", 2000, myPropertiesRot,1 , Color.RED);
+        gelb=new Player(2, "Gelb", 2000, myPropertiesGelb,0 , Color.YELLOW);
 
         ereigniskarten = new Deck();
-         e1 = new Card(1, "Gehe 3 Felder zurück");
-        ereigniskarten.add(e1);
-         e2 = new Card(2, "Rücke vor bis auf Los!");
-        ereigniskarten.add(e2);
-         e3 = new Card(3, "Gehe 10 Felder zurück");
-        ereigniskarten.add(e3);
-         e4 = new Card(4, "Gehe 10 Felder weiter");
-        ereigniskarten.add(e4);
-         e5 = new Card(5, "Gehe 6 Felder weiter");
-        ereigniskarten.add(e5);
-         e6 = new Card(6, "Du hast deine Netflix Gebühren nicht bezahlt. Zahle 100€");
-        ereigniskarten.add(e6);
-         e7 = new Card(7, "Du brauchst neue Uni Bücher! Zahle 100€");
-        ereigniskarten.add(e7);
-         e8 = new Card(8, "Es ist Schnittwoch. Du zahlst eine Runde Bier! Zahle 20€");
-        ereigniskarten.add(e8);
-         e9 = new Card(9, "Du brauchst ein Parkticket für die Uni. Zahle 40€");
-        ereigniskarten.add(e9);
-         e10 = new Card(10, "Du wirst unerwartet Elternteil. Babys sind teuer! Zahle 200€");
-        ereigniskarten.add(e10);
-         e11 = new Card(11, "Du druckst dir dein eigenes Geld. Ziehe 250€ ein.");
-        ereigniskarten.add(e11);
-         e12 = new Card(12, "Du gibst regelmäßig Nachhilfe in Mathe. Ziehe 100€ ein");
-        ereigniskarten.add(e12);
-         e13 = new Card(13, "Du Glückspilz hast 100€ am Boden gefunden!");
-        ereigniskarten.add(e13);
-         e14 = new Card(14, "Du hilfst als Kellner aus. Ziehe 100€ ein. ");
-        ereigniskarten.add(e14);
-         e15 = new Card(15, "Du hast eine App programmiert und verkauft. Ziehe 500€ ein");
-        ereigniskarten.add(e15);
-         e16 = new Card(16, "Steuer Hinterziehung! Gehe direkt ins Gefängnis! Gehe nicht über Los!");
-        ereigniskarten.add(e16);
-         e17 = new Card(17, "Rücke vor bis zur Münchnerstraße"); //index 16
-        ereigniskarten.add(e17);
-         e18 = new Card(18, "Rücke vor bis zum Opernplatz"); //24
-        ereigniskarten.add(e18);
-         e19 = new Card(19, "Rücke vor bis zur Turmstraße"); //3
-        ereigniskarten.add(e19);
-         e20 = new Card(20, "Betrunken Auto gefahren? Ab ins Gefängnis!");
-        ereigniskarten.add(e20);
+        ereigniskarten.initializeEreigniskartenStapel();
 
         gemeinschaftskarten = new Deck();
-         g1=new Card(21, "Es ist dein Geburtstag. Ziehe 220€ ein.");
-        gemeinschaftskarten.add(g1);
-         g2=new Card(22, "Du verkaufst dein altes Zeug auf Spock. Du erhältst 170€");
-        gemeinschaftskarten.add(g2);
-         g3=new Card(23, "Du erbst 550€");
-        gemeinschaftskarten.add(g3);
-         g4=new Card(24, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
-        gemeinschaftskarten.add(g4);
-         g5=new Card(25, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 200€ ein.");
-        gemeinschaftskarten.add(g5);
-         g6=new Card(26, "Rücke vor bis auf Los!");
-        gemeinschaftskarten.add(g6);
-         g7=new Card(27, "Bank Irrtum zu deinem Gunsten. Ziehe 300€ ein.");
-        gemeinschaftskarten.add(g7);
-         g8=new Card(28, "Gehe vor bis zur Parkstraße."); //index 37
-        gemeinschaftskarten.add(g8);
-         g9=new Card(29, "Du hattest ein gutes Jahr und bekommst eine Bonuszahlung von 510€");
-        gemeinschaftskarten.add(g9);
-         g10=new Card(30, "Du bekommst Geld zurück von deinem Steuerausgleich. Ziehe 350€ ein.");
-        gemeinschaftskarten.add(g10);
-         g11=new Card(31, "Du hast den zweiten Preis in einem Schönheitswettbewerb gewonnen. Ziehe 222€ ein.");
-        gemeinschaftskarten.add(g11);
-         g12=new Card(32, "Steuernachzahlung. Bezahle 250€");
-        gemeinschaftskarten.add(g12);
-         g13=new Card(33, "Arzt Kosten: Zahle 100€");
-        gemeinschaftskarten.add(g13);
-         g14=new Card(34, "Dein Auto braucht ein Service. Zahle 250€");
-        gemeinschaftskarten.add(g14);
-         g15=new Card(35, "Du gehst Shoppen. Zahle 200€");
-        gemeinschaftskarten.add(g15);
-         g16=new Card(36, "Du hast ein gutes Herz und spendest an eine Hilfsorganisation 100€");
-        gemeinschaftskarten.add(g16);
+        gemeinschaftskarten.initializeGemeinschaftskartenStapel();
     }
 
     @After
     public void teardown(){
         rot=null;
-        meineGrundstuecke=null;
+        myPropertiesRot =null;
         hauptstraße=null;
         nordbahnhof=null;
     }
 
     @Test
-    public void testSpielfigur(){
-        Player testFigur=new Player(1, "Rot", 2000, meineGrundstuecke,1 , Color.RED);
+    public void testPlayer(){
+        Player testFigur=new Player(1, "Rot", 2000, myPropertiesRot,1 , Color.RED);
         Assert.assertNotNull(testFigur);
     }
 
@@ -156,43 +89,44 @@ public class PlayerTest {
         Assert.assertEquals(rot.getBankBalance(), 2000);
     }
     @Test
-    public void testGetMeineGrundstuecke(){
-        Assert.assertEquals(rot.getMyProperties(),meineGrundstuecke);
+    public void testGetMyProperties(){
+        Assert.assertEquals(rot.getMyProperties(), myPropertiesRot);
     }
     @Test
-    public void testSetMeineGrundstuecke(){
-        ArrayList<Property> meineGrundstuecke2=new ArrayList<>();
-        meineGrundstuecke2.add(nordbahnhof);
-        meineGrundstuecke2.add(hauptstraße);
-        rot.setMyProperties(meineGrundstuecke2);
-        Assert.assertEquals(rot.getMyProperties(),meineGrundstuecke2);
+    public void testSetMyProperties(){
+        ArrayList<Property> myProperties2=new ArrayList<>();
+        myProperties2.add(nordbahnhof);
+        myProperties2.add(hauptstraße);
+        rot.setMyProperties(myProperties2);
+        Assert.assertEquals(rot.getMyProperties(),myProperties2);
     }
+
     @Test
-    public void testGetAnzahlBahnhoefe(){
+    public void testGetNumOfTrainstaitions(){
         Assert.assertEquals(rot.getNumOfTrainstaitions(),1);
     }
 
     @Test
-    public void testSetAnzahlBahnhoefe(){
+    public void testSetNumOfTrainstaitions(){
         rot.setNumOfTrainstaitions(4);
         Assert.assertEquals(rot.getNumOfTrainstaitions(),4);
     }
 
 
     @Test
-    public void testAendereKontostandPlus(){
+    public void testChangeMoneyPlus(){
         rot.changeMoney(50);
         Assert.assertEquals(rot.getBankBalance(),2050);
     }
 
     @Test
-    public void testAendereKontostandMinus(){
+    public void testChangeMoneyMinus(){
         rot.changeMoney(-2000);
         Assert.assertEquals(rot.getBankBalance(),0);
     }
 
     @Test
-    public void testAendereKontostandNull(){
+    public void testChangeMoneyNull(){
         rot.changeMoney(0);
         Assert.assertEquals(rot.getBankBalance(),2000);
     }
@@ -208,27 +142,119 @@ public class PlayerTest {
         Assert.assertEquals(rot.getPosition(),12);
     }
 
-//    @Test
-//    public void testMove(){
-//        rot.move(12);
-//        Assert.assertEquals(rot.getPosition(),12);
-//    }
-//
-//    @Test
-//    public void testMoveUeberLos(){
-//        rot.setPosition(38);
-//        rot.move(5);
-//        Assert.assertEquals(rot.getPosition(),3);
-//    }
-/*
     @Test
-    public void testZieheKarteCase1(){
-        Texture kartenbild=new Texture("images/KartenImages/Karte1.png");
-        rot.setPosition(4);
-        Assert.assertEquals(rot.zieheKarte(ereigniskarten), kartenbild);
-        Assert.assertEquals(rot.getPosition(),1);
+    public void testGoToJailPos(){
+        rot.goToJail();
+        Assert.assertEquals(rot.getPosition(), 10);
+    }
+    @Test
+    public void testGoToJailPrison(){
+        rot.goToJail();
+        Assert.assertEquals(rot.getPrison(), true);
+    }
+    @Test
+    public void testGetPrison(){
+        Assert.assertEquals(rot.getPrison(), false);
+    }
+    @Test
+    public void testSetPrison(){
+        rot.goToJail();
+        rot.setPrison(false);
+        Assert.assertEquals(rot.getPrison(), false);
+    }
+    @Test
+    public void testGetPrisonCount(){
+        rot.goToJail();
+        Assert.assertEquals(rot.getPrisonCount(), 0);
+    }
+    @Test
+    public void testSetPrisonCount(){
+        rot.setPrisonCount(4);
+        Assert.assertEquals(rot.getPrisonCount(), 4);
     }
 
+    @Test
+    public void testRoundmoney(){
+        rot.roundmoney();
+        Assert.assertEquals(rot.getBankBalance(), 2200);
+    }
+    @Test
+    public void testPayToOtherPlayerString(){
+        String antwort=rot.payToOtherPlayer(gelb, 2000);
+        Assert.assertEquals(antwort, "Rot stepped on Gelb's Property and payed 2000 rent.");
+    }
+    @Test
+    public void testPayToOtherPlayerStringBakrott(){
+        String antwort=rot.payToOtherPlayer(gelb, 4000);
+        Assert.assertEquals(antwort, "Rot ist Bankrott.");
+    }
+    @Test
+    public void testPayToOtherPlayerBankAccount(){
+        rot.payToOtherPlayer(gelb, 2000);
+        Assert.assertEquals(rot.getBankBalance(),0);
+        Assert.assertEquals(gelb.getBankBalance(), 4000);
+    }
+    @Test
+    public void testPayToOtherPlayerBankAccountBankrott(){
+        rot.payToOtherPlayer(gelb, 4000);
+        Assert.assertEquals(rot.getBankBalance(),0);
+        Assert.assertEquals(gelb.getBankBalance(), 6000);
+    }
+
+
+    @Test
+    public void testMove(){
+        rot.move(12);
+        Assert.assertEquals(rot.getPosition(),12);
+    }
+
+    @Test
+    public void testMoveUeberLos(){
+        rot.setPosition(38);
+        rot.move(5);
+        Assert.assertEquals(rot.getPosition(),3);
+    }
+    @Test
+    public void testMoveUeberLosMoney(){
+        rot.setPosition(38);
+        rot.move(5);
+        Assert.assertEquals(rot.getBankBalance(),2200);
+    }
+    @Test
+    public void testMovePrison(){
+        rot.goToJail();
+        rot.move(5);
+        Assert.assertEquals(rot.getPosition(),10);
+        Assert.assertEquals(rot.getPrisonCount(),1);
+        Assert.assertEquals(rot.getPrison(),true);
+    }
+    @Test
+    public void testMovePrisonAlmostFree(){
+        rot.goToJail();
+        rot.setPrisonCount(3);
+        rot.move(5);
+        Assert.assertEquals(rot.getPosition(),10);
+        Assert.assertEquals(rot.getPrisonCount(),0);
+        Assert.assertEquals(rot.getPrison(),false);
+    }
+    @Test
+    public void testMovePrisonFree(){
+        rot.goToJail();
+        rot.setPrisonCount(3);
+        rot.move(5);
+        rot.move(15);
+        Assert.assertEquals(rot.getPosition(),25);
+        Assert.assertEquals(rot.getPrisonCount(),0);
+        Assert.assertEquals(rot.getPrison(),false);
+    }
+
+    /*
+    @Test
+    public void testZieheKarteCase1(){
+        Assert.assertNotNull(rot.drawCard(ereigniskarten));
+    }
+
+    /*
     @Test
     public void testZieheKarteCase2(){
         Texture kartenbild=new Texture("images/KartenImages/Karte2.png");
