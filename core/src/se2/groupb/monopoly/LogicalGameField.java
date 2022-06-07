@@ -3,7 +3,7 @@ package se2.groupb.monopoly;
 public class LogicalGameField {
     private Property[] gameField;
 
-    public Property[] logicalGameField() {
+    LogicalGameField() {
         this.gameField = new Property[40];
         gameField[0]=new Property("Los");
         gameField[1]=new Street("Badstraße", 40,false, 0, 0, 10,  50);
@@ -45,7 +45,6 @@ public class LogicalGameField {
         gameField[37]=new Street("Parkstraße", 650,false, 0, 0, 250,  200);
         gameField[38]= new PenaltyField("Zusatzsteuer", 200);
         gameField[39]=new Street("Schlossallee", 800,false, 0, 0, 350,  200);
-        return gameField;
     }
 
     public Property[] getGameField() {
