@@ -245,11 +245,10 @@ public class CreateGameField extends GameScreenAdapter {
 
     @Override
     public void show() {
-        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
-        //Gdx.input.setInputProcessor(inputMultiplexer);
+        stage = new Stage(new ScreenViewport());
+
         Gdx.input.setInputProcessor(stage);
-        /*buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons-45,buttonsize/2);
+        buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons-45,buttonsize/2);
         diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 400, yPosInitialButtons - 500, buttonsize);
         cheatButton = drawImageButton("images/MenuButtons/report_cheat.png",xPosButtons + 400, yPosInitialButtons - 700, buttonsize);
 
@@ -257,19 +256,18 @@ public class CreateGameField extends GameScreenAdapter {
         diceButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                    int dice = roll();
-                    getCurrentPlayer().move(dice);
+                    if(Gdx.input.justTouched()) {
+                        int dice = roll();
+                        getCurrentPlayer().move(dice);
 //                checkIfPlayerIsAlone(getCurrentPlayer());
-                    //getCurrentPlayer().setPosition((getCurrentPlayer().getPosition() + dice) % 40);
-                    getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
-                    checkCurrentProperty();
-                    if (!onTurn) {
-                        nextPlayer();
+                        //getCurrentPlayer().setPosition((getCurrentPlayer().getPosition() + dice) % 40);
+                        getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
+                        checkCurrentProperty();
+                        if (!onTurn) {
+                            nextPlayer();
+                        }
                     }
                     return true;
-                }
-                return false;
             }
         });
 
@@ -290,7 +288,7 @@ public class CreateGameField extends GameScreenAdapter {
             }
         });
 
-        buyButton.addListener(new EventListener() {
+        /*buyButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 if(Gdx.input.justTouched()){
@@ -332,12 +330,16 @@ public class CreateGameField extends GameScreenAdapter {
                     }
                 }return false;
             }
-        });
+        });*/
 
-        stage = new Stage(new ScreenViewport());
+
         stage.addActor(buyButton);
         stage.addActor(diceButton);
-        stage.addActor(cheatButton);*/
+        stage.addActor(cheatButton);
+
+        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
 
@@ -392,6 +394,9 @@ public class CreateGameField extends GameScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         modelBatch.begin(camera);
         spriteBatch.begin();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
@@ -411,7 +416,7 @@ public class CreateGameField extends GameScreenAdapter {
         /**
          * Pressing the Roll Dice Button
          */
-        spriteBatch.draw(rollDice, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
+        /*spriteBatch.draw(rollDice, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched() && onTurn) {
             int dice = roll();
@@ -423,7 +428,7 @@ public class CreateGameField extends GameScreenAdapter {
             if (!onTurn) {
                 nextPlayer();
             }
-        }
+        }*/
 
         renderModels();
         drawDice(dice1, dice2);
@@ -444,7 +449,7 @@ public class CreateGameField extends GameScreenAdapter {
             /**
              * Buy-Button and his method for buying buildings
              */
-            spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, (buttonSizeX / 2) - 50, buttonSizeY / 2);
+            /*spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, (buttonSizeX / 2) - 50, buttonSizeY / 2);
             if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
                     && Gdx.input.justTouched()) {
                 int pos = getCurrentPlayer().getPosition();
@@ -485,13 +490,13 @@ public class CreateGameField extends GameScreenAdapter {
                     getCurrentPlayer().changeMoney(-s.getRent());
                     screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
                 }
-            }
+            }*/
 
 
             /**
              * Pressing the Report Cheat Button
              */
-            spriteBatch.draw(reportCheat, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY);
+            /*spriteBatch.draw(reportCheat, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY);
             if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                     && Gdx.input.justTouched() && !reported) {
                 if (cheatActivated) {
@@ -501,7 +506,7 @@ public class CreateGameField extends GameScreenAdapter {
                     player2.changeMoney(-100);
                 }
                 reported = true;
-            }
+            }*/
 
             /**
              * Check if phone is shaking while pressing volume down
@@ -535,9 +540,6 @@ public class CreateGameField extends GameScreenAdapter {
 
             spriteBatch.end();
             modelBatch.end();
-
-            stage.draw();
-
         }
 
         @Override
