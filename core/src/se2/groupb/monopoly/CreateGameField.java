@@ -47,6 +47,7 @@ public class CreateGameField extends GameScreenAdapter {
     private ImageButton buyButton;
     private ImageButton diceButton;
     private ImageButton cheatButton;
+    private ImageButton nextButton;
     private LogicalGameField gameField;
 
 
@@ -80,8 +81,6 @@ public class CreateGameField extends GameScreenAdapter {
 
 
     ArrayList<Property> arrayList = new ArrayList();
-
-    ArrayList<Property> arrayList1 = new ArrayList();
     ArrayList<Property> arrayList2 = new ArrayList();
     ArrayList<Property> arrayList3 = new ArrayList();
     ArrayList<Property> arrayList4 = new ArrayList();
@@ -249,8 +248,9 @@ public class CreateGameField extends GameScreenAdapter {
 
         Gdx.input.setInputProcessor(stage);
         buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons-45,buttonsize/2);
-        diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 400, yPosInitialButtons - 500, buttonsize);
-        cheatButton = drawImageButton("images/MenuButtons/report_cheat.png",xPosButtons + 400, yPosInitialButtons - 700, buttonsize);
+        diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
+        cheatButton = drawImageButton("images/MenuButtons/report_cheat.png",xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
+        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth()-90,50, buttonsize/5);
 
 
         diceButton.addListener(new EventListener() {
@@ -268,6 +268,16 @@ public class CreateGameField extends GameScreenAdapter {
                         }
                     }
                     return true;
+            }
+        });
+
+        nextButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if(Gdx.input.justTouched()){
+                    /** Here do something Andy*/
+                }
+                return true;
             }
         });
 
@@ -336,6 +346,7 @@ public class CreateGameField extends GameScreenAdapter {
         stage.addActor(buyButton);
         stage.addActor(diceButton);
         stage.addActor(cheatButton);
+        stage.addActor(nextButton);
 
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
         InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);

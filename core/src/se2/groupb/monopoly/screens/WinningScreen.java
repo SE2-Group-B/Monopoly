@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -48,21 +50,29 @@ public class WinningScreen extends GameScreenAdapter{
 
     @Override
     public void show() {
-        /**
-         * instead of closing the App go to Main Menu
-         */
-        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        inputProcessor.backToMainMenuProcessor();
-
         stage = new Stage();
-        /** Need to make a new Picture for exit button*/
-        //end = drawImageButton("images/MenuButtons/buy_building.png", Gdx.graphics.getWidth(), 50,buttonsize/2);
+        end = drawImageButton("images/MenuButtons/arrow.png", Gdx.graphics.getWidth()-100, 50,buttonsize/4);
+
+        end.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if(Gdx.input.justTouched()){
+                    Gdx.app.exit();
+                }return true;
+            }
+        });
         stage.addActor(end);
 
         font = new BitmapFont();
         spriteBatch = new SpriteBatch();
         font.getData().setScale(7f);
         waitingText = new GlyphLayout(font, text);
+
+        /**
+         * instead of closing the App go to Main Menu
+         */
+        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
+        inputProcessor.backToMainMenuProcessor();
     }
 
     @Override
@@ -73,6 +83,8 @@ public class WinningScreen extends GameScreenAdapter{
         buttonsize = (float) (Gdx.graphics.getWidth()/3D);
         monopoly.batch.begin();
         spriteBatch.begin();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
         font.setColor(Color.BLACK);
         font.draw(spriteBatch, text, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)+250);
