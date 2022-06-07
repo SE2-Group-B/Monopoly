@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import se2.groupb.monopoly.CreateGameField;
@@ -19,21 +21,23 @@ public class WinningScreen extends GameScreenAdapter{
     private BitmapFont font;
     private GlyphLayout waitingText;
     private Environment environment;
+    private float buttonsize;
+    int[] sums = monopoly.getSums();
+    String[] placement = monopoly.getPlacement();
 
-
-    CreateGameField createGameField = new CreateGameField();
-
+    private Stage stage;
+    private ImageButton end;
     SpriteBatch spriteBatch;
 
     private String text = "Und die Sieger sind:";
-    /*private String first = "Sieger: " + createGameField.placement[0] + " with:" + createGameField.sums[0];
-    private String second = "Zweiter: " + createGameField.placement[1] + " with:" + createGameField.sums[1];
-    private String third = "Dritter: " + createGameField.placement[2] + " with:" + createGameField.sums[2];
-    private String fourth = "Vierter: " + createGameField.placement[3] + " with:" + createGameField.sums[3];*/
-    private String first = "Sieger: Player 1 with: 2000$";
+    private String first = "Sieger: " + placement[0] + " with:" + sums[0];
+    private String second = "Zweiter: " + placement[1] + " with:" + sums[1];
+    private String third = "Dritter: " + placement[2] + " with:" + sums[2];
+    private String fourth = "Vierter: " + placement[3] + " with:" + sums[3];
+    /*private String first = "Sieger: Player 1 with: 2000$";
     private String second = "Zweiter: Player 2 with: 1800$";
     private String third = "Dritter: Player 3 with: 1600$";
-    private String fourth = "Vierter: Player 4 with: 100$";
+    private String fourth = "Vierter: Player 4 with: 100$";*/
 
 
     public WinningScreen(Monopoly monopoly) {
@@ -50,6 +54,11 @@ public class WinningScreen extends GameScreenAdapter{
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
         inputProcessor.backToMainMenuProcessor();
 
+        stage = new Stage();
+        /** Need to make a new Picture for exit button*/
+        //end = drawImageButton("images/MenuButtons/buy_building.png", Gdx.graphics.getWidth(), 50,buttonsize/2);
+        stage.addActor(end);
+
         font = new BitmapFont();
         spriteBatch = new SpriteBatch();
         font.getData().setScale(7f);
@@ -61,8 +70,7 @@ public class WinningScreen extends GameScreenAdapter{
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float userPosX = (float) Gdx.input.getX();
-        float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
+        buttonsize = (float) (Gdx.graphics.getWidth()/3D);
         monopoly.batch.begin();
         spriteBatch.begin();
 
@@ -77,7 +85,14 @@ public class WinningScreen extends GameScreenAdapter{
         monopoly.batch.end();
     }
 
-   
+    @Override
+    public void dispose() {
+        super.dispose();
+        font.dispose();
+        spriteBatch.dispose();
+        //stage.dispose();
+    }
+
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }
