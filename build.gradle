@@ -115,15 +115,13 @@ project(":core") {
         testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-
-
-        // Mocking
-        //implementation "org.o:mockito-comockitre:2.8.47"
-
-
-        // Mocking
-        //implementation "org.o:mockito-comockitre:2.8.47"
         
+        testImplementation "org.mockito:mockito-all:1.9.5"
+
+        // Mocking
+        //implementation "org.o:mockito-comockitre:2.8.47"
+
+
     }
 
 
