@@ -107,6 +107,8 @@ public class HostGameScreen extends GameScreenAdapter {
                         client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
                         System.out.println(client.getClient().isConnected());
                         if (client.getClient().isConnected()) {
+                            // add client to monopoly
+                            monopoly.addClient(client);
                             isConnected = true;
                             connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
 
@@ -184,31 +186,6 @@ public class HostGameScreen extends GameScreenAdapter {
         }
 
         monopoly.batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     @Override
