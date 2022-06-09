@@ -2,28 +2,23 @@ package se2.groupb.monopoly;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -32,10 +27,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import se2.groupb.monopoly.screens.GameScreenAdapter;
+import se2.groupb.monopoly.screens.InputBackProcessor;
 import se2.groupb.monopoly.screens.WinningScreen;
 
 
-public class CreateGameField extends ScreenAdapter {
+public class CreateGameField extends GameScreenAdapter {
 
     Monopoly monopoly;
     SpriteBatch spriteBatch;
@@ -47,11 +44,10 @@ public class CreateGameField extends ScreenAdapter {
     private Property[] logicalGameField;
 
     private Stage stage;
-    private Texture myTexture;
-    private TextureRegion myTextureRegion;
-    private TextureRegionDrawable myTextureRegionDrawable;
-    private ImageButton testbutton;
-    private ImageButton testbutton2;
+    private ImageButton buyButton;
+    private ImageButton diceButton;
+    private ImageButton cheatButton;
+    private ImageButton nextButton;
     private LogicalGameField gameField;
 
 
@@ -70,8 +66,8 @@ public class CreateGameField extends ScreenAdapter {
     private Player player4;
     private ArrayList<Player> players = new ArrayList();
     public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0, pot = 0;
-    public int[] sums = new int[4];
-    public String[] placement = new String[4];
+    private int[] sums = new int[4];
+    private String[] placement = new String[4];
 
     private Deck ereigniskartenDeck = new Deck();
     private Deck gemeinschaftskartenDeck = new Deck();
@@ -85,8 +81,6 @@ public class CreateGameField extends ScreenAdapter {
 
 
     ArrayList<Property> arrayList = new ArrayList();
-
-    ArrayList<Property> arrayList1 = new ArrayList();
     ArrayList<Property> arrayList2 = new ArrayList();
     ArrayList<Property> arrayList3 = new ArrayList();
     ArrayList<Property> arrayList4 = new ArrayList();
@@ -94,6 +88,7 @@ public class CreateGameField extends ScreenAdapter {
 
     private int buttonSizeX;
     private int buttonSizeY;
+    private float buttonsize;
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
     private float xPosButtons;
@@ -177,6 +172,7 @@ public class CreateGameField extends ScreenAdapter {
 
 
     public CreateGameField(Monopoly monopoly) {
+        super(monopoly);
         spriteBatch = new SpriteBatch();
         buttonSizeX = Gdx.graphics.getWidth() / 3;
         buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
@@ -185,6 +181,7 @@ public class CreateGameField extends ScreenAdapter {
         gf.createField("monopoly");
         fields = gf.getFields();
 
+        buttonsize = (float) (Gdx.graphics.getWidth()/3D);
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
@@ -216,15 +213,7 @@ public class CreateGameField extends ScreenAdapter {
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
         modelBatch = new ModelBatch();
-        TextureRegion textureBuy = new TextureRegion(BuyButton, 0, 0, 10, 10);
-        //textureBuy.setRegion(0, Gdx.graphics.getHeight() - 400, (buttonSizeX/2)-50, buttonSizeY / 2);
-        TextureRegionDrawable textureRegionBuy = new TextureRegionDrawable(textureBuy);
-        ImageButton imgbutton = new ImageButton(textureRegionBuy);
 
-
-        stage = new Stage(new ScreenViewport());
-        stage.addActor(imgbutton);
-        Gdx.input.setInputProcessor(stage);
 
         camera = new OrthographicCamera(100, 100);
         camera.rotate(90);
@@ -254,6 +243,119 @@ public class CreateGameField extends ScreenAdapter {
 //        cameraController = new CameraInputController(camera);
 //        Gdx.input.setInputProcessor(cameraController);
     }
+
+    @Override
+    public void show() {
+        stage = new Stage(new ScreenViewport());
+
+        Gdx.input.setInputProcessor(stage);
+        buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons-45,buttonsize/2);
+        diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
+        cheatButton = drawImageButton("images/MenuButtons/report_cheat.png",xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
+        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth()-90,50, buttonsize/5);
+
+
+        diceButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                    if(Gdx.input.justTouched()) {
+                        int dice = roll();
+                        getCurrentPlayer().move(dice);
+//                checkIfPlayerIsAlone(getCurrentPlayer());
+                        //getCurrentPlayer().setPosition((getCurrentPlayer().getPosition() + dice) % 40);
+                        getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
+                        checkCurrentProperty();
+                        if (!onTurn) {
+                            nextPlayer();
+                        }
+                    }
+                    return true;
+            }
+        });
+
+        nextButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if(Gdx.input.justTouched()){
+                    /** Here do something Andy*/
+                }
+                return true;
+            }
+        });
+
+        cheatButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if(Gdx.input.justTouched()){
+                    if (cheatActivated) {
+                        getCurrentPlayer().changeMoney(-200);
+                        player2.changeMoney(100);
+                    } else {
+                        player2.changeMoney(-100);
+                    }
+                    reported = true;
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        /*buyButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if(Gdx.input.justTouched()){
+                    int pos = getCurrentPlayer().getPosition();
+                    if (!isSomeonesProperty(pos)) {
+                        String propertyType = getPropertyType(pos);
+                        switch (propertyType) {
+                            case "Street":
+                                Street s = (Street) logicalGameField[pos];
+                                getCurrentPlayer().changeMoney(-s.getPrice());
+                                logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
+                                break;
+                            case "Trainstation":
+                                Trainstation t = (Trainstation) logicalGameField[pos];
+                                getCurrentPlayer().changeMoney(-t.getPrice());
+                                logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
+                                t.increaseRent();
+                                break;
+                            default:
+                                if (logicalGameField[pos].getOwnerId() == getCurrentPlayer().getId()) {
+                                    if (propertyType == "Street") {
+                                        Street s1 = (Street) logicalGameField[pos];
+                                        boolean bought = s1.buyhouse();
+                                        if (bought = true) {
+                                            getCurrentPlayer().changeMoney(-s1.getHousePrice());
+                                            return true;
+                                        } else {
+                                            break;
+                                        }
+                                    } else {
+
+                                    }
+                                } else {
+                                    screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
+                                }
+                        }return true;
+                    } else {
+                        screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
+                    }
+                }return false;
+            }
+        });*/
+
+
+        stage.addActor(buyButton);
+        stage.addActor(diceButton);
+        stage.addActor(cheatButton);
+        stage.addActor(nextButton);
+
+        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+
 
     public void checkIfPlayerIsAlone(Player player) {
         ArrayList<Player> playersToPosition = new ArrayList<>();
@@ -290,21 +392,12 @@ public class CreateGameField extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
-        float userPosX = (float) Gdx.input.getX();
-        float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
+        final float userPosX = (float) Gdx.input.getX();
+        final float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
         int count = 0;
 
         spriteBatch2 = new SpriteBatch();
         moneyfont = new BitmapFont();
-        //testbutton = new ImageButton()
-
-
-        /*imgbutton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-            }
-        });*/
 
         ScreenUtils.clear(0, 0, 0, 1);
         // cameraController.update();
@@ -314,6 +407,9 @@ public class CreateGameField extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         modelBatch.begin(camera);
         spriteBatch.begin();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
 
@@ -338,7 +434,7 @@ public class CreateGameField extends ScreenAdapter {
         /**
          * Pressing the Roll Dice Button
          */
-        spriteBatch.draw(rollDice, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
+        /*spriteBatch.draw(rollDice, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY);
         if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 500, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                 && Gdx.input.justTouched()) {
             int dice = roll();
@@ -350,7 +446,7 @@ public class CreateGameField extends ScreenAdapter {
             if (!onTurn) {
                 nextPlayer();
             }
-        }
+        }*/
 
         renderModels();
         drawDice(dice1, dice2);
@@ -371,7 +467,7 @@ public class CreateGameField extends ScreenAdapter {
             /**
              * Buy-Button and his method for buying buildings
              */
-            spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, (buttonSizeX / 2) - 50, buttonSizeY / 2);
+            /*spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, (buttonSizeX / 2) - 50, buttonSizeY / 2);
             if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
                     && Gdx.input.justTouched()) {
                 int pos = getCurrentPlayer().getPosition();
@@ -384,7 +480,6 @@ public class CreateGameField extends ScreenAdapter {
                             logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
                             break;
                         case "Trainstation":
-
                             Trainstation t = (Trainstation) logicalGameField[pos];
                             getCurrentPlayer().changeMoney(-t.getPrice());
                             logicalGameField[pos].setOwnerId(getCurrentPlayer().getId());
@@ -413,13 +508,13 @@ public class CreateGameField extends ScreenAdapter {
                     getCurrentPlayer().changeMoney(-s.getRent());
                     screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
                 }
-            }
+            }*/
 
 
             /**
              * Pressing the Report Cheat Button
              */
-            spriteBatch.draw(reportCheat, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY);
+            /*spriteBatch.draw(reportCheat, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY);
             if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                     && Gdx.input.justTouched() && !reported) {
                 if (cheatActivated) {
@@ -429,7 +524,7 @@ public class CreateGameField extends ScreenAdapter {
                     player2.changeMoney(-100);
                 }
                 reported = true;
-            }
+            }*/
 
             /**
              * Check if phone is shaking while pressing volume down
@@ -463,9 +558,6 @@ public class CreateGameField extends ScreenAdapter {
 
             spriteBatch.end();
             modelBatch.end();
-
-            stage.draw();
-
         }
 
         @Override
@@ -493,7 +585,11 @@ public class CreateGameField extends ScreenAdapter {
         public void resume () {
         }
 
-        //spielfigur.move(new Vector3(0f,0f,-6.5f));
+    @Override
+    public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
+
+    }
+    //spielfigur.move(new Vector3(0f,0f,-6.5f));
 
 
         public void renderModels () {
@@ -726,8 +822,8 @@ public class CreateGameField extends ScreenAdapter {
             pachCount = 0;
         }
 
-        private static boolean isCorrectPosition ( float userPosX, float userPosY, float xPosButton,
-        float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
+        public static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton,
+                                                float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
             return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
         }
 
@@ -782,6 +878,9 @@ public class CreateGameField extends ScreenAdapter {
          */
         public void winning () {
             int amount = 0;
+            sums = monopoly.getSums();
+            placement = monopoly.getPlacement();
+
 
             for (int i = 0; i <= 40; i++) {
                 if (logicalGameField[i].getOwnerId() == 1) {
@@ -828,12 +927,9 @@ public class CreateGameField extends ScreenAdapter {
                     placement[j] = player4.getName();
                 }
             }
-
+            monopoly.setSums(sums);
+            monopoly.setPlacement(placement);
             monopoly.setScreen(new WinningScreen(monopoly));
-        }
-
-    public CreateGameField() {
-
         }
 
     }
