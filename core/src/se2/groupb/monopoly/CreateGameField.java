@@ -457,9 +457,9 @@ public class CreateGameField extends GameScreenAdapter {
         moneyfont.draw(spriteBatch, "Pot: " + pot, 0, Gdx.graphics.getHeight() - 400);
 
 
-            /**
-             * Buy-Button and his method for buying buildings
-             */
+        /**
+         * Buy-Button and his method for buying buildings
+         */
             /*spriteBatch.draw(BuyButton, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, (buttonSizeX / 2) - 50, buttonSizeY / 2);
             if (isCorrectPosition(userPosX, userPosY, Gdx.graphics.getWidth() - Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 400, buttonSizeX / 2, buttonSizeY / 2, 0 * yPosOffsetButtons)
                     && Gdx.input.justTouched()) {
@@ -504,9 +504,9 @@ public class CreateGameField extends GameScreenAdapter {
             }*/
 
 
-            /**
-             * Pressing the Report Cheat Button
-             */
+        /**
+         * Pressing the Report Cheat Button
+         */
             /*spriteBatch.draw(reportCheat, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY);
             if (isCorrectPosition(userPosX, userPosY, xPosButtons + 100, yPosInitialButtons - 700, buttonSizeX, buttonSizeY, 0 * yPosOffsetButtons)
                     && Gdx.input.justTouched() && !reported) {
@@ -519,39 +519,40 @@ public class CreateGameField extends GameScreenAdapter {
                 reported = true;
             }*/
 
-            /**
-             * Check if phone is shaking while pressing volume down
-             */
-            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated) {
-                if (AccelerometerActive) {
-                    xAccel = Gdx.input.getAccelerometerX();
-                    yAccel = Gdx.input.getAccelerometerY();
-                    zAccel = Gdx.input.getAccelerometerZ();
-                    if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
-                        getCurrentPlayer().changeMoney(100);
-                        cheatActivated = shakeCheatActivated = true;
-                    }
+        /**
+         * Check if phone is shaking while pressing volume down
+         */
+        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated) {
+            if (AccelerometerActive) {
+                xAccel = Gdx.input.getAccelerometerX();
+                yAccel = Gdx.input.getAccelerometerY();
+                zAccel = Gdx.input.getAccelerometerZ();
+                if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
+                    getCurrentPlayer().changeMoney(100);
+                    cheatActivated = shakeCheatActivated = true;
                 }
             }
+        }
 
-            /**
-             * Check showCard is true and draw the card
-             */
-            if (showCard) {
-                spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) - 1000 / 2, (Gdx.graphics.getHeight() / 2) - 1300 / 2, 1000, 1300);
-                timerCard.scheduleTask(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        showCard = false;
-                    }
-                }, 5);
-                timerCard.stop();
-            }
 
+        /**
+         * Check showCard is true and draw the card
+         */
+        if (showCard) {
+            spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 3) - 200, 600, 750);
+            timerCard.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    showCard = false;
+                }
+            }, 5);
+            timerCard.stop();
 
             spriteBatch.end();
             modelBatch.end();
+
         }
+    }
 
         @Override
         public void dispose () {
@@ -616,7 +617,6 @@ public class CreateGameField extends GameScreenAdapter {
                 secondDice = random.nextInt(6) + 1;
             }
             onTurn = false;
-
             dice1 = setDice(firstDice);
             dice2 = setDice(secondDice);
             drawDice(dice1, dice2);
