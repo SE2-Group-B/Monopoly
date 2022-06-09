@@ -373,8 +373,8 @@ public class CreateGameField extends ScreenAdapter {
         * Check showCard is true and draw the card
         */
         if (showCard) {
-            spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) - 1000 / 2, (Gdx.graphics.getHeight() / 2) - 1300 / 2, 1000, 1300);
-            timerCard.scheduleTask(new Timer.Task() {
+            spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) -100, (Gdx.graphics.getHeight() / 3)-200 ,600, 750);
+            timerCard.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     showCard=false;
@@ -446,7 +446,6 @@ public class CreateGameField extends ScreenAdapter {
         dice1 = setDice(firstDice);
         dice2 = setDice(secondDice);
         drawDice(dice1, dice2);
-
         if (firstDice == secondDice) {
             onTurn = true;
             pachCount++;
