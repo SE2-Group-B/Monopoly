@@ -55,7 +55,7 @@ public abstract class GameScreenAdapter extends ScreenAdapter implements Screen 
     }
 
     // for testing protected static method drawImageButton()
-    public ImageButton drawImageButtonTester(String texturePath, float X, float Y, int size) {
+    public ImageButton drawImageButtonTester(String texturePath, float X, float Y, float size) {
         return drawImageButton(texturePath, X, Y, size);
     }
 

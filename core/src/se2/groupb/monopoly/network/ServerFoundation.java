@@ -17,6 +17,7 @@ public class ServerFoundation {
     int udpPort;
     Random random;
 
+    public int countPlayers = 0;
     private int currentPlayerID = 0;
 
     public ServerFoundation() {
@@ -60,8 +61,9 @@ public class ServerFoundation {
                     System.out.println("Server received message:\t" + object + "\n");
 
                     if (object.equals("HOST")) {
-                        // start game when 4 Players are connected
-                        if (server.getConnections().length == 2) {
+                        // start game when 2-4 Players are connected
+                        if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
+                            countPlayers = server.getConnections().length;
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");

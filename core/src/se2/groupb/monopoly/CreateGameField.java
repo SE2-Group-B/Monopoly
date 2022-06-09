@@ -123,7 +123,6 @@ public class CreateGameField extends GameScreenAdapter {
     public float topZ = 30f;
     public float rightX = 40f;
     public float rightZ = 3.25f;
-//////////////////////////////////
 
     Model[] fieldModel = new Model[40];
     ModelInstance[] fieldModInstance = new ModelInstance[40];
@@ -563,19 +562,6 @@ public class CreateGameField extends GameScreenAdapter {
 //        ml1.dispose();
 //        ml2.dispose();
             disposeModels();
-        }
-
-
-        @Override
-        public void resize ( int width, int height){
-        }
-
-        @Override
-        public void pause () {
-        }
-
-        @Override
-        public void resume () {
         }
 
     @Override

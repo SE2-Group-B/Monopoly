@@ -23,7 +23,6 @@ plugins {
 }
 
 
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
@@ -41,7 +40,6 @@ allprojects {
     apply plugin: "eclipse"
 
     version = '1.0'
-
 
 
     ext {
@@ -66,7 +64,7 @@ allprojects {
 }
 
 project(":android") {
-      apply plugin: "com.android.application"
+    apply plugin: "com.android.application"
 
     configurations { natives }
 
@@ -87,6 +85,7 @@ project(":android") {
 project(":core") {
     apply plugin: "java-library"
 
+    
     sourceSets.test.java.srcDirs = ["test/"] // maybe back to src
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -98,8 +97,6 @@ project(":core") {
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 
         // if not work... delete line 95
-
-
 
 
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
@@ -118,12 +115,10 @@ project(":core") {
 
 
         // Mocking
-       // implementation "org.o:mockito-comockitre:2.8.47"
-        testImplementation "org.mockito:mockito-all:1.9.5"
+        // implementation "org.o:mockito-comockitre:2.8.47"
+        implementation "org.mockito:mockito-all:1.9.5"
 
     }
-
-
 
 
 //    task jacocoTestReport(type:JacocoReport) {
