@@ -427,6 +427,7 @@ public class CreateGameField extends GameScreenAdapter {
             }
 
 
+
         /**
          * Check showCard is true and draw the card
          */
