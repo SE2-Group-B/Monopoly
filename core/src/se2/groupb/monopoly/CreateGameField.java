@@ -423,25 +423,25 @@ public class CreateGameField extends GameScreenAdapter {
                     }
                 }
             }
-
-            /**
-             * Check showCard is true and draw the card
-             */
-            if (showCard) {
-                spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) - 1000 / 2, (Gdx.graphics.getHeight() / 2) - 1300 / 2, 1000, 1300);
-                timerCard.scheduleTask(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        showCard = false;
-                    }
-                }, 5);
-                timerCard.stop();
-            }
+    
 
 
-            spriteBatch.end();
-            modelBatch.end();
+        /**
+         * Check showCard is true and draw the card
+         */
+        if (showCard) {
+            spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 3) - 200, 600, 750);
+            timerCard.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    showCard = false;
+                }
+            }, 5);
+            timerCard.stop();
         }
+        spriteBatch.end();
+        modelBatch.end();
+    }
 
         @Override
         public void dispose () {
@@ -506,7 +506,6 @@ public class CreateGameField extends GameScreenAdapter {
                 secondDice = random.nextInt(6) + 1;
             }
             onTurn = false;
-
             dice1 = setDice(firstDice);
             dice2 = setDice(secondDice);
             drawDice(dice1, dice2);
