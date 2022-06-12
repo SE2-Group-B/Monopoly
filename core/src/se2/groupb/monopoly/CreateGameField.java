@@ -821,10 +821,10 @@ public class CreateGameField extends GameScreenAdapter {
                         break;
                     default:
                         if (gameField.getGameField()[pos].getOwnerId() == getCurrentPlayer().getId()) {
-                            if (propertyType == "Street") {
+                            if (propertyType.equals("Street")) {
                                 Street s1 = (Street) gameField.getGameField()[pos];
                                 boolean bought = s1.buyhouse();
-                                if (bought = true) {
+                                if (bought) {
                                     getCurrentPlayer().changeMoney(-s1.getHousePrice());
                                 } else {
                                     break;
