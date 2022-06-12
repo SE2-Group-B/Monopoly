@@ -1,14 +1,11 @@
 package networkTests;
 
-import com.esotericsoftware.kryonet.Client;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.ConnectException;
 
 import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.network.ServerFoundation;
