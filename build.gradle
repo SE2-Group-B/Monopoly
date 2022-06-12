@@ -116,7 +116,7 @@ project(":core") {
 
         // Mocking
         // implementation "org.o:mockito-comockitre:2.8.47"
-        implementation "org.mockito:mockito-all:1.9.5"
+        testImplementation "org.mockito:mockito-all:1.9.5"
 
     }
 
