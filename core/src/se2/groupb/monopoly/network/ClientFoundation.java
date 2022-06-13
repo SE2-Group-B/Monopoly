@@ -71,6 +71,7 @@ public class ClientFoundation {
                 }
 
                 if (object instanceof PlayerInformation) {
+                    System.out.println(((PlayerInformation) object).getMessageType());
                     if (((PlayerInformation) object).getMessageType().equals("INITIALIZE_GAME")) {
                         // Server sends initialization of players
                         // then do something
