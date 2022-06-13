@@ -231,14 +231,35 @@ public class CreateGameField extends GameScreenAdapter {
         camera.far = 500000f;
         createModels();
 
-        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
-        player1.createSpielfigur();
-        player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
-        player2.createSpielfigur();
-        player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
-        player3.createSpielfigur();
-        player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        player4.createSpielfigur();
+
+        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
+            player1 = monopoly.getClient().getPlayer().getPlayer();
+            player1.createSpielfigur();
+            if (monopoly.getClient().getOtherPlayers().size() == 1){
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+            }else if (monopoly.getClient().getOtherPlayers().size() == 2){
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                player3.createSpielfigur();
+            }else if (monopoly.getClient().getOtherPlayers().size() == 3){
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                player3.createSpielfigur();
+                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
+                player4.createSpielfigur();
+            }
+        }
+        //player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        //player1.createSpielfigur();
+        //player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
+        //player2.createSpielfigur();
+        //player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
+        //player3.createSpielfigur();
+        //player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
+        //player4.createSpielfigur();
 
         camera.update();
 
