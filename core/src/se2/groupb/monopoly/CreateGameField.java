@@ -66,8 +66,10 @@ public class CreateGameField extends GameScreenAdapter {
     private Player player2;
     private Player player3;
     private Player player4;
+    private Pot moneyPot = new Pot();
+//    private DiceRoll diceRoll = new DiceRoll();
     private ArrayList<Player> players = new ArrayList();
-    public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0, pot = 0;
+    public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0;
     //private int[] sums = new int[4];
     //private String[] placement = new String[4];
     public ArrayList<Integer> sum = new ArrayList<>();
@@ -107,6 +109,7 @@ public class CreateGameField extends GameScreenAdapter {
     private boolean shakeCheatActivated;
     private boolean onTurn;
     private boolean reported;
+    private boolean keyVolumeUp;
 
     private Random random = new Random();
     private int cheatDice;
@@ -193,9 +196,12 @@ public class CreateGameField extends GameScreenAdapter {
         dice2 = new Texture("images/Dice/dice_0.png");
 
         ereigniskartenDeck.initializeEreigniskartenStapel();
+        ereigniskartenDeck.shuffle();
         gemeinschaftskartenDeck.initializeGemeinschaftskartenStapel();
+        gemeinschaftskartenDeck.shuffle();
         kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
         showCard = false;
+        keyVolumeUp = false;
 
 
         onTurn = true;
@@ -421,8 +427,13 @@ public class CreateGameField extends GameScreenAdapter {
         /**
          * Set pach Cheat
          */
-        if (Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)) {
-            cheatDice++;
+        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
+            if(!keyVolumeUp){
+                keyVolumeUp = true;
+                cheatDice++;
+            }
+        }else{
+            keyVolumeUp = false;
         }
 
 
@@ -446,7 +457,7 @@ public class CreateGameField extends GameScreenAdapter {
         }
         moneyfont.draw(spriteBatch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Rounds: " + roundCount, (float) (Gdx.graphics.getWidth()*0.9),yPosInitialButtons + 250);
-        moneyfont.draw(spriteBatch, "Pot: " + pot, 0, Gdx.graphics.getHeight() - 400);
+        moneyfont.draw(spriteBatch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
 
             /**
              * Check if phone is shaking while pressing volume down
@@ -607,9 +618,7 @@ public class CreateGameField extends GameScreenAdapter {
                     break;
                 case "PenaltyField":
                     PenaltyField p = (PenaltyField) gameField.getGameField()[playerPosition];
-                    getCurrentPlayer().changeMoney(-p.getPenalty());
-                    pot += p.getPenalty();
-                    output = getCurrentPlayer().getName() + " wirft " + p.getPenalty() + " in den Pot.";
+                    output = moneyPot.donateToPot(getCurrentPlayer(), p.getPenalty());
                     break;
                 case "Property":
                     Property prop = gameField.getGameField()[playerPosition];
@@ -636,7 +645,7 @@ public class CreateGameField extends GameScreenAdapter {
             String output = "Spieler " + getCurrentPlayer().getName();
             switch (property.getName()) {
                 case "Los":
-                    getCurrentPlayer().changeMoney(400);
+                    getCurrentPlayer().changeMoney(200);
                     output += " ist direkt auf Los gekommen und zieht 400€ ein.";
                     break;
                 case "Gemeinschaftsfeld":
@@ -651,12 +660,15 @@ public class CreateGameField extends GameScreenAdapter {
                     showCard = true;
                     break;
                 case "Gefängnis":
-                    output += " ist nur zu Besuch im Gefägnis.";
+                    if(getCurrentPlayer().getPrison()){
+                        int häfn = 3-getCurrentPlayer().getPrisonCount();
+                        output += " sitzt noch für " + häfn + " Runden im Geföngnis";
+                    }else{
+                        output += " ist nur zu Besuch im Gefägnis.";
+                    }
                     break;
                 case "Sofa":
-                    getCurrentPlayer().changeMoney(pot);
-                    output += " hat den Pot mit " + pot + "€ gewonnen.";
-                    pot = 0;
+                    output = moneyPot.winPot(getCurrentPlayer());
                     break;
                 case "Gehe ins Gefängnis":
                     getCurrentPlayer().move(positions[10]);
@@ -695,6 +707,9 @@ public class CreateGameField extends GameScreenAdapter {
             reset();
         }
 
+    /**
+     * Change Method with Server
+     */
         private Player getCurrentPlayer () {
             return getPlayerById(currentPlayerId);
         }
