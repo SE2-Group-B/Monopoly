@@ -77,32 +77,7 @@ public class WinningScreen extends GameScreenAdapter{
         monopoly.batch.end();
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        spriteBatch.dispose();
-    }
-
-    @Override
+   
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }

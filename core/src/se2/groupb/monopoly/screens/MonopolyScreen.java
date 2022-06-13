@@ -94,34 +94,6 @@ public class MonopolyScreen extends GameScreenAdapter {
 
         monopoly.batch.draw(img, 0, 0);
         monopoly.batch.end();
-
-
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     @Override

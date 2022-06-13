@@ -1,5 +1,7 @@
 package networkTests;
 
+import com.esotericsoftware.kryonet.Client;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -70,7 +72,10 @@ public class ClientFoundationTest {
             e.printStackTrace();
         }
         Assert.assertFalse(client.allPlayersJoined());
+    }
 
-
+    @Test
+    public void testWrongPortTest(){
+        ClientFoundation client = new ClientFoundation(1,1);
     }
 }
