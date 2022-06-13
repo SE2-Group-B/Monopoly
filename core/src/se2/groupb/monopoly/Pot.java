@@ -4,7 +4,7 @@ public class Pot {
     private int amount;
 
     public Pot() {
-        this.amount = amount;
+        this.amount = 0;
     }
 
     public String donateToPot(Player player, int donation){
@@ -15,8 +15,13 @@ public class Pot {
 
     public String winPot(Player player){
         player.changeMoney(this.amount);
+        int oldamount = this.amount;
         this.amount = 0;
-        return player.getName() + " won the Pot with " + this.amount + "€.";
+        return player.getName() + " won the Pot with " + oldamount + "€.";
+    }
+
+    public void addToPot(int amount){
+        this.amount += amount;
     }
 
     public int getAmount() {
