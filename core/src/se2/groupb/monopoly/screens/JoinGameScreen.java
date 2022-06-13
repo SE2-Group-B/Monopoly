@@ -184,7 +184,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         }
 
         font.draw(monopoly.batch, enterGroupNumberText,
-                (float) (Gdx.graphics.getWidth() / 2D - enterGroupNumberText.width / 2D), (yPosInput + 1.5f * inputHeight ));
+                (float) (Gdx.graphics.getWidth() / 2D - enterGroupNumberText.width / 2D), (yPosInput + 1.5f * inputHeight));
 
         if (isConnected) {
             if (client.allPlayersJoined()) {

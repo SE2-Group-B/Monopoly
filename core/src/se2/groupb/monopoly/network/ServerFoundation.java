@@ -81,7 +81,7 @@ public class ServerFoundation {
                             System.out.println("here");
                             initPlayers(countPlayers);
                             System.out.println("there");
-                            //sendcount(roundcount);
+                            sendcount(roundcount);
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");
@@ -150,12 +150,13 @@ public class ServerFoundation {
             if (players != null){
                 for (int i = 0; i < players.size(); i++) {
                     players.get(i).setIsPlayer(true);
-                    server.sendToTCP(i, players.get(i));
-                    System.out.println(players.get(i).getMessageType());
+                    server.sendToTCP(i+1, players.get(i));
+                    System.out.println("Server sending message to user " + i + ": " + players.get(i).getPlayer().getName());
                     for (int j = 0; j < players.size(); j++) {
                         if (j != i){
                             players.get(i).setIsPlayer(false);
-                            server.sendToTCP(i, players.get(j));
+                            server.sendToTCP(i+1, players.get(j));
+                            System.out.println("Server sending message to user " + i + ": " + players.get(j).getPlayer().getName());
                         }
                     }
                 }

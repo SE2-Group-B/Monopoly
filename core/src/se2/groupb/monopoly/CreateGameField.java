@@ -231,18 +231,22 @@ public class CreateGameField extends GameScreenAdapter {
         camera.far = 500000f;
         createModels();
 
-
+        
         if(!monopoly.getClient().getOtherPlayers().isEmpty()){
             player1 = monopoly.getClient().getPlayer().getPlayer();
             player1.createSpielfigur();
             if (monopoly.getClient().getOtherPlayers().size() == 1){
                 player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
                 player2.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
             }else if (monopoly.getClient().getOtherPlayers().size() == 2){
                 player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
                 player2.createSpielfigur();
                 player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
                 player3.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
             }else if (monopoly.getClient().getOtherPlayers().size() == 3){
                 player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
                 player2.createSpielfigur();
@@ -250,6 +254,8 @@ public class CreateGameField extends GameScreenAdapter {
                 player3.createSpielfigur();
                 player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
                 player4.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
             }
         }
         /*player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
@@ -401,12 +407,16 @@ public class CreateGameField extends GameScreenAdapter {
 
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
-
-
-        modelBatch.render(player1.modInstance, environment);
-        modelBatch.render(player2.modInstance, environment);
-        modelBatch.render(player3.modInstance, environment);
-        modelBatch.render(player4.modInstance, environment);
+        if (player1 != null && player2 != null){
+            modelBatch.render(player1.modInstance, environment);
+            modelBatch.render(player2.modInstance, environment);
+        }
+        if (player3 != null){
+            modelBatch.render(player3.modInstance, environment);
+        }
+        if (player4 != null){
+            modelBatch.render(player4.modInstance, environment);
+        }
 
         /**
          * Set pach Cheat
