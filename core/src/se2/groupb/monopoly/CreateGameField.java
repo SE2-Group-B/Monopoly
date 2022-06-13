@@ -237,35 +237,41 @@ public class CreateGameField extends GameScreenAdapter {
         camera.far = 500000f;
         createModels();
 
-
-//        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
-//            player1 = monopoly.getClient().getPlayer().getPlayer();
-//            player1.createSpielfigur();
-//            if (monopoly.getClient().getOtherPlayers().size() == 1){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//            }else if (monopoly.getClient().getOtherPlayers().size() == 2){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-//                player3.createSpielfigur();
-//            }else if (monopoly.getClient().getOtherPlayers().size() == 3){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-//                player3.createSpielfigur();
-//                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
-//                player4.createSpielfigur();
-//            }
-//        }
-        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        
+        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
+            player1 = monopoly.getClient().getPlayer().getPlayer();
+            player1.createSpielfigur();
+            if (monopoly.getClient().getOtherPlayers().size() == 1){
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
+            }else if (monopoly.getClient().getOtherPlayers().size() == 2){
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                player3.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
+            }else if (monopoly.getClient().getOtherPlayers().size() == 3){
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                player3.createSpielfigur();
+                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
+                player4.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
+            }
+        }
+        /*player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
         player1.createSpielfigur();
         player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
         player2.createSpielfigur();
         player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
         player3.createSpielfigur();
         player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        player4.createSpielfigur();
+        player4.createSpielfigur();*/
 
         camera.update();
 
@@ -407,12 +413,16 @@ public class CreateGameField extends GameScreenAdapter {
 
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
-
-
-        modelBatch.render(player1.modInstance, environment);
-        modelBatch.render(player2.modInstance, environment);
-        modelBatch.render(player3.modInstance, environment);
-        modelBatch.render(player4.modInstance, environment);
+        if (player1 != null && player2 != null){
+            modelBatch.render(player1.modInstance, environment);
+            modelBatch.render(player2.modInstance, environment);
+        }
+        if (player3 != null){
+            modelBatch.render(player3.modInstance, environment);
+        }
+        if (player4 != null){
+            modelBatch.render(player4.modInstance, environment);
+        }
 
         /**
          * Set pach Cheat
@@ -435,10 +445,16 @@ public class CreateGameField extends GameScreenAdapter {
          */
         moneyfont.setColor(Color.WHITE);
         moneyfont.getData().setScale(4, 4);
-        moneyfont.draw(spriteBatch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
-        moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
-        moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
-        moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
+        if (player1 != null && player2 != null) {
+            moneyfont.draw(spriteBatch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
+            moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
+        }
+        if (player3 != null) {
+            moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
+        }
+        if (player4 != null) {
+            moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
+        }
         moneyfont.draw(spriteBatch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Rounds: " + roundCount, (float) (Gdx.graphics.getWidth()*0.9),yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);

@@ -78,7 +78,9 @@ public class ServerFoundation {
                         // start game when 2-4 Players are connected
                         if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
                             countPlayers = server.getConnections().length;
+                            System.out.println("here");
                             initPlayers(countPlayers);
+                            System.out.println("there");
                             sendcount(roundcount);
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
@@ -140,15 +142,21 @@ public class ServerFoundation {
     // we can do that if we add a variable in PlayerInformation class, so message is unique
     //      -> eg. PlInfo: public String messageType, SerFound: messageType = "INIT"; Client: if messageType.equals("INIT") do ....
     public void sendPlayerInformation(ArrayList<PlayerInformation> players, String messageType) {
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setMessageType(messageType);
+        }
+
         if (messageType.equals("INITIALIZE_GAME")){
             if (players != null){
                 for (int i = 0; i < players.size(); i++) {
                     players.get(i).setIsPlayer(true);
-                    server.sendToTCP(i, players.get(i));
+                    server.sendToTCP(i+1, players.get(i));
+                    System.out.println("Server sending message to user " + i + ": " + players.get(i).getPlayer().getName());
                     for (int j = 0; j < players.size(); j++) {
                         if (j != i){
                             players.get(i).setIsPlayer(false);
-                            server.sendToTCP(i, players.get(j));
+                            server.sendToTCP(i+1, players.get(j));
+                            System.out.println("Server sending message to user " + i + ": " + players.get(j).getPlayer().getName());
                         }
                     }
                 }

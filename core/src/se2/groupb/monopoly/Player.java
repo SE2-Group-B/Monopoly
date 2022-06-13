@@ -30,6 +30,8 @@ public class Player {
     private CreateGameField field;
 
 
+    public Player() {
+    }
 
     public Player(int id, String name, int bankBalance, ArrayList<Property> myProperties, int NumOfTrainstaitions, Color color) {
         this.id = id;

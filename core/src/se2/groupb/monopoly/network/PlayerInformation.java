@@ -15,6 +15,9 @@ public class PlayerInformation {
     String messageType;
     boolean isPlayer;
 
+    public PlayerInformation() {
+    }
+
     public PlayerInformation(Player player) {
         this.player = player;
     }
