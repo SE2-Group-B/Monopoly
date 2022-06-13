@@ -57,7 +57,6 @@ public class ServerFoundation {
     private void bindServer(final int tcpPort, final int udpPort) {
         this.server.start();
 
-
         try {
             this.server.bind(tcpPort, udpPort);
             System.out.println("Ports opened at: " + tcpPort + " : " + udpPort);
@@ -78,9 +77,7 @@ public class ServerFoundation {
                         // start game when 2-4 Players are connected
                         if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
                             countPlayers = server.getConnections().length;
-                            System.out.println("here");
                             initPlayers(countPlayers);
-                            System.out.println("there");
                             sendcount(roundcount);
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
