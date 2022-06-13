@@ -1,9 +1,8 @@
 package se2.groupb.monopoly.network;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-
-import java.awt.Color;
 
 import se2.groupb.monopoly.Player;
 
