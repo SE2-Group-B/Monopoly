@@ -61,6 +61,7 @@ public class CreateGameField extends GameScreenAdapter {
     private Texture reportCheat = new Texture("images/MenuButtons/report_cheat.png");
     private Texture BuyButton = new Texture("images/MenuButtons/buy_building.png");
 
+
     private Player player1;
     private Player player2;
     private Player player3;
