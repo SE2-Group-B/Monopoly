@@ -119,7 +119,7 @@ public class ServerFoundation {
         }
 
         if (countPlayers >= 2 && countPlayers <= 4) {
-            sendPlayerInformation(players);
+            sendPlayerInformation(players, "INITIALIZE_GAME");
         }
     }
 
@@ -127,10 +127,19 @@ public class ServerFoundation {
     // we are just sending a playerInformation message, we must later specify message so client knows what to do
     // we can do that if we add a variable in PlayerInformation class, so message is unique
     //      -> eg. PlInfo: public String messageType, SerFound: messageType = "INIT"; Client: if messageType.equals("INIT") do ....
-    public void sendPlayerInformation(ArrayList<PlayerInformation> players) {
-        if (players != null){
-            for (int i = 0; i < players.size(); i++) {
-                server.sendToTCP(i, players.get(i));
+    public void sendPlayerInformation(ArrayList<PlayerInformation> players, String messageType) {
+        if (messageType.equals("INITIALIZE_GAME")){
+            if (players != null){
+                for (int i = 0; i < players.size(); i++) {
+                    players.get(i).setIsPlayer(true);
+                    server.sendToTCP(i, players.get(i));
+                    for (int j = 0; j < players.size(); j++) {
+                        if (j != i){
+                            players.get(i).setIsPlayer(false);
+                            server.sendToTCP(i, players.get(j));
+                        }
+                    }
+                }
             }
         }
     }

@@ -12,8 +12,35 @@ import se2.groupb.monopoly.Player;
  */
 public class PlayerInformation {
     Player player;
+    String messageType;
+    boolean isPlayer;
 
     public PlayerInformation(Player player) {
         this.player = player;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public boolean getIsPlayer() {
+        return isPlayer;
+    }
+
+    public void setIsPlayer(boolean player) {
+        isPlayer = player;
+    }
+
 }
