@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,19 +16,11 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 
 
@@ -276,18 +267,16 @@ public class CreateGameField extends ScreenAdapter {
     }
 
     public void setMultiplePlayersOnField(ArrayList<Player> playersToPosition) {
-
-
-//        if (players.size() > 0) {
-//            for (Player player : players) {
-//                if (currentPlayerId != player.getId()) {
-//                    if (currentPlayerId < 10) {
-//                        positions[player.getPosition()].x -= 1;
-//                        player.move(positions[player.getPosition()]);
-//                    }
-//                }
-//            }
-//        }
+        if (players.size() > 0) {
+            for (Player player : players) {
+                if (currentPlayerId != player.getId()) {
+                    if (currentPlayerId < 10) {
+                        positions[player.getPosition()].x -= 1;
+                        player.move(positions[player.getPosition()]);
+                    }
+                }
+            }
+        }
     }
 
     @Override
