@@ -554,11 +554,9 @@ public class CreateGameField extends GameScreenAdapter {
                 }
             }, 5);
             timerCard.stop();
-
-            spriteBatch.end();
-            modelBatch.end();
-
         }
+        spriteBatch.end();
+        modelBatch.end();
     }
 
         @Override
