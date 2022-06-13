@@ -1,14 +1,9 @@
 package screenTests;
 
-import com.esotericsoftware.kryonet.Server;
-
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 import se2.groupb.monopoly.Monopoly;
-import se2.groupb.monopoly.network.ClientFoundation;
-import se2.groupb.monopoly.network.ServerFoundation;
 import se2.groupb.monopoly.screens.InputBackProcessor;
 
 public class InputBackProcessorTest {

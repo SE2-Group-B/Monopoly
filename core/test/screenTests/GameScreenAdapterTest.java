@@ -3,8 +3,6 @@ package screenTests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 
 import org.junit.After;
@@ -26,41 +24,6 @@ public class GameScreenAdapterTest {
 
 
             @Override
-            public void show() {
-
-            }
-
-            @Override
-            public void render(float delta) {
-
-            }
-
-            @Override
-            public void resize(int width, int height) {
-
-            }
-
-            @Override
-            public void pause() {
-
-            }
-
-            @Override
-            public void resume() {
-
-            }
-
-            @Override
-            public void hide() {
-
-            }
-
-            @Override
-            public void dispose() {
-
-            }
-
-            @Override
             public boolean testPosition(float userPosX, float userPosY, float xPosButton, float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset) {
                 return super.testPosition(userPosX, userPosY, xPosButton, yPosButton, buttonSizeX, buttonSizeY, yPosOffset);
             }
@@ -71,7 +34,7 @@ public class GameScreenAdapterTest {
             }
 
             @Override
-            public ImageButton drawImageButtonTester(String texturePath, float X, float Y, int size) {
+            public ImageButton drawImageButtonTester(String texturePath, float X, float Y, float size) {
                 return super.drawImageButtonTester(texturePath, X, Y, size);
             }
         };

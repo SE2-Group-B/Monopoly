@@ -1,6 +1,7 @@
 package se2.groupb.monopoly.network;
 
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -8,7 +9,11 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Random;
+
+import se2.groupb.monopoly.Player;
+import se2.groupb.monopoly.Property;
 
 public class ServerFoundation {
 
@@ -17,6 +22,13 @@ public class ServerFoundation {
     int udpPort;
     Random random;
 
+    private ArrayList<PlayerInformation> players;
+    private PlayerInformation player1;
+    private PlayerInformation player2;
+    private PlayerInformation player3;
+    private PlayerInformation player4;
+
+    public int countPlayers = 0;
     private int currentPlayerID = 0;
 
     public ServerFoundation() {
@@ -29,7 +41,7 @@ public class ServerFoundation {
             e.printStackTrace();
         }
 
-        setTcpPort(randomizePorts());
+        setTcpPort(randomInt());
         setUdpPort(getTcpPort());
 
         // register kryo network
@@ -60,8 +72,10 @@ public class ServerFoundation {
                     System.out.println("Server received message:\t" + object + "\n");
 
                     if (object.equals("HOST")) {
-                        // start game when 4 Players are connected
-                        if (server.getConnections().length == 2) {
+                        // start game when 2-4 Players are connected
+                        if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
+                            countPlayers = server.getConnections().length;
+                            initPlayers(countPlayers);
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");
@@ -75,7 +89,62 @@ public class ServerFoundation {
 
     }
 
-    private int randomizePorts() {
+
+    // server initializes the players and sends information to client
+    private void initPlayers(int countPlayers) {
+        if (countPlayers == 2) {
+            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<Property>(), 0, Color.BLUE));
+            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<Property>(), 0, Color.RED));
+            players = new ArrayList<>();
+            players.add(player1);
+            players.add(player2);
+        } else if (countPlayers == 3) {
+            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<Property>(), 0, Color.BLUE));
+            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<Property>(), 0, Color.RED));
+            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<Property>(), 0, Color.YELLOW));
+            players = new ArrayList<>();
+            players.add(player1);
+            players.add(player2);
+            players.add(player3);
+        } else if (countPlayers == 4) {
+            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<Property>(), 0, Color.BLUE));
+            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<Property>(), 0, Color.RED));
+            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<Property>(), 0, Color.YELLOW));
+            this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<Property>(), 0, Color.GREEN));
+            players = new ArrayList<>();
+            players.add(player1);
+            players.add(player2);
+            players.add(player3);
+            players.add(player4);
+        }
+
+        if (countPlayers >= 2 && countPlayers <= 4) {
+            sendPlayerInformation(players, "INITIALIZE_GAME");
+        }
+    }
+
+    // send specific PlayerInformation (player) to corresponding client
+    // we are just sending a playerInformation message, we must later specify message so client knows what to do
+    // we can do that if we add a variable in PlayerInformation class, so message is unique
+    //      -> eg. PlInfo: public String messageType, SerFound: messageType = "INIT"; Client: if messageType.equals("INIT") do ....
+    public void sendPlayerInformation(ArrayList<PlayerInformation> players, String messageType) {
+        if (messageType.equals("INITIALIZE_GAME")){
+            if (players != null){
+                for (int i = 0; i < players.size(); i++) {
+                    players.get(i).setIsPlayer(true);
+                    server.sendToTCP(i, players.get(i));
+                    for (int j = 0; j < players.size(); j++) {
+                        if (j != i){
+                            players.get(i).setIsPlayer(false);
+                            server.sendToTCP(i, players.get(j));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public int randomInt() {
         int r = random.nextInt() % 6000 + 1000;
         if (r < 0) r *= -1;
         return r;
