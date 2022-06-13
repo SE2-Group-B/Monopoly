@@ -254,14 +254,14 @@ public class CreateGameField extends GameScreenAdapter {
                 player4.createSpielfigur();
             }
         }
-        //player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
-        //player1.createSpielfigur();
-        //player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
-        //player2.createSpielfigur();
-        //player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
-        //player3.createSpielfigur();
-        //player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        //player4.createSpielfigur();
+        /*player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+        player1.createSpielfigur();
+        player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
+        player2.createSpielfigur();
+        player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
+        player3.createSpielfigur();
+        player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
+        player4.createSpielfigur();*/
 
         camera.update();
 
@@ -330,7 +330,7 @@ public class CreateGameField extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if(Gdx.input.justTouched()){
-                   buying();
+                   winning();
                 }return true;
             }
         });
@@ -834,7 +834,7 @@ public class CreateGameField extends GameScreenAdapter {
             //monopoly.setSums(sums);
             //monopoly.setPlacement(placement);
             /** Debugging necessary*/
-            //monopoly.setScreen(new WinningScreen(monopoly, sum, placement));
+            monopoly.setScreen(new WinningScreen(monopoly, sum, placement));
         }
 
         public void buying() {
