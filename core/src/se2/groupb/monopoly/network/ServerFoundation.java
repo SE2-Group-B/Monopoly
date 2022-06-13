@@ -31,6 +31,9 @@ public class ServerFoundation {
     public int countPlayers = 0;
     private int currentPlayerID = 0;
 
+    public RoundCounter roundcount = new RoundCounter();
+    public int minigamecount;
+
     public ServerFoundation() {
         random = new Random();
         System.setProperty("java.net.preferIPv4Stack", "true");
@@ -76,11 +79,20 @@ public class ServerFoundation {
                         if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
                             countPlayers = server.getConnections().length;
                             initPlayers(countPlayers);
+                            sendcount(roundcount);
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");
                         }
 
+                    }
+                }
+                if( object instanceof RoundCounter){
+                    if(((RoundCounter) object).getRoundcount() >= 0 && ((RoundCounter) object).getRoundcount() <= 8 && ((RoundCounter) object).getRoundcount() > roundcount.getRoundcount()){
+                        roundcount = (RoundCounter) object;
+                        server.sendToAllTCP(roundcount);
+                    }else if(((RoundCounter) object).getRoundcount() >= 9){
+                        server.sendToAllTCP("FINISH");
                     }
                 }
             }
@@ -148,6 +160,11 @@ public class ServerFoundation {
         int r = random.nextInt() % 6000 + 1000;
         if (r < 0) r *= -1;
         return r;
+    }
+
+    public void sendcount(RoundCounter round) {
+        server.sendToAllTCP(roundcount);
+
     }
 
     public void setTcpPort(int tcpPort) {
