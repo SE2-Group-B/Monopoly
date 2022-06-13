@@ -16,6 +16,8 @@ public class Monopoly extends Game {
     SensorScreen sensors;
     int[] diceRoll;
     private ClientFoundation client;
+    int[] sums = new int[4];
+    String[] placement = new String[4];
 
     /**
      * for later, when online game can be finished
@@ -64,5 +66,21 @@ public class Monopoly extends Game {
 
     public void removeClient(){
         this.client = null;
+    }
+
+    public int[] getSums() {
+        return sums;
+    }
+
+    public void setSums(int[] sums) {
+        this.sums = sums;
+    }
+
+    public String[] getPlacement() {
+        return placement;
+    }
+
+    public void setPlacement(String[] placement) {
+        this.placement = placement;
     }
 }

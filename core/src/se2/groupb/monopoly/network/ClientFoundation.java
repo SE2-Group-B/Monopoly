@@ -6,10 +6,15 @@ import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
+
+import se2.groupb.monopoly.Player;
 
 public class ClientFoundation {
     private Client client;
     boolean allJoined = false;
+    PlayerInformation player;
+    private ArrayList<PlayerInformation> otherPlayers = new ArrayList<>();
 
     public ClientFoundation(int tcpPort, int udpPort) {
         System.setProperty("java.net.preferIPv4Stack", "true");
@@ -58,6 +63,18 @@ public class ClientFoundation {
                         allJoined = false;
                     }
                 }
+
+                if (object instanceof PlayerInformation) {
+                    if (((PlayerInformation) object).getMessageType().equals("INITIALIZE_GAME")) {
+                        // Server sends initialization of players
+                        // then do something
+                        if (((PlayerInformation) object).getIsPlayer()) {
+                            player = (PlayerInformation) object;
+                        } else if (!((PlayerInformation) object).getIsPlayer()) {
+                            otherPlayers.add((PlayerInformation) object);
+                        }
+                    }
+                }
             }
         });
     }
@@ -74,5 +91,11 @@ public class ClientFoundation {
         return allJoined;
     }
 
+    public PlayerInformation getPlayer() {
+        return player;
+    }
 
+    public ArrayList<PlayerInformation> getOtherPlayers() {
+        return otherPlayers;
+    }
 }
