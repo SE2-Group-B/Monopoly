@@ -3,6 +3,8 @@ package se2.groupb.monopoly.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
+import java.awt.Color;
+
 import se2.groupb.monopoly.Player;
 
 public class Network {
@@ -15,5 +17,6 @@ public class Network {
         kryo.register(Player.class);
         kryo.register(Integer.class);
         kryo.register(Boolean.class);
+        kryo.register(Color.class);
     }
 }
