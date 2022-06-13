@@ -87,30 +87,4 @@ public class HostGameScreenTest {
         // if no offset, its out of the button area, so it doesn't click
         assertFalse(screen.testPosition(x + 15, y + 15, x, y, 10, 10, yOffset));
     }
-
-
-    @Test
-    public void resizeTest() {
-        screen.resize(0, 0);
-    }
-
-    @Test
-    public void pauseTest() {
-        screen.pause();
-    }
-
-    @Test
-    public void resumeTest() {
-        screen.resume();
-    }
-
-    @Test
-    public void hideTest() {
-        screen.hide();
-    }
-
-    @Test
-    public void disposeTest() {
-        screen.dispose();
-    }
 }
