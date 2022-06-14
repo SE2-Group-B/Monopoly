@@ -20,6 +20,7 @@ public class SensorScreen extends GameScreenAdapter {
     private boolean shakeCheatActivated;
     private boolean onTurn;
     private boolean reported;
+    private boolean keyVolumeUp;
 
     private Random random;
     private int cheatDice;
@@ -54,6 +55,7 @@ public class SensorScreen extends GameScreenAdapter {
         cheatActivated = false;
         shakeCheatActivated = false;
         reported = false;
+        keyVolumeUp = false;
         onTurn = true;
         random = new Random();
         cheatDice = 0;
@@ -80,10 +82,19 @@ public class SensorScreen extends GameScreenAdapter {
         monopoly.batch.draw(rollDice, xPosButtons-500, yPosInitialButtons, buttonSizeX, buttonSizeY);
         monopoly.batch.draw(reportCheat, xPosButtons+500, yPosInitialButtons, buttonSizeX, buttonSizeY);
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.VOLUME_UP)){
-            cheatDice++;
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :  "+cheatDice);
+
+
+        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
+            if(!keyVolumeUp){
+                keyVolumeUp = true;
+                cheatDice++;
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :  "+cheatDice);
+            }
+        }else{
+            keyVolumeUp = false;
         }
+
+
         /**
          * Pressing the Roll Dice Button
          */

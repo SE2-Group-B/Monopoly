@@ -12,9 +12,10 @@ import se2.groupb.monopoly.Player;
 
 public class ClientFoundation {
     private Client client;
-    boolean allJoined = false;
+    boolean allJoined = false, gameEnd = false;
     PlayerInformation player;
     private ArrayList<PlayerInformation> otherPlayers = new ArrayList<>();
+    RoundCounter roundCounter;
 
     public ClientFoundation(int tcpPort, int udpPort) {
         System.setProperty("java.net.preferIPv4Stack", "true");
@@ -61,16 +62,24 @@ public class ClientFoundation {
                         allJoined = true;
                     } else if (object.equals("WAITINGFORPLAYER")) {
                         allJoined = false;
+                    }else if(object.equals("FINISH")){
+                        gameEnd = true;
                     }
+                }
+                if(object instanceof RoundCounter) {
+                    roundCounter = (RoundCounter) object;
                 }
 
                 if (object instanceof PlayerInformation) {
+                    System.out.println("Client received message: " + ((PlayerInformation) object).getMessageType());
                     if (((PlayerInformation) object).getMessageType().equals("INITIALIZE_GAME")) {
                         // Server sends initialization of players
                         // then do something
                         if (((PlayerInformation) object).getIsPlayer()) {
+                            System.out.println(((PlayerInformation) object).getMessageType());
                             player = (PlayerInformation) object;
                         } else if (!((PlayerInformation) object).getIsPlayer()) {
+                            ((PlayerInformation) object).getMessageType();
                             otherPlayers.add((PlayerInformation) object);
                         }
                     }
@@ -97,5 +106,9 @@ public class ClientFoundation {
 
     public ArrayList<PlayerInformation> getOtherPlayers() {
         return otherPlayers;
+    }
+
+    public RoundCounter getRoundCounter() {
+        return roundCounter;
     }
 }

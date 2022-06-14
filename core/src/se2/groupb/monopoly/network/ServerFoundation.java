@@ -31,6 +31,9 @@ public class ServerFoundation {
     public int countPlayers = 0;
     private int currentPlayerID = 0;
 
+    public RoundCounter roundcount = new RoundCounter();
+    public int minigamecount;
+
     public ServerFoundation() {
         random = new Random();
         System.setProperty("java.net.preferIPv4Stack", "true");
@@ -75,12 +78,23 @@ public class ServerFoundation {
                         // start game when 2-4 Players are connected
                         if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
                             countPlayers = server.getConnections().length;
+                            System.out.println("here");
                             initPlayers(countPlayers);
+                            System.out.println("there");
+                            sendcount(roundcount);
                             server.sendToAllTCP("START");
                         } else { // wait for players if not all connected
                             server.sendToAllTCP("WAITFORPLAYER");
                         }
 
+                    }
+                }
+                if( object instanceof RoundCounter){
+                    if(((RoundCounter) object).getRoundcount() >= 0 && ((RoundCounter) object).getRoundcount() <= 8 && ((RoundCounter) object).getRoundcount() > roundcount.getRoundcount()){
+                        roundcount = (RoundCounter) object;
+                        server.sendToAllTCP(roundcount);
+                    }else if(((RoundCounter) object).getRoundcount() >= 9){
+                        server.sendToAllTCP("FINISH");
                     }
                 }
             }
@@ -128,15 +142,21 @@ public class ServerFoundation {
     // we can do that if we add a variable in PlayerInformation class, so message is unique
     //      -> eg. PlInfo: public String messageType, SerFound: messageType = "INIT"; Client: if messageType.equals("INIT") do ....
     public void sendPlayerInformation(ArrayList<PlayerInformation> players, String messageType) {
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setMessageType(messageType);
+        }
+
         if (messageType.equals("INITIALIZE_GAME")){
             if (players != null){
                 for (int i = 0; i < players.size(); i++) {
                     players.get(i).setIsPlayer(true);
-                    server.sendToTCP(i, players.get(i));
+                    server.sendToTCP(i+1, players.get(i));
+                    System.out.println("Server sending message to user " + i + ": " + players.get(i).getPlayer().getName());
                     for (int j = 0; j < players.size(); j++) {
                         if (j != i){
                             players.get(i).setIsPlayer(false);
-                            server.sendToTCP(i, players.get(j));
+                            server.sendToTCP(i+1, players.get(j));
+                            System.out.println("Server sending message to user " + i + ": " + players.get(j).getPlayer().getName());
                         }
                     }
                 }
@@ -148,6 +168,11 @@ public class ServerFoundation {
         int r = random.nextInt() % 6000 + 1000;
         if (r < 0) r *= -1;
         return r;
+    }
+
+    public void sendcount(RoundCounter round) {
+        server.sendToAllTCP(roundcount);
+
     }
 
     public void setTcpPort(int tcpPort) {
