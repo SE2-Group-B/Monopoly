@@ -67,7 +67,7 @@ public class CreateGameField extends GameScreenAdapter {
     private Player player3;
     private Player player4;
     private Pot moneyPot = new Pot();
-//    private DiceRoll diceRoll = new DiceRoll();
+    private DiceRoll diceRoll = new DiceRoll();
     private ArrayList<Player> players = new ArrayList();
     public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0;
     //private int[] sums = new int[4];
@@ -238,40 +238,40 @@ public class CreateGameField extends GameScreenAdapter {
         createModels();
 
         
-        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
-            player1 = monopoly.getClient().getPlayer().getPlayer();
-            player1.createSpielfigur();
-            if (monopoly.getClient().getOtherPlayers().size() == 1){
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }else if (monopoly.getClient().getOtherPlayers().size() == 2){
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-                player3.createSpielfigur();
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }else if (monopoly.getClient().getOtherPlayers().size() == 3){
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-                player3.createSpielfigur();
-                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
-                player4.createSpielfigur();
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }
-        }
-        /*player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
+//        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
+//            player1 = monopoly.getClient().getPlayer().getPlayer();
+//            player1.createSpielfigur();
+//            if (monopoly.getClient().getOtherPlayers().size() == 1){
+//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+//                player2.createSpielfigur();
+//                System.out.println("Your Color: " + player1.getName());
+//                System.out.println("Player 2: " + player2.getName());
+//            }else if (monopoly.getClient().getOtherPlayers().size() == 2){
+//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+//                player2.createSpielfigur();
+//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+//                player3.createSpielfigur();
+//                System.out.println("Your Color: " + player1.getName());
+//                System.out.println("Player 2: " + player2.getName());
+//            }else if (monopoly.getClient().getOtherPlayers().size() == 3){
+//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+//                player2.createSpielfigur();
+//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+//                player3.createSpielfigur();
+//                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
+//                player4.createSpielfigur();
+//                System.out.println("Your Color: " + player1.getName());
+//                System.out.println("Player 2: " + player2.getName());
+//            }
+//        }
+        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
         player1.createSpielfigur();
         player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
         player2.createSpielfigur();
         player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
         player3.createSpielfigur();
         player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        player4.createSpielfigur();*/
+        player4.createSpielfigur();
 
         camera.update();
 
@@ -294,15 +294,17 @@ public class CreateGameField extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                     if(Gdx.input.justTouched()) {
-                        int dice = roll();
+                        int dice = diceRoll.roll(getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
                         getCurrentPlayer().move(dice);
 //                checkIfPlayerIsAlone(getCurrentPlayer());
-                        //getCurrentPlayer().setPosition((getCurrentPlayer().getPosition() + dice) % 40);
                         getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
                         checkCurrentProperty();
-                        if (!onTurn) {
+                        if (!diceRoll.getOnTurn()) {
                             nextPlayer();
-                            roundCount++;
+                            //roundCount++;
                         }
                     }
                     return true;
@@ -322,17 +324,18 @@ public class CreateGameField extends GameScreenAdapter {
         cheatButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                    if (cheatActivated) {
-                        getCurrentPlayer().changeMoney(-200);
-                        player2.changeMoney(100);
-                    } else {
-                        player2.changeMoney(-100);
-                    }
-                    reported = true;
-                    return true;
-                }
-                return false;
+//                if(Gdx.input.justTouched()){
+//                    if (cheatActivated) {
+//                        getCurrentPlayer().changeMoney(-200);
+//                        player2.changeMoney(100);
+//                    } else {
+//                        player2.changeMoney(-100);
+//                    }
+//                    reported = true;
+//                    return true;
+//                }
+                diceRoll.reportCheat();
+                return true;
             }
         });
 
@@ -427,14 +430,16 @@ public class CreateGameField extends GameScreenAdapter {
         /**
          * Set pach Cheat
          */
-        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
-            if(!keyVolumeUp){
-                keyVolumeUp = true;
-                cheatDice++;
-            }
-        }else{
-            keyVolumeUp = false;
-        }
+//        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
+//            if(!keyVolumeUp){
+//                keyVolumeUp = true;
+//                cheatDice++;
+//            }
+//        }else{
+//            keyVolumeUp = false;
+//        }
+        diceRoll.checkManualPachCount();
+
 
 
         renderModels();
@@ -462,19 +467,18 @@ public class CreateGameField extends GameScreenAdapter {
             /**
              * Check if phone is shaking while pressing volume down
              */
-            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated) {
-                if (AccelerometerActive) {
-                    xAccel = Gdx.input.getAccelerometerX();
-                    yAccel = Gdx.input.getAccelerometerY();
-                    zAccel = Gdx.input.getAccelerometerZ();
-                    if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
-                        getCurrentPlayer().changeMoney(100);
-                        cheatActivated = shakeCheatActivated = true;
-                    }
-                }
-            }
-
-
+//            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated) {
+//                if (AccelerometerActive) {
+//                    xAccel = Gdx.input.getAccelerometerX();
+//                    yAccel = Gdx.input.getAccelerometerY();
+//                    zAccel = Gdx.input.getAccelerometerZ();
+//                    if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
+//                        getCurrentPlayer().changeMoney(100);
+//                        cheatActivated = shakeCheatActivated = true;
+//                    }
+//                }
+//            }
+        diceRoll.checkForShakeCheat();
 
         /**
          * Check showCard is true and draw the card
@@ -526,68 +530,68 @@ public class CreateGameField extends GameScreenAdapter {
         }
 
 
-        public int roll () {
-            int firstDice = random.nextInt(6) + 1;
-            int secondDice = 0;
-            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice == 0) {
-                secondDice = firstDice;
-                cheatActivated = true;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice != 0) {
-                if (cheatDice >= 6) {
-                    firstDice = secondDice = 6;
-                } else {
-                    firstDice = secondDice = cheatDice;
-                }
-                cheatActivated = true;
-            } else {
-                secondDice = random.nextInt(6) + 1;
-            }
-            onTurn = false;
-            dice1 = setDice(firstDice);
-            dice2 = setDice(secondDice);
-            drawDice(dice1, dice2);
-
-            if (firstDice == secondDice) {
-                onTurn = true;
-                pachCount++;
-                getCurrentPlayer().setPrison(false);
-            }
-            if (pachCount > 2) {
-                onTurn = false;
-                getCurrentPlayer().goToJail();
-                getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
-            }
-            cheatDice = 0;
-            return firstDice + secondDice;
-        }
-
-        private Texture setDice ( int value){
-            String path;
-            switch (value) {
-                case 1:
-                    path = "images/Dice/dice_1.png";
-                    break;
-                case 2:
-                    path = "images/Dice/dice_2.png";
-                    break;
-                case 3:
-                    path = "images/Dice/dice_3.png";
-                    break;
-                case 4:
-                    path = "images/Dice/dice_4.png";
-                    break;
-                case 5:
-                    path = "images/Dice/dice_5.png";
-                    break;
-                case 6:
-                    path = "images/Dice/dice_6.png";
-                    break;
-                default:
-                    path = "images/Dice/dice_0.png";
-                    break;
-            }
-            return new Texture(path);
-        }
+//        public int roll () {
+//            int firstDice = random.nextInt(6) + 1;
+//            int secondDice = 0;
+//            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice == 0) {
+//                secondDice = firstDice;
+//                cheatActivated = true;
+//            } else if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice != 0) {
+//                if (cheatDice >= 6) {
+//                    firstDice = secondDice = 6;
+//                } else {
+//                    firstDice = secondDice = cheatDice;
+//                }
+//                cheatActivated = true;
+//            } else {
+//                secondDice = random.nextInt(6) + 1;
+//            }
+//            onTurn = false;
+//            dice1 = setDice(firstDice);
+//            dice2 = setDice(secondDice);
+//            drawDice(dice1, dice2);
+//
+//            if (firstDice == secondDice) {
+//                onTurn = true;
+//                pachCount++;
+//                getCurrentPlayer().setPrison(false);
+//            }
+//            if (pachCount > 2) {
+//                onTurn = false;
+//                getCurrentPlayer().goToJail();
+//                getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
+//            }
+//            cheatDice = 0;
+//            return firstDice + secondDice;
+//        }
+//
+//        private Texture setDice ( int value){
+//            String path;
+//            switch (value) {
+//                case 1:
+//                    path = "images/Dice/dice_1.png";
+//                    break;
+//                case 2:
+//                    path = "images/Dice/dice_2.png";
+//                    break;
+//                case 3:
+//                    path = "images/Dice/dice_3.png";
+//                    break;
+//                case 4:
+//                    path = "images/Dice/dice_4.png";
+//                    break;
+//                case 5:
+//                    path = "images/Dice/dice_5.png";
+//                    break;
+//                case 6:
+//                    path = "images/Dice/dice_6.png";
+//                    break;
+//                default:
+//                    path = "images/Dice/dice_0.png";
+//                    break;
+//            }
+//            return new Texture(path);
+//        }
 
         private void drawDice (Texture d1, Texture d2){
             spriteBatch.draw(d1, xPosButtons + 500, yPosInitialButtons - 400, 500, 500);
@@ -652,7 +656,6 @@ public class CreateGameField extends GameScreenAdapter {
                     output += " ist auf einem Gemeinschaftsfeld.";
                     kartenHintergrund = getCurrentPlayer().drawCard(gemeinschaftskartenDeck);
                     showCard = true;
-
                     break;
                 case "Ereignisfeld":
                     output += " ist auf einem Ereignisfeld.";
@@ -661,8 +664,8 @@ public class CreateGameField extends GameScreenAdapter {
                     break;
                 case "Gefängnis":
                     if(getCurrentPlayer().getPrison()){
-                        int häfn = 3-getCurrentPlayer().getPrisonCount();
-                        output += " sitzt noch für " + häfn + " Runden im Geföngnis";
+                        int häfn = 4-getCurrentPlayer().getPrisonCount();
+                        output += " sitzt noch für " + häfn + " Runden im Gefängnis";
                     }else{
                         output += " ist nur zu Besuch im Gefägnis.";
                     }
@@ -704,7 +707,8 @@ public class CreateGameField extends GameScreenAdapter {
                 currentPlayerId++;
             }
             //screenOutput = "";
-            reset();
+            diceRoll.reset();
+            //reset();
         }
 
     /**
@@ -735,12 +739,12 @@ public class CreateGameField extends GameScreenAdapter {
             return p;
         }
 
-        private void reset () {
-            cheatActivated = shakeCheatActivated = reported = false;
-            onTurn = true;
-            cheatDice = 0;
-            pachCount = 0;
-        }
+//        private void reset () {
+//            cheatActivated = shakeCheatActivated = reported = false;
+//            onTurn = true;
+//            cheatDice = 0;
+//            pachCount = 0;
+//        }
 
         public static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton,
                                                 float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
