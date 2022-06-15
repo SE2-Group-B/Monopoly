@@ -1,4 +1,4 @@
-package se2.groupb.monopoly.network;
+package se2.groupb.monopoly.network.messages;
 
 public class RoundCounter {
     int roundcount;

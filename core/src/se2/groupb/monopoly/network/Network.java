@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Player;
 import se2.groupb.monopoly.Property;
+import se2.groupb.monopoly.network.messages.PlayerInformation;
+import se2.groupb.monopoly.network.messages.RoundCounter;
 
 public class Network {
     // register objects that are sent over the Network
