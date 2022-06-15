@@ -24,7 +24,6 @@ public class ServerFoundation {
     int udpPort;
     Random random;
 
-    private ArrayList<PlayerInformation> players;
     private PlayerInformation player1;
     private PlayerInformation player2;
     private PlayerInformation player3;
@@ -106,7 +105,7 @@ public class ServerFoundation {
 
     // server initializes the players and sends information to client
     private void initPlayers(int countPlayers) {
-        players = new ArrayList<>();
+        ArrayList<PlayerInformation> players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
             this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<Property>(), 0, Color.BLUE));
             this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<Property>(), 0, Color.RED));
