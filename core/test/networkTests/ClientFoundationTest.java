@@ -79,7 +79,7 @@ public class ClientFoundationTest {
         Assert.assertFalse(client.allPlayersJoined());
     }
 
-    @Test
+    /*@Test
     public void getPlayerTest() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
@@ -168,5 +168,5 @@ public class ClientFoundationTest {
     @Test
     public void testWrongPortTest() {
         ClientFoundation client = new ClientFoundation(1, 1);
-    }
+    }*/
 }
