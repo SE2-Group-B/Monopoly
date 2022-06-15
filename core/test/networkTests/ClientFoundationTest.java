@@ -89,9 +89,6 @@ public class ClientFoundationTest {
 
         try {
             client.getClient().update(100);
-            client2.getClient().update(100);
-            client3.getClient().update(100);
-            client4.getClient().update(100);
         } catch (IOException e) {
             e.printStackTrace();
         }
