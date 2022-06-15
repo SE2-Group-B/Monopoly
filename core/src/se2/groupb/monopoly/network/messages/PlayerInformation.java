@@ -1,4 +1,4 @@
-package se2.groupb.monopoly.network;
+package se2.groupb.monopoly.network.messages;
 
 import se2.groupb.monopoly.Player;
 
@@ -13,6 +13,7 @@ import se2.groupb.monopoly.Player;
 public class PlayerInformation {
     Player player;
     String messageType;
+    //boolean for seeing if the player on client is the actual user or the other players
     boolean isPlayer;
 
     public PlayerInformation() {
