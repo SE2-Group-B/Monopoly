@@ -79,7 +79,7 @@ public class ClientFoundationTest {
         Assert.assertFalse(client.allPlayersJoined());
     }
 
-    /*@Test
+    @Test
     public void getPlayerTest() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
@@ -102,7 +102,7 @@ public class ClientFoundationTest {
         Assert.assertEquals(client4.getPlayer().getPlayer().getName(), "Green");
     }
 
-    @Test
+    /*@Test
     public void getOtherPlayersTestOnlyFirstClient() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
