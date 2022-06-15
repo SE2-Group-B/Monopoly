@@ -51,23 +51,16 @@ public class CreateGameField extends GameScreenAdapter {
     private ImageButton nextButton;
     private LogicalGameField gameField;
 
-
     private Field[] fields = new Field[40];
 
     //private String buildingPath = "Spielfeld\\field.g3dj";
-
-
-    private Texture rollDice = new Texture("images/MenuButtons/roll.png");
-    private Texture reportCheat = new Texture("images/MenuButtons/report_cheat.png");
-    private Texture BuyButton = new Texture("images/MenuButtons/buy_building.png");
-
 
     private Player player1;
     private Player player2;
     private Player player3;
     private Player player4;
     private Pot moneyPot = new Pot();
-//    private DiceRoll diceRoll = new DiceRoll();
+    private DiceRoll diceRoll = new DiceRoll();
     private ArrayList<Player> players = new ArrayList();
     public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0;
     //private int[] sums = new int[4];
@@ -81,16 +74,13 @@ public class CreateGameField extends GameScreenAdapter {
     public boolean showCard;
     private Timer timerCard = new Timer();
 
-
     // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
-
 
     ArrayList<Property> arrayList = new ArrayList();
     ArrayList<Property> arrayList2 = new ArrayList();
     ArrayList<Property> arrayList3 = new ArrayList();
     ArrayList<Property> arrayList4 = new ArrayList();
-
 
     private int buttonSizeX;
     private int buttonSizeY;
@@ -99,21 +89,6 @@ public class CreateGameField extends GameScreenAdapter {
     private float yPosOffsetButtons;
     private float xPosButtons;
 
-    private boolean AccelerometerActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
-
-    private float xAccel;
-    private float yAccel;
-    private float zAccel;
-
-    private boolean cheatActivated;
-    private boolean shakeCheatActivated;
-    private boolean onTurn;
-    private boolean reported;
-    private boolean keyVolumeUp;
-
-    private Random random = new Random();
-    private int cheatDice;
-    private int pachCount;
     private int currentPlayerId;
     private int playerCount;
     private String screenOutput;
@@ -176,7 +151,6 @@ public class CreateGameField extends GameScreenAdapter {
         createRightPositions();
     }
 
-
     public CreateGameField(Monopoly monopoly) {
         super(monopoly);
         spriteBatch = new SpriteBatch();
@@ -201,18 +175,12 @@ public class CreateGameField extends GameScreenAdapter {
         gemeinschaftskartenDeck.shuffle();
         kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
         showCard = false;
-        keyVolumeUp = false;
 
-
-        onTurn = true;
-        cheatActivated = reported = shakeCheatActivated = false;
-        cheatDice = pachCount = 0;
         currentPlayerId = 1;
         playerCount = 4;
         screenOutput = "";
 
         gameField = new LogicalGameField();
-
 
 //        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 //        Gdx.app.debug("GDSAFA", "Hello");
@@ -221,7 +189,6 @@ public class CreateGameField extends GameScreenAdapter {
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
         modelBatch = new ModelBatch();
-
 
         camera = new OrthographicCamera(100, 100);
         camera.rotate(90);
@@ -232,11 +199,9 @@ public class CreateGameField extends GameScreenAdapter {
         camera.lookAt(40f, 0f, -40f);  // 850f, 100f, -200f
         camera.zoom = 1;
 
-
 //        camera.near = -10000f;
         camera.far = 500000f;
         createModels();
-
         
         if(!monopoly.getClient().getOtherPlayers().isEmpty()){
             player1 = monopoly.getClient().getPlayer().getPlayer();
@@ -294,15 +259,17 @@ public class CreateGameField extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                     if(Gdx.input.justTouched()) {
-                        int dice = roll();
+                        int dice = diceRoll.roll(getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
                         getCurrentPlayer().move(dice);
 //                checkIfPlayerIsAlone(getCurrentPlayer());
-                        //getCurrentPlayer().setPosition((getCurrentPlayer().getPosition() + dice) % 40);
                         getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
                         checkCurrentProperty();
-                        if (!onTurn) {
+                        if (!diceRoll.getOnTurn()) {
                             nextPlayer();
-                            roundCount++;
+                            //roundCount++;
                         }
                     }
                     return true;
@@ -322,17 +289,8 @@ public class CreateGameField extends GameScreenAdapter {
         cheatButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                    if (cheatActivated) {
-                        getCurrentPlayer().changeMoney(-200);
-                        player2.changeMoney(100);
-                    } else {
-                        player2.changeMoney(-100);
-                    }
-                    reported = true;
-                    return true;
-                }
-                return false;
+                diceRoll.reportCheat();
+                return true;
             }
         });
 
@@ -345,7 +303,6 @@ public class CreateGameField extends GameScreenAdapter {
             }
         });
 
-
         stage.addActor(buyButton);
         stage.addActor(diceButton);
         stage.addActor(cheatButton);
@@ -355,8 +312,6 @@ public class CreateGameField extends GameScreenAdapter {
         InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
-
-
 
     public void checkIfPlayerIsAlone(Player player) {
         ArrayList<Player> playersToPosition = new ArrayList<>();
@@ -424,18 +379,8 @@ public class CreateGameField extends GameScreenAdapter {
             modelBatch.render(player4.modInstance, environment);
         }
 
-        /**
-         * Set pach Cheat
-         */
-        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
-            if(!keyVolumeUp){
-                keyVolumeUp = true;
-                cheatDice++;
-            }
-        }else{
-            keyVolumeUp = false;
-        }
-
+        diceRoll.checkManualPachCount();
+        diceRoll.checkForShakeCheat();
 
         renderModels();
         drawDice(dice1, dice2);
@@ -458,23 +403,6 @@ public class CreateGameField extends GameScreenAdapter {
         moneyfont.draw(spriteBatch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Rounds: " + roundCount, (float) (Gdx.graphics.getWidth()*0.9),yPosInitialButtons + 250);
         moneyfont.draw(spriteBatch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
-
-            /**
-             * Check if phone is shaking while pressing volume down
-             */
-            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated) {
-                if (AccelerometerActive) {
-                    xAccel = Gdx.input.getAccelerometerX();
-                    yAccel = Gdx.input.getAccelerometerY();
-                    zAccel = Gdx.input.getAccelerometerZ();
-                    if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
-                        getCurrentPlayer().changeMoney(100);
-                        cheatActivated = shakeCheatActivated = true;
-                    }
-                }
-            }
-
-
 
         /**
          * Check showCard is true and draw the card
@@ -523,70 +451,6 @@ public class CreateGameField extends GameScreenAdapter {
             for (int i = 0; i < fieldModel.length; i++) {
                 fieldModel[i].dispose();
             }
-        }
-
-
-        public int roll () {
-            int firstDice = random.nextInt(6) + 1;
-            int secondDice = 0;
-            if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice == 0) {
-                secondDice = firstDice;
-                cheatActivated = true;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && cheatDice != 0) {
-                if (cheatDice >= 6) {
-                    firstDice = secondDice = 6;
-                } else {
-                    firstDice = secondDice = cheatDice;
-                }
-                cheatActivated = true;
-            } else {
-                secondDice = random.nextInt(6) + 1;
-            }
-            onTurn = false;
-            dice1 = setDice(firstDice);
-            dice2 = setDice(secondDice);
-            drawDice(dice1, dice2);
-
-            if (firstDice == secondDice) {
-                onTurn = true;
-                pachCount++;
-                getCurrentPlayer().setPrison(false);
-            }
-            if (pachCount > 2) {
-                onTurn = false;
-                getCurrentPlayer().goToJail();
-                getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
-            }
-            cheatDice = 0;
-            return firstDice + secondDice;
-        }
-
-        private Texture setDice ( int value){
-            String path;
-            switch (value) {
-                case 1:
-                    path = "images/Dice/dice_1.png";
-                    break;
-                case 2:
-                    path = "images/Dice/dice_2.png";
-                    break;
-                case 3:
-                    path = "images/Dice/dice_3.png";
-                    break;
-                case 4:
-                    path = "images/Dice/dice_4.png";
-                    break;
-                case 5:
-                    path = "images/Dice/dice_5.png";
-                    break;
-                case 6:
-                    path = "images/Dice/dice_6.png";
-                    break;
-                default:
-                    path = "images/Dice/dice_0.png";
-                    break;
-            }
-            return new Texture(path);
         }
 
         private void drawDice (Texture d1, Texture d2){
@@ -652,7 +516,6 @@ public class CreateGameField extends GameScreenAdapter {
                     output += " ist auf einem Gemeinschaftsfeld.";
                     kartenHintergrund = getCurrentPlayer().drawCard(gemeinschaftskartenDeck);
                     showCard = true;
-
                     break;
                 case "Ereignisfeld":
                     output += " ist auf einem Ereignisfeld.";
@@ -661,8 +524,8 @@ public class CreateGameField extends GameScreenAdapter {
                     break;
                 case "Gefängnis":
                     if(getCurrentPlayer().getPrison()){
-                        int häfn = 3-getCurrentPlayer().getPrisonCount();
-                        output += " sitzt noch für " + häfn + " Runden im Geföngnis";
+                        int häfn = 4-getCurrentPlayer().getPrisonCount();
+                        output += " sitzt noch für " + häfn + " Runden im Gefängnis";
                     }else{
                         output += " ist nur zu Besuch im Gefägnis.";
                     }
@@ -703,8 +566,7 @@ public class CreateGameField extends GameScreenAdapter {
             } else {
                 currentPlayerId++;
             }
-            //screenOutput = "";
-            reset();
+            diceRoll.reset();
         }
 
     /**
@@ -735,13 +597,6 @@ public class CreateGameField extends GameScreenAdapter {
             return p;
         }
 
-        private void reset () {
-            cheatActivated = shakeCheatActivated = reported = false;
-            onTurn = true;
-            cheatDice = 0;
-            pachCount = 0;
-        }
-
         public static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton,
                                                 float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
             return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
@@ -756,14 +611,12 @@ public class CreateGameField extends GameScreenAdapter {
             return parts[parts.length - 1];
         }
 
-
         public void createModels () {
             transformModelsOnField(0, 10, 0, 0, 0, 0);
             transformModelsOnField(11, 19, leftX, leftZ, 270, 0);
             transformModelsOnField(20, 30, topX, topZ, 180, 0);
             transformModelsOnField(31, 39, rightX, rightZ, 90, 3);
         }
-
 
         public void transformModelsOnField ( int start, int end, float v3X, float v3Z, int degrees,
         int offset){
@@ -798,7 +651,6 @@ public class CreateGameField extends GameScreenAdapter {
          */
         public void winning () {
             int amount = 0;
-
 
             for (int i = 0; i < 40; i++) {
                 if (gameField.getGameField()[i].getOwnerId() == 1) {
@@ -851,7 +703,6 @@ public class CreateGameField extends GameScreenAdapter {
                 }
             }
 
-
             //monopoly.setSums(sums);
             //monopoly.setPlacement(placement);
             /** Debugging necessary*/
@@ -895,6 +746,5 @@ public class CreateGameField extends GameScreenAdapter {
                 screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
             }
         }
-
     }
 

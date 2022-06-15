@@ -25,7 +25,6 @@ public class ServerFoundationTest {
         server = new ServerFoundation();
         client1 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
-
     }
 
     @After
@@ -43,13 +42,23 @@ public class ServerFoundationTest {
     }
 
     @Test
-    public void startGameTest() {
-        client1.getClient().sendUDP("HOST");
-        client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
-        client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
-
+    public void startGameTest1Player() {
+        client2.getClient().close();
         client1.getClient().sendUDP("HOST");
     }
+
+    @Test
+    public void startGameTest2Players() {
+        client1.getClient().sendUDP("HOST");
+    }
+
+    @Test
+    public void startGameTest4Players() {
+        client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client1.getClient().sendUDP("HOST");
+    }
+
 
     @Test
     public void getServerTest() {
