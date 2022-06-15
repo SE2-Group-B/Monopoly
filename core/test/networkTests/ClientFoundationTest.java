@@ -92,10 +92,27 @@ public class ClientFoundationTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Assert.assertEquals(client.getPlayer().getPlayer().getName(), "Blue");
+
+        try {
+            client2.getClient().update(100);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Assert.assertEquals(client2.getPlayer().getPlayer().getName(), "Red");
+
+        try {
+            client3.getClient().update(100);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Assert.assertEquals(client3.getPlayer().getPlayer().getName(), "Yellow");
+
+        try {
+            client4.getClient().update(100);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Assert.assertEquals(client4.getPlayer().getPlayer().getName(), "Green");
     }
 
