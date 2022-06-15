@@ -24,7 +24,6 @@ public class ServerFoundation {
     int udpPort;
     Random random;
 
-    private ArrayList<PlayerInformation> players;
     private PlayerInformation player1;
     private PlayerInformation player2;
     private PlayerInformation player3;
@@ -106,7 +105,7 @@ public class ServerFoundation {
 
     // server initializes the players and sends information to client
     private void initPlayers(int countPlayers) {
-        players = new ArrayList<>();
+        ArrayList<PlayerInformation> players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
             this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<Property>(), 0, Color.BLUE));
             this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<Property>(), 0, Color.RED));
@@ -136,18 +135,17 @@ public class ServerFoundation {
             players.get(i).setMessageType(messageType);
         }
 
-        if (messageType.equals("INITIALIZE_GAME")) {
-            if (players != null && !players.isEmpty()) {
-                for (int i = 0; i < players.size(); i++) {
-                    players.get(i).setIsPlayer(true);
-                    server.sendToTCP(i + 1, players.get(i));
-                    System.out.println("Server sending message to user " + i + ": You are " + players.get(i).getPlayer().getName());
-                    for (int j = 0; j < players.size(); j++) {
-                        if (j != i) {
-                            players.get(i).setIsPlayer(false);
-                            server.sendToTCP(i + 1, players.get(j));
-                            System.out.println("Server sending message to user " + i + ": Player " + (j+1) + " is " + players.get(j).getPlayer().getName());
-                        }
+        if (messageType.equals("INITIALIZE_GAME") && !players.isEmpty()) {
+            for (int i = 0; i < players.size(); i++) {
+                players.get(i).setIsPlayer(true);
+                server.sendToTCP(i + 1, players.get(i));
+                System.out.println("Server sending message to user " + i + ": You are " + players.get(i).getPlayer().getName());
+                for (int j = 0; j < players.size(); j++) {
+                    if (j != i) {
+                        players.get(i).setIsPlayer(false);
+                        server.sendToTCP(i + 1, players.get(j));
+                        System.out.println("Server sending message to user " + i + ": Player " + (j + 1) + " is " + players.get(j).getPlayer().getName());
+
                     }
                 }
             }

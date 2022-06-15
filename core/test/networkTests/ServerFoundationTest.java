@@ -59,6 +59,13 @@ public class ServerFoundationTest {
         client1.getClient().sendUDP("HOST");
     }
 
+    @Test
+    public void startGameTest5Players(){
+        client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        ClientFoundation client5 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client1.getClient().sendTCP("HOST");
+    }
 
     @Test
     public void getServerTest() {
@@ -70,4 +77,7 @@ public class ServerFoundationTest {
         ServerFoundation server2 = new ServerFoundation();
         Assert.assertNotEquals(server2.getTcpPort(), server.getTcpPort());
     }
+
+
+
 }
