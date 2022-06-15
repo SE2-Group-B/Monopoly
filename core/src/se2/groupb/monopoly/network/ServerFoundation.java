@@ -106,9 +106,8 @@ public class ServerFoundation {
 
     // server initializes the players and sends information to client
     private void initPlayers(int countPlayers) {
-        players = null;
+        players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
-            players = new ArrayList<>();
             this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<Property>(), 0, Color.BLUE));
             this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<Property>(), 0, Color.RED));
             players.add(player1);
