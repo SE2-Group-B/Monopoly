@@ -18,7 +18,6 @@ public class ClientFoundationTest {
     @Before
     public void setUp() {
         server = new ServerFoundation();
-
         client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
     }
 
@@ -34,11 +33,6 @@ public class ClientFoundationTest {
         int port = server.getTcpPort();
         server.getServer().close();
         server = null;
-        try {
-            client.getClient().update(500);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         client = new ClientFoundation(port, port);
         try {
             client.getClient().update(500);
@@ -49,40 +43,42 @@ public class ClientFoundationTest {
     }
 
     @Test
-    public void serverExistsTest() {
-        server = new ServerFoundation();
-        client = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
-        Assert.assertTrue(client.getClient().isConnected());
-    }
-
-    @Test
     public void listenerTest() {
         server.getServer().sendToAllTCP("message");
     }
 
     @Test
-    public void startGameTest() {
+    public void startGameTestEnoughPlayers() {
         server.getServer().sendToAllTCP("START");
         try {
-            client.getClient().update(100);
+            client.getClient().update(500);
         } catch (IOException e) {
             e.printStackTrace();
         }
         Assert.assertTrue(client.allPlayersJoined());
+    }
 
+    @Test
+    public void startGameTestNotEnoughPlayers() {
         server.getServer().sendToAllTCP("WAITINGFORPLAYER");
         try {
-            client.getClient().update(100);
+            client.getClient().update(500);
         } catch (IOException e) {
             e.printStackTrace();
         }
         Assert.assertFalse(client.allPlayersJoined());
     }
 
+    @Test
+    public void wrongPortTest() {
+        ClientFoundation client = new ClientFoundation(1, 1);
+        Assert.assertFalse(client.getClient().isConnected());
+    }
+
     /**
      * the tests work, but when building the project on github, it says some tests failed -> doesn't build
      */
-    /*@Test
+    @Test
     public void getPlayerTest() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
@@ -97,9 +93,9 @@ public class ClientFoundationTest {
         }
 
         Assert.assertEquals(client.getPlayer().getPlayer().getName(), "Blue");
-        Assert.assertEquals(client2.getPlayer().getPlayer().getName(), "Red");
-        Assert.assertEquals(client3.getPlayer().getPlayer().getName(), "Yellow");
-        Assert.assertEquals(client4.getPlayer().getPlayer().getName(), "Green");
+        Assert.assertEquals(client.getOtherPlayers().get(0).getPlayer().getName(), "Red");
+        Assert.assertEquals(client.getOtherPlayers().get(1).getPlayer().getName(), "Yellow");
+        Assert.assertEquals(client.getOtherPlayers().get(2).getPlayer().getName(), "Green");
     }
 
     @Test
@@ -122,14 +118,13 @@ public class ClientFoundationTest {
     }
 
     @Test
-    public void getOtherPlayersTestTwoPlayers() {
+    public void getOtherPlayersTestTwoPlayerGamePlayer1() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
 
         client.getClient().sendTCP("HOST");
 
         try {
             client.getClient().update(100);
-            client2.getClient().update(100);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -138,6 +133,19 @@ public class ClientFoundationTest {
         Assert.assertThrows(IndexOutOfBoundsException.class, () -> {
             client2.getOtherPlayers().get(1).getPlayer().getName();
         });
+    }
+
+    @Test
+    public void getOtherPlayersTestTwoPlayerGamePlayer2() {
+        ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+
+        client.getClient().sendTCP("HOST");
+
+        try {
+            client2.getClient().update(100);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Assert.assertEquals("Blue", client2.getOtherPlayers().get(0).getPlayer().getName());
         Assert.assertThrows(IndexOutOfBoundsException.class, () -> {
@@ -145,8 +153,9 @@ public class ClientFoundationTest {
         });
     }
 
+
     @Test
-    public void getOtherPlayersOnlyLastPlayer() {
+    public void getOtherPlayersTestOnlyLastPlayer() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
@@ -162,11 +171,5 @@ public class ClientFoundationTest {
         Assert.assertEquals("Blue", client4.getOtherPlayers().get(0).getPlayer().getName());
         Assert.assertEquals("Red", client4.getOtherPlayers().get(1).getPlayer().getName());
         Assert.assertEquals("Yellow", client4.getOtherPlayers().get(2).getPlayer().getName());
-    }*/
-
-
-    @Test
-    public void testWrongPortTest() {
-        ClientFoundation client = new ClientFoundation(1, 1);
     }
 }

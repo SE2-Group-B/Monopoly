@@ -136,18 +136,17 @@ public class ServerFoundation {
             players.get(i).setMessageType(messageType);
         }
 
-        if (messageType.equals("INITIALIZE_GAME")) {
-            if (players != null && !players.isEmpty()) {
-                for (int i = 0; i < players.size(); i++) {
-                    players.get(i).setIsPlayer(true);
-                    server.sendToTCP(i + 1, players.get(i));
-                    System.out.println("Server sending message to user " + i + ": You are " + players.get(i).getPlayer().getName());
-                    for (int j = 0; j < players.size(); j++) {
-                        if (j != i) {
-                            players.get(i).setIsPlayer(false);
-                            server.sendToTCP(i + 1, players.get(j));
-                            System.out.println("Server sending message to user " + i + ": Player " + (j+1) + " is " + players.get(j).getPlayer().getName());
-                        }
+        if (messageType.equals("INITIALIZE_GAME") && !players.isEmpty()) {
+            for (int i = 0; i < players.size(); i++) {
+                players.get(i).setIsPlayer(true);
+                server.sendToTCP(i + 1, players.get(i));
+                System.out.println("Server sending message to user " + i + ": You are " + players.get(i).getPlayer().getName());
+                for (int j = 0; j < players.size(); j++) {
+                    if (j != i) {
+                        players.get(i).setIsPlayer(false);
+                        server.sendToTCP(i + 1, players.get(j));
+                        System.out.println("Server sending message to user " + i + ": Player " + (j + 1) + " is " + players.get(j).getPlayer().getName());
+
                     }
                 }
             }
