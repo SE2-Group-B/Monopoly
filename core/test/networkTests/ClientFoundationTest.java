@@ -117,7 +117,7 @@ public class ClientFoundationTest {
         Assert.assertEquals("Green", client.getOtherPlayers().get(2).getPlayer().getName());
     }*/
 
-    /*@Test
+    @Test
     public void getOtherPlayersTestTwoPlayerGamePlayer1() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
 
@@ -131,9 +131,9 @@ public class ClientFoundationTest {
 
         Assert.assertEquals("Red", client.getOtherPlayers().get(0).getPlayer().getName());
         Assert.assertThrows(IndexOutOfBoundsException.class, () -> {
-            client2.getOtherPlayers().get(1).getPlayer().getName();
+            client.getOtherPlayers().get(1).getPlayer().getName();
         });
-    }*/
+    }
 
     @Test
     public void getOtherPlayersTestTwoPlayerGamePlayer2() {
