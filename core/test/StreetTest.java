@@ -76,4 +76,35 @@ public class StreetTest {
         hauptstraße.setHousePrice(55);
         Assert.assertEquals(hauptstraße.getHousePrice(),55);
     }
+
+    /*@Test
+    public void testincreaseRent(){
+        hauptstraße.increasemiete();
+        Assert.assertEquals(hauptstraße.getRent(), 24);
+    }*/
+
+    @Test
+    public void testbuyHouse(){
+        hauptstraße.buyhouse();
+        Assert.assertEquals(1,hauptstraße.getHouse());
+        Assert.assertEquals(24,hauptstraße.getRent());
+    }
+
+    @Test
+    public void testfalseHouse(){
+        for (int i = 1; i <= 4; i++) {
+            hauptstraße.buyhouse();
+        }
+        Assert.assertEquals(0,hauptstraße.getHouse());
+        Assert.assertEquals(false, hauptstraße.buyhouse());
+    }
+    @Test
+    public void testbuyHotel(){
+        for (int i = 1; i <= 3; i++) {
+            hauptstraße.buyhouse();
+        }
+        Assert.assertEquals(0, hauptstraße.getHouse());
+        Assert.assertEquals(1, hauptstraße.getHotel());
+        Assert.assertEquals(36, hauptstraße.getRent());
+    }
 }

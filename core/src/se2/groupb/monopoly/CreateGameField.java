@@ -340,7 +340,7 @@ public class CreateGameField extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if(Gdx.input.justTouched()){
-                   winning();
+                   buying();
                 }return true;
             }
         });
