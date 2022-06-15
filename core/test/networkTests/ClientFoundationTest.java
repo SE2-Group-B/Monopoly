@@ -28,7 +28,7 @@ public class ClientFoundationTest {
     }
 
     // should be @Test (expected = IOException.class or ConnectException.class), but it works fine without
-    /*@Test
+    @Test
     public void noServerTest() {
         int port = server.getTcpPort();
         server.getServer().close();
@@ -40,7 +40,7 @@ public class ClientFoundationTest {
             e.printStackTrace();
         }
         Assert.assertFalse(client.getClient().isConnected());
-    }*/
+    }
 
     @Test
     public void listenerTest() {
@@ -117,7 +117,7 @@ public class ClientFoundationTest {
         Assert.assertEquals("Green", client.getOtherPlayers().get(2).getPlayer().getName());
     }*/
 
-    @Test
+    /*@Test
     public void getOtherPlayersTestTwoPlayerGamePlayer1() {
         ClientFoundation client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
 
@@ -133,7 +133,7 @@ public class ClientFoundationTest {
         Assert.assertThrows(IndexOutOfBoundsException.class, () -> {
             client2.getOtherPlayers().get(1).getPlayer().getName();
         });
-    }
+    }*/
 
     @Test
     public void getOtherPlayersTestTwoPlayerGamePlayer2() {
