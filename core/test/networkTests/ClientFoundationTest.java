@@ -64,7 +64,7 @@ public class ClientFoundationTest {
     public void startGameTest() {
         server.getServer().sendToAllTCP("START");
         try {
-            client.getClient().update(100);
+            client.getClient().update(500);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,7 +72,7 @@ public class ClientFoundationTest {
 
         server.getServer().sendToAllTCP("WAITINGFORPLAYER");
         try {
-            client.getClient().update(100);
+            client.getClient().update(500);
         } catch (IOException e) {
             e.printStackTrace();
         }
