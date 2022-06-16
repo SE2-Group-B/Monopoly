@@ -177,7 +177,7 @@ public class CreateGameField extends GameScreenAdapter {
         showCard = false;
 
         currentPlayerId = 1;
-        playerCount = 4;
+
         screenOutput = "";
 
         gameField = new LogicalGameField();
@@ -229,6 +229,8 @@ public class CreateGameField extends GameScreenAdapter {
                 System.out.println("Player 2: " + player2.getName());
             }
         }
+        playerCount = monopoly.getClient().getOtherPlayers().size();
+
         /*player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
         player1.createSpielfigur();
         player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
@@ -236,7 +238,8 @@ public class CreateGameField extends GameScreenAdapter {
         player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
         player3.createSpielfigur();
         player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        player4.createSpielfigur();*/
+        player4.createSpielfigur();
+        playerCount = 4;*/
 
         camera.update();
 
