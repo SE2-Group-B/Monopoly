@@ -59,5 +59,6 @@ public abstract class GameScreenAdapter extends ScreenAdapter implements Screen 
         return drawImageButton(texturePath, X, Y, size);
     }
 
+
     public abstract void switchScreenDelayed(final GameScreenAdapter screen, float delay);
 }

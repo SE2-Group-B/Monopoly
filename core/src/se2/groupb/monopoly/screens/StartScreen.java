@@ -1,4 +1,4 @@
-package se2.groupb.monopoly;
+package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -6,6 +6,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import se2.groupb.monopoly.Monopoly;
+import se2.groupb.monopoly.screens.HomeScreen;
 
 public class StartScreen extends ScreenAdapter {
     SpriteBatch batch;

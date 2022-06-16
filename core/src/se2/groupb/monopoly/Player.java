@@ -71,6 +71,8 @@ public class Player {
         modInstance.transform.setTranslation(vector3);
     }
 
+
+
     public Color getColor() { return color; }
 
     public int getId() {
@@ -165,6 +167,7 @@ public class Player {
     public void roundmoney() {
         this.setBankBalance((this.getBankBalance() + 200));
     }
+
 
 
     public Texture drawCard(Deck ks) {
