@@ -11,6 +11,8 @@ import se2.groupb.monopoly.screens.SensorScreen;
 
 
 public class Monopoly extends Game {
+
+
     public SpriteBatch batch;
     Property[] arr;
     SensorScreen sensors;

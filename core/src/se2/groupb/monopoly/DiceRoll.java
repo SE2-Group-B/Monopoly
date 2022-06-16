@@ -19,7 +19,7 @@ public class DiceRoll {
 
     private boolean cheatActivated;
     private boolean shakeCheatActivated;
-    private boolean onTurn;
+    private boolean onTurn = true;
     private boolean reported;
     private boolean keyVolumeUp;
 
