@@ -28,8 +28,8 @@ public class DiceRoll {
     private int firstDice;
     private int secondDice;
 
-    private Texture dice1 = setDice(1);
-    private Texture dice2 = setDice(1);
+    private Texture dice1;
+    private Texture dice2;
 
     private Player player;
 
@@ -41,7 +41,6 @@ public class DiceRoll {
         chechForPach();
         this.dice1 = setDice(firstDice);
         this.dice2 = setDice(secondDice);
-//        drawDice(dice1, dice2);
         cheatDice = 0;
         return firstDice + secondDice;
     }
@@ -98,7 +97,7 @@ public class DiceRoll {
             if (cheatActivated) {
 //                player.changeMoney(-200);
 //                player.changeMoney(100);
-                player.changeMoney(777);
+                player.changeMoney(100);
             } else {
                 player.changeMoney(-100);
             }
