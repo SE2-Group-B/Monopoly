@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-import se2.groupb.monopoly.Player;
+import se2.groupb.monopoly.network.messages.PlayerInformation;
+import se2.groupb.monopoly.network.messages.RoundCounter;
 
 public class ClientFoundation {
     private Client client;

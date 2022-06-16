@@ -25,7 +25,6 @@ public class ServerFoundationTest {
         server = new ServerFoundation();
         client1 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client2 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
-
     }
 
     @After
@@ -43,12 +42,29 @@ public class ServerFoundationTest {
     }
 
     @Test
-    public void startGameTest() {
+    public void startGameTest1Player() {
+        client2.getClient().close();
         client1.getClient().sendUDP("HOST");
+    }
+
+    @Test
+    public void startGameTest2Players() {
+        client1.getClient().sendUDP("HOST");
+    }
+
+    @Test
+    public void startGameTest4Players() {
         client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
-
         client1.getClient().sendUDP("HOST");
+    }
+
+    @Test
+    public void startGameTest5Players(){
+        client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        ClientFoundation client5 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
+        client1.getClient().sendTCP("HOST");
     }
 
     @Test
@@ -61,4 +77,7 @@ public class ServerFoundationTest {
         ServerFoundation server2 = new ServerFoundation();
         Assert.assertNotEquals(server2.getTcpPort(), server.getTcpPort());
     }
+
+
+
 }

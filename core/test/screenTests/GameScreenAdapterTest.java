@@ -48,35 +48,47 @@ public class GameScreenAdapterTest {
 
 
     @Test
-    public void positionCheckerX0Y0() {
+    public void positionCheckerX0Y0CheckWithinRegion() {
         int x = 0;
         int y = 0;
-        assertTrue(screen.testPosition(x + 1, x + 1, x, y, 10, 10, y));
-        assertTrue(screen.testPosition(x + 5, x + 5, x, y, 10, 10, y));
-        assertTrue(screen.testPosition(x + 9, x + 9, x, y, 10, 10, y));
-        assertFalse(screen.testPosition(x + 0, x + 0, x, y, 10, 10, y));
-        assertFalse(screen.testPosition(x + 10, x + 10, x, y, 10, 10, y));
-        assertFalse(screen.testPosition(x + 15, x + 1, x, y, 10, 10, y));
-        assertFalse(screen.testPosition(x + 1, x + 15, x, y, 10, 10, y));
-        assertFalse(screen.testPosition(x + 15, x + 15, x, y, 10, 10, y));
+        assertTrue(screen.testPosition(x + 1, y + 1, x, y, 10, 10, y));
+        assertTrue(screen.testPosition(x + 5, y + 5, x, y, 10, 10, y));
+        assertTrue(screen.testPosition(x + 9, y + 9, x, y, 10, 10, y));
     }
 
     @Test
-    public void positionCheckerX100Y100() {
+    public void positionCheckerX0Y0CheckOutsideRegion() {
+        int x = 0;
+        int y = 0;
+        assertFalse(screen.testPosition(x + 0, y + 0, x, y, 10, 10, y));
+        assertFalse(screen.testPosition(x + 10, y + 10, x, y, 10, 10, y));
+        assertFalse(screen.testPosition(x + 15, y + 1, x, y, 10, 10, y));
+        assertFalse(screen.testPosition(x + 1, y + 15, x, y, 10, 10, y));
+        assertFalse(screen.testPosition(x + 15, y + 15, x, y, 10, 10, y));
+    }
+
+    @Test
+    public void positionCheckerX100Y100CheckWithinRegion() {
         int x = 100;
         int y = 100;
-        assertTrue(screen.testPosition(x + 1, x + 1, x, y, 10, 10, 0));
-        assertTrue(screen.testPosition(x + 5, x + 5, x, y, 10, 10, 0));
-        assertTrue(screen.testPosition(x + 9, x + 9, x, y, 10, 10, 0));
-        assertFalse(screen.testPosition(x + 0, x + 0, x, y, 10, 10, 0));
-        assertFalse(screen.testPosition(x + 10, x + 10, x, y, 10, 10, 0));
-        assertFalse(screen.testPosition(x + 15, x + 1, x, y, 10, 10, 0));
-        assertFalse(screen.testPosition(x + 1, x + 15, x, y, 10, 10, 0));
-        assertFalse(screen.testPosition(x + 15, x + 15, x, y, 10, 10, 0));
+        assertTrue(screen.testPosition(x + 1, y + 1, x, y, 10, 10, 0));
+        assertTrue(screen.testPosition(x + 5, y + 5, x, y, 10, 10, 0));
+        assertTrue(screen.testPosition(x + 9, y + 9, x, y, 10, 10, 0));
     }
 
     @Test
-    public void positionCheckerX100Y100withOffset() {
+    public void positionCheckerX100Y100CheckOutsideRegion() {
+        int x = 100;
+        int y = 100;
+        assertFalse(screen.testPosition(x + 0, y + 0, x, y, 10, 10, 0));
+        assertFalse(screen.testPosition(x + 10, y + 10, x, y, 10, 10, 0));
+        assertFalse(screen.testPosition(x + 15, y + 1, x, y, 10, 10, 0));
+        assertFalse(screen.testPosition(x + 1, y + 15, x, y, 10, 10, 0));
+        assertFalse(screen.testPosition(x + 15, y + 15, x, y, 10, 10, 0));
+    }
+
+    @Test
+    public void positionCheckerX100Y100ButtonWithOffsetCheckWithinRegion() {
         int x = 100;
         int y = 100;
         int yOffset = 50;
@@ -84,6 +96,14 @@ public class GameScreenAdapterTest {
         assertTrue(screen.testPosition(x + 1, y + yOffset + 1, x, y, 10, 10, yOffset));
         assertTrue(screen.testPosition(x + 5, y + yOffset + 5, x, y, 10, 10, yOffset));
         assertTrue(screen.testPosition(x + 9, y + yOffset + 9, x, y, 10, 10, yOffset));
+        }
+
+    @Test
+    public void positionCheckerX100Y100ButtonWithOffsetCheckOutsideRegion() {
+        int x = 100;
+        int y = 100;
+        int yOffset = 50;
+
         assertFalse(screen.testPosition(x + 0, y + yOffset + 0, x, y, 10, 10, yOffset));
         assertFalse(screen.testPosition(x + 10, y + yOffset + 10, x, y, 10, 10, yOffset));
         assertFalse(screen.testPosition(x + 15, y + yOffset + 1, x, y, 10, 10, yOffset));
@@ -92,10 +112,9 @@ public class GameScreenAdapterTest {
         // if no offset, its out of the button area, so it doesn't click
         assertFalse(screen.testPosition(x + 15, y + 15, x, y, 10, 10, yOffset));
     }
-
     // Gdx.files throws error in unit test
     @Test
-    public void drawImageTester(){
+    public void drawImageTester() {
         //screen.drawImageButtonTester("images/MenuButtons/connect.png", 0,0,1920/3);
     }
 }

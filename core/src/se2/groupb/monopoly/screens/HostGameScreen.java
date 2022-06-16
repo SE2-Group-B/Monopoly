@@ -144,17 +144,24 @@ public class HostGameScreen extends GameScreenAdapter {
                     buttonPressed = true;
                     // draw rectangle above old text since it does not vanish when loading the game
 
-                    if (client.allPlayersJoined()) {
-                        /**
-                         * START THE GAME
-                         * set the screen, user can't go to main menu anymore
-                         */
-                        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
-                        Gdx.input.setInputProcessor(inputMultiplexer);
-                        allJoined = true;
-                        switchScreenDelayed(getScreen(), 0.000000001f);
-                        return true;
-                    } else allJoined = false;
+                    // might want to redo later again, timer to wait for message
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 3; i++) {
+                                if (client.allPlayersJoined()) {
+                                    /**
+                                     * START THE GAME
+                                     * set the screen, user can't go to main menu anymore
+                                     */
+                                    InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+                                    Gdx.input.setInputProcessor(inputMultiplexer);
+                                    allJoined = true;
+                                    switchScreenDelayed(getScreen(), 0.000000001f);
+                                } else allJoined = false;
+                            }
+                        }
+                    }, 3);
                 }
                 return false;
             }
