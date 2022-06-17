@@ -56,4 +56,10 @@ public class trainstationTest {
         Assert.assertEquals(nordbahnhof.getRent(), 111);
     }
 
+    @Test
+    public void testincreaseRent(){
+        nordbahnhof.increaseRent();
+        Assert.assertEquals(200, nordbahnhof.getRent());
+    }
+
 }

@@ -275,7 +275,7 @@ public class CreateGameField extends GameScreenAdapter {
             public boolean handle(Event event) {
                 if(Gdx.input.justTouched()){
                    //winning();
-                    buying();
+                    screenOutput = playerOperation.buying();
                 }return true;
             }
         });
@@ -564,44 +564,6 @@ public class CreateGameField extends GameScreenAdapter {
             monopoly.setScreen(new WinningScreen(monopoly, sum, placement));
         }
 
-        public void buying() {
-            int pos = playerOperation.getCurrentPlayer().getPosition();
-            if (!playerOperation.isSomeonesProperty(pos)) {
-                String propertyType = getPropertyType(pos);
-                switch (propertyType) {
-                    case "Street":
-                        Street s = (Street) gameField.getGameField()[pos];
-                        playerOperation.getCurrentPlayer().changeMoney(-s.getPrice());
-                        gameField.getGameField()[pos].setOwnerId(playerOperation.getCurrentPlayer().getId());
-                        break;
-                    case "Trainstation":
-                        Trainstation t = (Trainstation) gameField.getGameField()[pos];
-                        playerOperation.getCurrentPlayer().changeMoney(-t.getPrice());
-                        gameField.getGameField()[pos].setOwnerId(playerOperation.getCurrentPlayer().getId());
-                        playerOperation.getCurrentPlayer().setNumOfTrainstaitions(playerOperation.getCurrentPlayer().getNumOfTrainstaitions()+1);
-                        //t.increaseRent();
-                        break;
-                    default:
-                        if (gameField.getGameField()[pos].getOwnerId() == playerOperation.getCurrentPlayer().getId()) {
-                            if (propertyType.equals("Street")) {
-                                Street s1 = (Street) gameField.getGameField()[pos];
-                                boolean bought = s1.buyhouse();
-                                if (bought) {
-                                    playerOperation.getCurrentPlayer().changeMoney(-s1.getHousePrice());
-                                } else {
-                                    break;
-                                }
-                            } else {
-                                screenOutput = "Hier kannst du nichts zukaufen";
-                            }
-                        } else {
-                            screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
-                        }
-                }
-            } else {
-                screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
-            }
-        }
 
         private ArrayList<Player> initPlayerList(){
             players.add(player1);

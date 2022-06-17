@@ -42,7 +42,6 @@ public class Street extends Property {
 
     public void setHouse(int house) {
         this.house = house;
-        increasemiete();
     }
 
     public int getHotel() {
@@ -51,7 +50,6 @@ public class Street extends Property {
 
     public void setHotel(int hotel) {
         this.hotel = hotel;
-        increasemiete();
     }
 
     public int getRent() {
@@ -71,7 +69,7 @@ public class Street extends Property {
     }
 
     public boolean buyhouse() {
-        if(getHouse() < 2){
+        if(getHouse() < 2 && getHotel() == 0){
             setHouse(getHouse()+1); increasemiete();
             return true;
         }else if(getHouse() == 2 && getHotel() == 0) {
@@ -90,9 +88,9 @@ public class Street extends Property {
         if(haus == 1 && hotel == 0) {
             miete1 = (int) (miete1 * 1.2);
         }else if(haus == 2 && hotel == 0){
-            miete1 = (int) (miete1 * 1.4);
+            miete1 = (int) ((miete1 / 1.2) * 1.4);
         }else if(hotel == 1){
-            miete1 = (int) (miete1 * 1.8);
+            miete1 = (int) ((miete1 / 1.4) * 1.8);
         }else{
             return;
         }
