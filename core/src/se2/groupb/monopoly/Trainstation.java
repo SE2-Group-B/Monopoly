@@ -1,6 +1,5 @@
 package se2.groupb.monopoly;
 
-import se2.groupb.monopoly.network.PlayerInformation;
 
 public class Trainstation extends Property {
     private boolean sold;
