@@ -1,28 +1,36 @@
 package se2.groupb.monopoly;
 
+
+import com.badlogic.gdx.graphics.Texture;
+
 import java.util.ArrayList;
 
+
+
 public class PlayerOperation {
-    private CreateGameField gameField;
+    //    private CreateGameField gameField;
     private LogicalGameField logicalGameField;
     private ArrayList<Player> playerList;
     private Player currentPlayer;
     private Pot moneyPot;
     private int currentPlayerId;
     private int playerCount;
+//    private DiceRoll diceRoll;
+//    private ArrayList<Texture> list;
 
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
-        gameField = new CreateGameField(gameField.monopoly);
+//        gameField = new CreateGameField(gameField.monopoly);
         logicalGameField = new LogicalGameField();
         currentPlayerId = 1;
+//        diceRoll = new DiceRoll();
     }
 
-    private boolean isSomeonesProperty(int position) {
+    public boolean isSomeonesProperty(int position) {
         return logicalGameField.getGameField()[position].getOwnerId() != 0;
     }
 
-    private Player getPropertyOwner(int pos) {
+    public Player getPropertyOwner(int pos) {
         return getPlayerById(logicalGameField.getGameField()[pos].getOwnerId());
     }
 
@@ -55,7 +63,7 @@ public class PlayerOperation {
         return output;
     }
 
-    private boolean isEnemyProperty(int position) {
+    public boolean isEnemyProperty(int position) {
         return (isSomeonesProperty(position) && (currentPlayer.getId() != getPropertyOwner(position).getId()));
     }
 
@@ -88,7 +96,7 @@ public class PlayerOperation {
                 output = moneyPot.winPot(currentPlayer);
                 break;
             case "Gehe ins Gefängnis":
-                currentPlayer.move(gameField.positions[10]);
+//                currentPlayer.move(gameField.positions[10]);
                 currentPlayer.goToJail();
                 output += " went to prison";
                 break;
@@ -112,4 +120,36 @@ public class PlayerOperation {
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
+
+//    public void reportCheatOperation() {
+//        diceRoll.reportCheat();
+//    }
+//
+//    public String nextPlayerOperation() {
+//        if (!diceRoll.getOnTurn()) {
+//            return nextPlayer();
+//        }
+//        return "You have to press the next Player button";
+//    }
+
+//    public String rollDiceOperation() {
+//        String output = "";
+//        if (diceRoll.getOnTurn()) {
+//            int dice = diceRoll.roll(getCurrentPlayer());
+//            list = diceRoll.getDiceTextures();
+////            dice1 = l.get(0);
+////            dice2 = l.get(1);
+//            getCurrentPlayer().move(dice);
+////                checkIfPlayerIsAlone(getCurrentPlayer());
+////            getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
+//            setMoneyPotForOperation(moneyPot);
+//            output = checkCurrentProperty(getCurrentPlayer());
+//            diceRoll.reset();
+//        }
+//        return output;
+//    }
+
+//    public ArrayList<Texture> returnDiceTextures(){
+//        return list;
+//    }
 }

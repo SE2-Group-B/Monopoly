@@ -19,7 +19,7 @@ public class DiceRoll {
 
     private boolean cheatActivated;
     private boolean shakeCheatActivated;
-    private boolean onTurn;
+    private boolean onTurn = true;
     private boolean reported;
     private boolean keyVolumeUp;
 
@@ -105,7 +105,7 @@ public class DiceRoll {
         }
     }
 
-    private Texture setDice(int value) {
+    public Texture setDice(int value) {
         String path;
         switch (value) {
             case 1:
