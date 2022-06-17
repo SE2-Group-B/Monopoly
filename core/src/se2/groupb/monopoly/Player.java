@@ -61,7 +61,7 @@ public class Player {
         }else{
             this.changeMoney(-value);
             p.changeMoney(value);
-            output = this.getName() + " stepped on " + p.getName() + "'s Property and payed " + value + " rent.";
+            output = this.getName() + " stepped on " + p.getName() + "'s Property and payed " + value + "$ rent.";
         }
         return output;
     }

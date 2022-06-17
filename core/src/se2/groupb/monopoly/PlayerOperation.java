@@ -62,7 +62,7 @@ public class PlayerOperation {
         switch (property.getName()) {
             case "Los":
                 currentPlayer.changeMoney(400);
-                output += " landed directly on GO and earned 400€";
+                output += " landed directly on GO and earned 400$";
                 break;
             case "Gemeinschaftsfeld":
                 output += " stepped on a Gemeinschaftsfeld.";
@@ -117,12 +117,12 @@ public class PlayerOperation {
         if (!isSomeonesProperty(playerPosition)) {
             if (p instanceof Street) {
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
-                output += " bought " + p.getName() + " for " + ((Street) p).getPrice() + "€";
+                output += " bought Street " + p.getName() + " for " + ((Street) p).getPrice() + "$";
                 getCurrentPlayer().changeMoney(-((Street) p).getPrice());
             } else if (p instanceof Trainstation) {
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
                 getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions()+1);
-                output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";;
+                output += " bought Trainstation " + p.getName() + " for " + ((Trainstation) p).getPrice() + "$";
                 getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
             } else {
                 output = "You can't buy this Property";

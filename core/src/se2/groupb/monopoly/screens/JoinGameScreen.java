@@ -210,7 +210,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
+                screen.monopoly.setScreen(new MonopolyScreen(screen.monopoly));
             }
         }, delay);
     }

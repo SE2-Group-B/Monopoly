@@ -2,102 +2,322 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
+import se2.groupb.monopoly.CreateGameField;
+import se2.groupb.monopoly.Deck;
+import se2.groupb.monopoly.DiceRoll;
+import se2.groupb.monopoly.LogicalGameField;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.Player;
+import se2.groupb.monopoly.PlayerOperation;
+import se2.groupb.monopoly.Pot;
 import se2.groupb.monopoly.Property;
+import se2.groupb.monopoly.network.ClientFoundation;
 
 public class MonopolyScreen extends GameScreenAdapter {
-    Texture img;
-    Music music;
-    private BitmapFont menuFont;
-    private BitmapFont money;
 
-    private SpriteBatch batch1;
-    private Monopoly monopoly;
+    //Buttons
+    private ImageButton buyButton;
+    private ImageButton diceButton;
+    private ImageButton cheatButton;
+    private ImageButton nextButton;
+    private int buttonSizeX;
+    private int buttonSizeY;
+    private float buttonsize;
+    private float yPosInitialButtons;
+    private float yPosOffsetButtons;
+    private float xPosButtons;
 
-    private Property[] spielfeld;
+    //Player
+    private Player player1;
+    private Player player2;
+    private Player player3;
+    private Player player4;
 
+    //Andy
+//    private OrthographicCamera camera;
+//    private ModelBatch modelBatch;
+//    private Environment environment;
+    private CreateGameField gameField;
+
+    //Marko
+    private Pot moneyPot;
+    private DiceRoll diceRoll;
+    private int currentPlayerId;
+    private String screenOutput;
+    private Texture dice1;
+    private Texture dice2;
+    private PlayerOperation playerOperation;
+    private ArrayList<Player> playerList;
+
+    //Alen
+    private BitmapFont moneyfont;
+    private int player1mon, player2mon, player3mon, player4mon;
+    private ArrayList<Integer> sum;
+    private ArrayList<String> placement;
+    private ArrayList<Property> player1Propertylist;
+    private ArrayList<Property> player2Propertylist;
+    private ArrayList<Property> player3Propertylist;
+    private ArrayList<Property> player4Propertylist;
+
+    //Chris
+    private Stage stage;
+
+    //Vivi
+    private Deck ereigniskartenDeck;
+    private Deck gemeinschaftskartenDeck;
     private Texture kartenHintergrund;
+    private boolean showCard;
+    private Timer timerCard;
+    private LogicalGameField logicalGameField;
+
+    private SpriteBatch batch;
+    private Monopoly monopoly;
 
     public MonopolyScreen(Monopoly monopoly) {
         super(monopoly);
+
+        //Init Buttons
+        buttonSizeX = Gdx.graphics.getWidth() / 3;
+        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
+        buttonsize = (float) (Gdx.graphics.getWidth() / 3D);
+        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
+        yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
+        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
+
+        //init Player
+        //initServerPlayer();
+        initOfflinePlayer();
+
+        //init Andy
+//        gameField = new CreateGameField(monopoly);
+
+        //init Marko
+        currentPlayerId = 1;
+        screenOutput = "";
+        dice1 = new Texture("images/Dice/dice_0.png");
+        dice2 = new Texture("images/Dice/dice_0.png");
+        moneyPot = new Pot();
+        diceRoll = new DiceRoll();
+        playerList = new ArrayList<>();
+        playerOperation = new PlayerOperation(initPlayerList());
+        playerOperation.setPlayerCount(4);
+
+
+        //init Alen
+        moneyfont = new BitmapFont();
+        player1mon = 0;
+        player2mon = 0;
+        player3mon = 0;
+        player4mon = 0;
+        sum = new ArrayList<>();
+        placement = new ArrayList<>();
+        player1Propertylist = new ArrayList<>();
+        player2Propertylist = new ArrayList<>();
+        player3Propertylist = new ArrayList<>();
+        player4Propertylist = new ArrayList<>();
+
+        //init Chris
+
+
+        //Init Vivi
+        logicalGameField = new LogicalGameField();
+        ereigniskartenDeck = new Deck();
+        gemeinschaftskartenDeck = new Deck();
+        ereigniskartenDeck.initializeEreigniskartenStapel();
+        gemeinschaftskartenDeck.initializeGemeinschaftskartenStapel();
+        ereigniskartenDeck.shuffle();
+        gemeinschaftskartenDeck.shuffle();
+        kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
+        showCard = false;
+        timerCard = new Timer();
     }
 
-    public void create() {
-        batch1 = new SpriteBatch();
-        money = new BitmapFont();
-        money.setColor(Color.BLACK);
-    }
 
     @Override
     public void show() {
-        img = new Texture("images/badlogic.jpg");
-        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/OkLetsGOOO.mp3"));
-        music.play();
-        music.setVolume(100);
+        batch = new SpriteBatch();
+        stage = new Stage(new ScreenViewport());
 
-        //Spielfiguren
-        ArrayList<Property> grundstueckeRot=new ArrayList<>();
-        ArrayList<Property> grundstueckeGelb=new ArrayList<>();
-        ArrayList<Property> grundstueckeGruen=new ArrayList<>();
-        ArrayList<Property> grundstueckeBlau=new ArrayList<>();
-        Player rot = new Player(1, "Rot", 2000, grundstueckeRot, 0, Color.RED);
-        Player gelb = new Player(2, "Gelb", 2000, grundstueckeGelb, 0, Color.YELLOW);
-        Player gruen = new Player(3, "Grün", 2000, grundstueckeGruen, 0, Color.GREEN);
-        Player blau = new Player(4, "Blau", 2000, grundstueckeBlau, 0, Color.BLUE);
+        gameField = new CreateGameField(monopoly, batch, stage);
 
+        Gdx.input.setInputProcessor(stage);
+        buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons - 45, buttonsize / 2);
+        diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
+        cheatButton = drawImageButton("images/MenuButtons/report_cheat.png", xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
+        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90, 50, buttonsize / 5);
 
+        playerOperation = new PlayerOperation(initPlayerList());
+        playerOperation.setPlayerCount(4);
 
+        diceButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
+                    int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                    ArrayList<Texture> l = diceRoll.getDiceTextures();
+                    dice1 = l.get(0);
+                    dice2 = l.get(1);
+                    playerOperation.getCurrentPlayer().move(dice);
+//                checkIfPlayerIsAlone(getCurrentPlayer());
+                    playerOperation.setMoneyPotForOperation(moneyPot);
+                    screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                    playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                }
+                return true;
+            }
+        });
+
+        nextButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if(Gdx.input.justTouched()){
+                    if (!diceRoll.getOnTurn()) {
+                        screenOutput = playerOperation.nextPlayer();
+                        diceRoll.reset();
+                    }else{
+                        screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
+                    }
+                }
+                return true;
+            }
+        });
+
+        cheatButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                diceRoll.reportCheat();
+                return true;
+            }
+        });
+
+        buyButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if(Gdx.input.justTouched()){
+                    //winning();
+                    screenOutput = playerOperation.buying();
+                }return true;
+            }
+        });
+
+        stage.addActor(buyButton);
+        stage.addActor(diceButton);
+        stage.addActor(cheatButton);
+        stage.addActor(nextButton);
+
+        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(1, 1, 1, 1);
-        int yPosInitialButtons = Gdx.graphics.getHeight() / 4;
-        int xPosButtons = Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 12;
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Start Game text on screen
-        menuFont = new BitmapFont();
-        menuFont.setColor(0,0,0,1);
-        menuFont.getData().setScale(4,4);
+        moneyfont = new BitmapFont();
+        moneyfont.setColor(Color.WHITE);
+        moneyfont.getData().setScale(4, 4);
 
-        /*textButton = new TextButton("Hallo", skin);
-        textButton.setPosition(Gdx.graphics.getWidth() - 540f, Gdx.graphics.getHeight() - 180f);
-        textButton.setSize(220, 140);*/
+        stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
+        stage.draw(); //Draw the ui
 
-        monopoly.batch.begin();
+        batch.begin();
 
-        create();
+        diceRoll.checkManualPachCount();
+        diceRoll.checkForShakeCheat();
+        gameField.drawDice(dice1, dice2);
 
-        // Tap screen to go to main menu
-        menuFont.draw(monopoly.batch, "Start",  xPosButtons, yPosInitialButtons);
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isTouched()){
-            // switch Screen
-            monopoly.setScreen(new MainMenuScreen(monopoly));
+        if (player1 != null && player2 != null) {
+            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
+            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
         }
-        batch1.begin();
-        money.getData().setScale(4,4);
-        money.draw(batch1, String.valueOf(200), Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 12,200);
-        batch1.end();
-        
+        if (player3 != null) {
+            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
+        }
+        if (player4 != null) {
+            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
+        }
+        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250);
+        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
 
-        monopoly.batch.draw(img, 0, 0);
-
-        monopoly.batch.draw(img, 0, 0);
-        monopoly.batch.end();
+        batch.end();
     }
 
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+        moneyfont.dispose();
+        stage.dispose();
+        dice1.dispose();
+        dice2.dispose();
+    }
+
+    public void initServerPlayer(){
+        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
+            player1 = monopoly.getClient().getPlayer().getPlayer();
+            player1.createSpielfigur();
+            if (monopoly.getClient().getOtherPlayers().size() > 0){
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
+            }
+            if (monopoly.getClient().getOtherPlayers().size() > 1){
+                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                player3.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
+            }
+            if (monopoly.getClient().getOtherPlayers().size() > 2){
+                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
+                player4.createSpielfigur();
+                System.out.println("Your Color: " + player1.getName());
+                System.out.println("Player 2: " + player2.getName());
+            }
+        }
+        playerOperation.setPlayerCount(monopoly.getClient().getOtherPlayers().size() + 1);
+        initPlayerList();
+    }
+
+    public void initOfflinePlayer(){
+        player1 = new Player(1, "Blue", 2000, player1Propertylist, 0, Color.BLUE);
+        player1.createSpielfigur();
+        player2 = new Player(2, "Red", 2000, player2Propertylist, 0, Color.RED);
+        player2.createSpielfigur();
+        player3 = new Player(3, "Yellow", 2000, player3Propertylist, 0, Color.YELLOW);
+        player3.createSpielfigur();
+        player4 = new Player(4, "Green", 2000, player4Propertylist, 0, Color.GREEN);
+        player4.createSpielfigur();
+    }
+
+    public ArrayList<Player> initPlayerList(){
+        playerList.add(player1);
+        playerList.add(player2);
+        playerList.add(player3);
+        playerList.add(player4);
+        return playerList;
     }
 }

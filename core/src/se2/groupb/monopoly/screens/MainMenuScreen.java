@@ -102,7 +102,7 @@ public class MainMenuScreen extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if (Gdx.input.justTouched()){
-                    monopoly.setScreen(new CreateGameField(monopoly));
+                    monopoly.setScreen(new MonopolyScreen(monopoly));
                     return true;
                 }
                 return false;
@@ -118,9 +118,9 @@ public class MainMenuScreen extends GameScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        monopoly.batch.begin();
-
-        monopoly.batch.end();
+//        monopoly.batch.begin();
+//
+//        monopoly.batch.end();
 
     }
 
