@@ -30,6 +30,7 @@ import java.util.Random;
 
 import se2.groupb.monopoly.screens.GameScreenAdapter;
 import se2.groupb.monopoly.screens.InputBackProcessor;
+import se2.groupb.monopoly.screens.MonopolyScreen;
 import se2.groupb.monopoly.screens.WinningScreen;
 
 
@@ -62,56 +63,20 @@ public class CreateGameField extends GameScreenAdapter {
     private float xPosButtons;
 
     // variables for fieldoffsets
-    public float leftX = 9.535f;
-    public float leftZ = 68f;
-    public float topX = 71.05f;
-    public float topZ = 30f;
-    public float rightX = 40f;
-    public float rightZ = 3.25f;
+    private float leftX = 9.535f;
+    private float leftZ = 68f;
+    private float topX = 71.05f;
+    private float topZ = 30f;
+    private float rightX = 40f;
+    private float rightZ = 3.25f;
+    private Monopoly monopoly = new Monopoly();
+    private MonopolyScreen monopolyScreen = new MonopolyScreen(monopoly);
 
     Model[] fieldModel = new Model[40];
     ModelInstance[] fieldModInstance = new ModelInstance[40];
+    ArrayList<Player> players = monopolyScreen.initPlayerList();
 
-    private void createBotPositions() {
-        float[] botPos = {0, -6.5f, -13f, -19.5f, -26f, -32.5f, -39f, -45.5f, -52f, -58.5f, -65f};
-        for (int i = 0; i < 11; i++) {
-            positions[i] = new Vector3(0f, 3.5f, botPos[i]);
-        }
-    }
 
-    private void createLeftPositions() {
-        float[] leftPos = {9.522501f, 16.022501f, 22.522501f, 29.022501f, 35.5225f, 42.0225f, 48.5225f, 55.0225f, 61.5225f};
-        int count = 0;
-        for (int i = 11; i < 20; i++) {
-            positions[i] = new Vector3(leftPos[count], 3.5f, -68f);
-            count++;
-        }
-    }
-
-    private void createTopPositions() {
-        float[] topPos = {-65f, -58.5f, -52f, -45.5f, -39f, -32.5f, -26f, -19.5f, -13f, -6.5f, 0f};
-        int count = 0;
-        for (int i = 20; i < 31; i++) {
-            positions[i] = new Vector3(71.05f, 3.5f, topPos[count]);
-            count++;
-        }
-    }
-
-    private void createRightPositions() {
-        float[] rightPos = {61.5f, 55.0f, 48.5f, 42.0f, 35.5f, 29.0f, 22.5f, 16.0f, 9.5f};
-        int count = 0;
-        for (int i = 31; i < 40; i++) {
-            positions[i] = new Vector3(rightPos[count], 3.5f, 3.25f);
-            count++;
-        }
-    }
-
-    private void createPositions() {
-        createBotPositions();
-        createLeftPositions();
-        createTopPositions();
-        createRightPositions();
-    }
 
     public CreateGameField(Monopoly monopoly) {
         super(monopoly);
@@ -138,7 +103,7 @@ public class CreateGameField extends GameScreenAdapter {
 
         camera.update();
 //        Gdx.input.setInputProcessor(stage);
-        render(Gdx.graphics.getDeltaTime());
+//        render(Gdx.graphics.getDeltaTime());
     }
 
     @Override
@@ -191,15 +156,17 @@ public class CreateGameField extends GameScreenAdapter {
         stage.draw();
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
-        if (player1 != null && player2 != null) {
-            modelBatch.render(player1.modInstance, environment);
-            modelBatch.render(player2.modInstance, environment);
+        monopolyScreen.initOfflinePlayer();
+
+        if (players.get(0) != null && players.get(1) != null) {
+            modelBatch.render(players.get(0).modInstance, environment);
+            modelBatch.render(players.get(1).modInstance, environment);
         }
-        if (player3 != null) {
-            modelBatch.render(player3.modInstance, environment);
+        if (players.get(2) != null) {
+            modelBatch.render(players.get(2).modInstance, environment);
         }
-        if (player4 != null) {
-            modelBatch.render(player4.modInstance, environment);
+        if (players.get(3) != null) {
+            modelBatch.render(players.get(3).modInstance, environment);
         }
 
         renderModels();
@@ -244,6 +211,47 @@ public class CreateGameField extends GameScreenAdapter {
         for (int i = 0; i < fieldModel.length; i++) {
             fieldModel[i].dispose();
         }
+    }
+
+    private void createBotPositions() {
+        float[] botPos = {0, -6.5f, -13f, -19.5f, -26f, -32.5f, -39f, -45.5f, -52f, -58.5f, -65f};
+        for (int i = 0; i < 11; i++) {
+            positions[i] = new Vector3(0f, 3.5f, botPos[i]);
+        }
+    }
+
+    private void createLeftPositions() {
+        float[] leftPos = {9.522501f, 16.022501f, 22.522501f, 29.022501f, 35.5225f, 42.0225f, 48.5225f, 55.0225f, 61.5225f};
+        int count = 0;
+        for (int i = 11; i < 20; i++) {
+            positions[i] = new Vector3(leftPos[count], 3.5f, -68f);
+            count++;
+        }
+    }
+
+    private void createTopPositions() {
+        float[] topPos = {-65f, -58.5f, -52f, -45.5f, -39f, -32.5f, -26f, -19.5f, -13f, -6.5f, 0f};
+        int count = 0;
+        for (int i = 20; i < 31; i++) {
+            positions[i] = new Vector3(71.05f, 3.5f, topPos[count]);
+            count++;
+        }
+    }
+
+    private void createRightPositions() {
+        float[] rightPos = {61.5f, 55.0f, 48.5f, 42.0f, 35.5f, 29.0f, 22.5f, 16.0f, 9.5f};
+        int count = 0;
+        for (int i = 31; i < 40; i++) {
+            positions[i] = new Vector3(rightPos[count], 3.5f, 3.25f);
+            count++;
+        }
+    }
+
+    private void createPositions() {
+        createBotPositions();
+        createLeftPositions();
+        createTopPositions();
+        createRightPositions();
     }
 
     public void drawDice(Texture d1, Texture d2) {
