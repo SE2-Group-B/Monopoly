@@ -61,7 +61,7 @@ public class PlayerOperation {
         String output = "Player " + currentPlayer.getName();
         switch (property.getName()) {
             case "Los":
-                currentPlayer.changeMoney(200);
+                currentPlayer.changeMoney(400);
                 output += " landed directly on GO and earned 400€";
                 break;
             case "Gemeinschaftsfeld":
@@ -86,7 +86,6 @@ public class PlayerOperation {
                 output = moneyPot.winPot(currentPlayer);
                 break;
             case "Gehe ins Gefängnis":
-//                currentPlayer.move(gameField.positions[10]);
                 currentPlayer.goToJail();
                 output += " went to prison";
                 break;
