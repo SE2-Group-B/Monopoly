@@ -210,44 +210,6 @@ public class CreateGameField extends GameScreenAdapter {
 //        initServerPlayer();
         initOfflinePlayer();
 
-//        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
-//            player1 = monopoly.getClient().getPlayer().getPlayer();
-//            player1.createSpielfigur();
-//            if (monopoly.getClient().getOtherPlayers().size() == 1){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                System.out.println("Your Color: " + player1.getName());
-//                System.out.println("Player 2: " + player2.getName());
-//            }else if (monopoly.getClient().getOtherPlayers().size() == 2){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-//                player3.createSpielfigur();
-//                System.out.println("Your Color: " + player1.getName());
-//                System.out.println("Player 2: " + player2.getName());
-//            }else if (monopoly.getClient().getOtherPlayers().size() == 3){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-//                player3.createSpielfigur();
-//                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
-//                player4.createSpielfigur();
-//                System.out.println("Your Color: " + player1.getName());
-//                System.out.println("Player 2: " + player2.getName());
-//            }
-//        }
-//        playerCount = monopoly.getClient().getOtherPlayers().size();
-//
-//        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
-//        player1.createSpielfigur();
-//        player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
-//        player2.createSpielfigur();
-//        player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
-//        player3.createSpielfigur();
-//        player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-//        player4.createSpielfigur();
-//        playerCount = 4;
-
         camera.update();
 
 //        cameraController = new CameraInputController(camera);
@@ -270,36 +232,17 @@ public class CreateGameField extends GameScreenAdapter {
         diceButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                    if(Gdx.input.justTouched() && diceRoll.getOnTurn()) {
-                        int dice = diceRoll.roll(getCurrentPlayer());
-                        ArrayList<Texture> l = diceRoll.getDiceTextures();
-                        dice1 = l.get(0);
-                        dice2 = l.get(1);
-                        getCurrentPlayer().move(dice);
+                if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
+                    int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                    ArrayList<Texture> l = diceRoll.getDiceTextures();
+                    dice1 = l.get(0);
+                    dice2 = l.get(1);
+                    playerOperation.getCurrentPlayer().move(dice);
 //                checkIfPlayerIsAlone(getCurrentPlayer());
-                        getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
-                        checkCurrentProperty();
-
-                    }
-//                if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
-//                    int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
-//                    ArrayList<Texture> l = diceRoll.getDiceTextures();
-//                    dice1 = l.get(0);
-//                    dice2 = l.get(1);
-//                    playerOperation.getCurrentPlayer().move(dice);
-////                checkIfPlayerIsAlone(getCurrentPlayer());
-//                    playerOperation.getCurrentPlayer().move(positions[playerOperation.getCurrentPlayer().getPosition()]);
-//                    playerOperation.setMoneyPotForOperation(moneyPot);
-//                    screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
-//                    diceRoll.reset();
-//                }
-//                if (Gdx.input.justTouched()) {
-//                    playerOperation.rollDiceOperation();
-//                    ArrayList<Texture> l = playerOperation.returnDiceTextures();
-//                    dice1 = l.get(0);
-//                    dice2 = l.get(1);
-//                    playerOperation.getCurrentPlayer().move(positions[playerOperation.getCurrentPlayer().getPosition()]);
-//                }
+                    playerOperation.getCurrentPlayer().move(positions[playerOperation.getCurrentPlayer().getPosition()]);
+                    playerOperation.setMoneyPotForOperation(moneyPot);
+                    screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                }
                     return true;
             }
         });
@@ -309,12 +252,11 @@ public class CreateGameField extends GameScreenAdapter {
             public boolean handle(Event event) {
                 if(Gdx.input.justTouched()){
                     if (!diceRoll.getOnTurn()) {
-//                        screenOutput = playerOperation.nextPlayer();
-                        screenOutput = nextPlayer();
+                        screenOutput = playerOperation.nextPlayer();
+                        diceRoll.reset();
                     }else{
-                        screenOutput = "It's still " + getCurrentPlayer().getName() + "'s turn";
+                        screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
                     }
-//                    playerOperation.nextPlayerOperation();
                 }
                 return true;
             }
@@ -324,7 +266,6 @@ public class CreateGameField extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 diceRoll.reportCheat();
-//                playerOperation.reportCheatOperation();
                 return true;
             }
         });
@@ -334,7 +275,7 @@ public class CreateGameField extends GameScreenAdapter {
             public boolean handle(Event event) {
                 if(Gdx.input.justTouched()){
                    //winning();
-                    buying();
+                    screenOutput = playerOperation.buying();
                 }return true;
             }
         });
@@ -494,137 +435,23 @@ public class CreateGameField extends GameScreenAdapter {
             spriteBatch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
         }
 
-        /**
-         * Method for output of the field on the Screen
-         */
-        private void checkCurrentProperty () {
-            int playerPosition = getCurrentPlayer().getPosition();
-            Property p = gameField.getGameField()[playerPosition];
-            String output = "Player " + getCurrentPlayer().getName() + " is on " + p.getName();
-            if (p instanceof Street) {
-                if (isEnemyProperty(playerPosition)) {
-                    output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), ((Street) p).getRent());
-                }
-            } else if (p instanceof Trainstation) {
-                if (isEnemyProperty(playerPosition)) {
-                    output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), ((Trainstation) p).getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
-                }
-            } else if (p instanceof PenaltyField) {
-                output = moneyPot.donateToPot(getCurrentPlayer(), ((PenaltyField) p).getPenalty());
-            } else if (p instanceof Property) {
-                output = checkSoleProperty(p);
-            }
-            screenOutput = output;
-        }
-
-        private boolean isEnemyProperty(int position) {
-            return (isSomeonesProperty(position) && (getCurrentPlayer().getId() != getPropertyOwner(position).getId()));
-        }
-
-        private String screenOutputCheck () {
-            String playerName = getCurrentPlayer().getName();
-            String playerPosition = gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
-            return playerName + " befindet sich bei " + playerPosition;
-        }
-
-        /**
-         * Method for controll of special fields as well as their methods
-         * @param property to be controlled
-         * @return additional Output text for the screen for special fields
-         */
-        private String checkSoleProperty (Property property){
-            String output = "Player " + getCurrentPlayer().getName();
-            switch (property.getName()) {
-                case "Los":
-                    getCurrentPlayer().changeMoney(200);
-                    output += " landed directly on GO and earned 400€";
-                    break;
-                case "Gemeinschaftsfeld":
-                    output += " stepped on a Gemeinschaftsfeld.";
-                kartenHintergrund = getCurrentPlayer().drawCard(gemeinschaftskartenDeck);
-                showCard = true;
-                    break;
-                case "Ereignisfeld":
-                    output += " stepped on a Ereignisfeld.";
-                kartenHintergrund = getCurrentPlayer().drawCard(ereigniskartenDeck);
-                showCard = true;
-                    break;
-                case "Gefängnis":
-                    if (getCurrentPlayer().getPrison()) {
-                        int hefn = 3 - getCurrentPlayer().getPrisonCount();
-                        output += " sits " + hefn + " more rounds in prison";
-                    } else {
-                        output += " is just visiting the prison";
-                    }
-                    break;
-                case "Sofa":
-                    output = moneyPot.winPot(getCurrentPlayer());
-                    break;
-                case "Gehe ins Gefängnis":
-                    getCurrentPlayer().move(positions[10]);
-                    getCurrentPlayer().goToJail();
-                    output += " went to prison";
-                    break;
-            }
-            return output;
-        }
-
+//
+//        private String screenOutputCheck () {
+//            String playerName = getCurrentPlayer().getName();
+//            String playerPosition = gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
+//            return playerName + " befindet sich bei " + playerPosition;
+//        }
+//
         /**
          * method for the prison
          */
-        private void checkPrison () {
-            int playerPosition = getCurrentPlayer().getPosition();
-            if (playerPosition == 30) {
-                getCurrentPlayer().setPrison(true);
-            }
-        }
-
-        private boolean isSomeonesProperty ( int position){
-            return gameField.getGameField()[position].getOwnerId() != 0;
-        }
-
-        private Player getPropertyOwner ( int pos){
-            return getPlayerById(gameField.getGameField()[pos].getOwnerId());
-        }
-
-        private String nextPlayer () {
-            if (currentPlayerId == playerCount) {
-                currentPlayerId = 1;
-            } else {
-                currentPlayerId++;
-            }
-            diceRoll.reset();
-            return "It's " + getCurrentPlayer().getName() + "'s turn now";
-        }
-
-    /**
-     * Change Method with Server
-     */
-        private Player getCurrentPlayer () {
-            return getPlayerById(currentPlayerId);
-        }
-
-        private Player getPlayerById ( int id){
-            Player p;
-            switch (id) {
-                case 1:
-                    p = player1;
-                    break;
-                case 2:
-                    p = player2;
-                    break;
-                case 3:
-                    p = player3;
-                    break;
-                case 4:
-                    p = player4;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + currentPlayerId);
-            }
-            return p;
-        }
-
+//        private void checkPrison () {
+//            int playerPosition = getCurrentPlayer().getPosition();
+//            if (playerPosition == 30) {
+//                getCurrentPlayer().setPrison(true);
+//            }
+//        }
+//
         public static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton,
                                                 float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
             return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
@@ -737,89 +564,112 @@ public class CreateGameField extends GameScreenAdapter {
             monopoly.setScreen(new WinningScreen(monopoly, sum, placement));
         }
 
-        public void buying() {
-            int pos = getCurrentPlayer().getPosition();
-            if (!isSomeonesProperty(pos)) {
-                String propertyType = getPropertyType(pos);
-                switch (propertyType) {
-                    case "Street":
-                        Street s = (Street) gameField.getGameField()[pos];
-                        getCurrentPlayer().changeMoney(-s.getPrice());
-                        gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
-                        break;
-                    case "Trainstation":
-                        Trainstation t = (Trainstation) gameField.getGameField()[pos];
-                        getCurrentPlayer().changeMoney(-t.getPrice());
-                        gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
-                        getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions()+1);
-                        //t.increaseRent();
-                        break;
-                    default:
-                        if (gameField.getGameField()[pos].getOwnerId() == getCurrentPlayer().getId()) {
-                            if (propertyType.equals("Street")) {
-                                Street s1 = (Street) gameField.getGameField()[pos];
-                                boolean bought = s1.buyhouse();
-                                if (bought) {
-                                    getCurrentPlayer().changeMoney(-s1.getHousePrice());
-                                } else {
-                                    break;
-                                }
-                            } else {
-                                screenOutput = "Hier kannst du nichts zukaufen";
-                            }
-                        } else {
-                            screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
-                        }
+//        public void buying() {
+//            int pos = playerOperation.getCurrentPlayer().getPosition();
+//            if (!playerOperation.isSomeonesProperty(pos)) {
+//                String propertyType = getPropertyType(pos);
+//                switch (propertyType) {
+//                    case "Street":
+//                        Street s = (Street) gameField.getGameField()[pos];
+//                        playerOperation.getCurrentPlayer().changeMoney(-s.getPrice());
+//                        gameField.getGameField()[pos].setOwnerId(playerOperation.getCurrentPlayer().getId());
+//                        break;
+//                    case "Trainstation":
+//                        Trainstation t = (Trainstation) gameField.getGameField()[pos];
+//                        playerOperation.getCurrentPlayer().changeMoney(-t.getPrice());
+//                        gameField.getGameField()[pos].setOwnerId(playerOperation.getCurrentPlayer().getId());
+//                        playerOperation.getCurrentPlayer().setNumOfTrainstaitions(playerOperation.getCurrentPlayer().getNumOfTrainstaitions()+1);
+//                        //t.increaseRent();
+//                        break;
+//                    default:
+//                        if (gameField.getGameField()[pos].getOwnerId() == playerOperation.getCurrentPlayer().getId()) {
+//                            if (propertyType.equals("Street")) {
+//                                Street s1 = (Street) gameField.getGameField()[pos];
+//                                boolean bought = s1.buyhouse();
+//                                if (bought) {
+//                                    playerOperation.getCurrentPlayer().changeMoney(-s1.getHousePrice());
+//                                } else {
+//                                    break;
+//                                }
+//                            } else {
+//                                screenOutput = "Hier kannst du nichts zukaufen";
+//                            }
+//                        } else {
+//                            screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
+//                        }
+//                }
+//            } else {
+//                screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
+//            }
+//        }
+
+//        public String buying() {
+//            int playerPosition = playerOperation.getCurrentPlayer().getPosition();
+//            Property p = gameField.getGameField()[playerPosition];
+//            String output = "Player " + playerOperation.getCurrentPlayer().getName();
+//            if (!playerOperation.isSomeonesProperty(playerPosition)) {
+//                if (p instanceof Street) {
+//                    gameField.getGameField()[playerPosition].setOwnerId(playerOperation.getCurrentPlayer().getId());
+//                    output += " bought " + p.getName() + " for " + ((Street) p).getPrice() + "€";
+//                    playerOperation.getCurrentPlayer().changeMoney(-((Street) p).getPrice());
+//                } else if (p instanceof Trainstation) {
+//                    gameField.getGameField()[playerPosition].setOwnerId(playerOperation.getCurrentPlayer().getId());
+//                    playerOperation.getCurrentPlayer().setNumOfTrainstaitions(playerOperation.getCurrentPlayer().getNumOfTrainstaitions()+1);
+//                    output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";;
+//                    playerOperation.getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
+//                } else {
+//                    output = "You can't buy this Property";
+//                }
+//            }else {
+//                output = "You can't buy this Property";
+//            }
+//            return output;
+//        }
+
+        private ArrayList<Player> initPlayerList(){
+            players.add(player1);
+            players.add(player2);
+            players.add(player3);
+            players.add(player4);
+            return players;
+        }
+
+        private void initServerPlayer(){
+            if(!monopoly.getClient().getOtherPlayers().isEmpty()){
+                player1 = monopoly.getClient().getPlayer().getPlayer();
+                player1.createSpielfigur();
+                if (monopoly.getClient().getOtherPlayers().size() > 0){
+                    player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                    player2.createSpielfigur();
+                    System.out.println("Your Color: " + player1.getName());
+                    System.out.println("Player 2: " + player2.getName());
                 }
-            } else {
-                screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
+                if (monopoly.getClient().getOtherPlayers().size() > 1){
+                    player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                    player3.createSpielfigur();
+                    System.out.println("Your Color: " + player1.getName());
+                    System.out.println("Player 2: " + player2.getName());
+                }
+                if (monopoly.getClient().getOtherPlayers().size() > 2){
+                    player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
+                    player4.createSpielfigur();
+                    System.out.println("Your Color: " + player1.getName());
+                    System.out.println("Player 2: " + player2.getName());
+                }
             }
+            playerOperation.setPlayerCount(monopoly.getClient().getOtherPlayers().size() + 1);
         }
 
-    private ArrayList<Player> initPlayerList(){
-        players.add(player1);
-        players.add(player2);
-        players.add(player3);
-        players.add(player4);
-        return players;
-    }
-
-    private void initServerPlayer(){
-        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
-            player1 = monopoly.getClient().getPlayer().getPlayer();
+        private void initOfflinePlayer(){
+            player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
             player1.createSpielfigur();
-            if (monopoly.getClient().getOtherPlayers().size() > 0){
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }
-            if (monopoly.getClient().getOtherPlayers().size() > 1){
-                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-                player3.createSpielfigur();
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }
-            if (monopoly.getClient().getOtherPlayers().size() > 2){
-                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
-                player4.createSpielfigur();
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }
+            player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
+            player2.createSpielfigur();
+            player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
+            player3.createSpielfigur();
+            player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
+            player4.createSpielfigur();
+            playerCount = 4;
         }
-        playerOperation.setPlayerCount(monopoly.getClient().getOtherPlayers().size() + 1);
-    }
-
-    private void initOfflinePlayer(){
-        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
-        player1.createSpielfigur();
-        player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
-        player2.createSpielfigur();
-        player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
-        player3.createSpielfigur();
-        player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        player4.createSpielfigur();
-        playerCount = 4;
-    }
 }
 

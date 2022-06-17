@@ -1,29 +1,19 @@
 package se2.groupb.monopoly;
 
-
-import com.badlogic.gdx.graphics.Texture;
-
 import java.util.ArrayList;
 
-
-
 public class PlayerOperation {
-    //    private CreateGameField gameField;
     private LogicalGameField logicalGameField;
     private ArrayList<Player> playerList;
     private Player currentPlayer;
     private Pot moneyPot;
     private int currentPlayerId;
     private int playerCount;
-//    private DiceRoll diceRoll;
-//    private ArrayList<Texture> list;
 
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
-//        gameField = new CreateGameField(gameField.monopoly);
         logicalGameField = new LogicalGameField();
         currentPlayerId = 1;
-//        diceRoll = new DiceRoll();
     }
 
     public boolean isSomeonesProperty(int position) {
@@ -57,7 +47,7 @@ public class PlayerOperation {
             }
         } else if (p instanceof PenaltyField) {
             output = moneyPot.donateToPot(currentPlayer, ((PenaltyField) p).getPenalty());
-        } else if (p instanceof Property) {
+        } else {
             output = checkSoleProperty(p);
         }
         return output;
@@ -67,7 +57,7 @@ public class PlayerOperation {
         return (isSomeonesProperty(position) && (currentPlayer.getId() != getPropertyOwner(position).getId()));
     }
 
-    private String checkSoleProperty(Property property) {
+    public String checkSoleProperty(Property property) {
         String output = "Player " + currentPlayer.getName();
         switch (property.getName()) {
             case "Los":
@@ -121,35 +111,26 @@ public class PlayerOperation {
         this.playerCount = playerCount;
     }
 
-//    public void reportCheatOperation() {
-//        diceRoll.reportCheat();
-//    }
-//
-//    public String nextPlayerOperation() {
-//        if (!diceRoll.getOnTurn()) {
-//            return nextPlayer();
-//        }
-//        return "You have to press the next Player button";
-//    }
-
-//    public String rollDiceOperation() {
-//        String output = "";
-//        if (diceRoll.getOnTurn()) {
-//            int dice = diceRoll.roll(getCurrentPlayer());
-//            list = diceRoll.getDiceTextures();
-////            dice1 = l.get(0);
-////            dice2 = l.get(1);
-//            getCurrentPlayer().move(dice);
-////                checkIfPlayerIsAlone(getCurrentPlayer());
-////            getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
-//            setMoneyPotForOperation(moneyPot);
-//            output = checkCurrentProperty(getCurrentPlayer());
-//            diceRoll.reset();
-//        }
-//        return output;
-//    }
-
-//    public ArrayList<Texture> returnDiceTextures(){
-//        return list;
-//    }
+    public String buying() {
+        int playerPosition = getCurrentPlayer().getPosition();
+        Property p = logicalGameField.getGameField()[playerPosition];
+        String output = "Player " + getCurrentPlayer().getName();
+        if (!isSomeonesProperty(playerPosition)) {
+            if (p instanceof Street) {
+                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                output += " bought " + p.getName() + " for " + ((Street) p).getPrice() + "€";
+                getCurrentPlayer().changeMoney(-((Street) p).getPrice());
+            } else if (p instanceof Trainstation) {
+                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions()+1);
+                output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";;
+                getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
+            } else {
+                output = "You can't buy this Property";
+            }
+        }else {
+            output = "You can't buy this Property";
+        }
+        return output;
+    }
 }
