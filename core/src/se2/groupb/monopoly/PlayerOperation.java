@@ -3,7 +3,6 @@ package se2.groupb.monopoly;
 import java.util.ArrayList;
 
 public class PlayerOperation {
-    private CreateGameField gameField;
     private LogicalGameField logicalGameField;
     private ArrayList<Player> playerList;
     private Player currentPlayer;
@@ -13,16 +12,15 @@ public class PlayerOperation {
 
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
-        gameField = new CreateGameField(gameField.monopoly);
         logicalGameField = new LogicalGameField();
         currentPlayerId = 1;
     }
 
-    private boolean isSomeonesProperty(int position) {
+    public boolean isSomeonesProperty(int position) {
         return logicalGameField.getGameField()[position].getOwnerId() != 0;
     }
 
-    private Player getPropertyOwner(int pos) {
+    public Player getPropertyOwner(int pos) {
         return getPlayerById(logicalGameField.getGameField()[pos].getOwnerId());
     }
 
@@ -49,21 +47,21 @@ public class PlayerOperation {
             }
         } else if (p instanceof PenaltyField) {
             output = moneyPot.donateToPot(currentPlayer, ((PenaltyField) p).getPenalty());
-        } else if (p instanceof Property) {
+        } else {
             output = checkSoleProperty(p);
         }
         return output;
     }
 
-    private boolean isEnemyProperty(int position) {
+    public boolean isEnemyProperty(int position) {
         return (isSomeonesProperty(position) && (currentPlayer.getId() != getPropertyOwner(position).getId()));
     }
 
-    private String checkSoleProperty(Property property) {
+    public String checkSoleProperty(Property property) {
         String output = "Player " + currentPlayer.getName();
         switch (property.getName()) {
             case "Los":
-                currentPlayer.changeMoney(200);
+                currentPlayer.changeMoney(400);
                 output += " landed directly on GO and earned 400€";
                 break;
             case "Gemeinschaftsfeld":
@@ -88,7 +86,6 @@ public class PlayerOperation {
                 output = moneyPot.winPot(currentPlayer);
                 break;
             case "Gehe ins Gefängnis":
-                currentPlayer.move(gameField.positions[10]);
                 currentPlayer.goToJail();
                 output += " went to prison";
                 break;
@@ -111,5 +108,28 @@ public class PlayerOperation {
 
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
+    }
+
+    public String buying() {
+        int playerPosition = getCurrentPlayer().getPosition();
+        Property p = logicalGameField.getGameField()[playerPosition];
+        String output = "Player " + getCurrentPlayer().getName();
+        if (!isSomeonesProperty(playerPosition)) {
+            if (p instanceof Street) {
+                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                output += " bought " + p.getName() + " for " + ((Street) p).getPrice() + "€";
+                getCurrentPlayer().changeMoney(-((Street) p).getPrice());
+            } else if (p instanceof Trainstation) {
+                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions()+1);
+                output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";;
+                getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
+            } else {
+                output = "You can't buy this Property";
+            }
+        }else {
+            output = "You can't buy this Property";
+        }
+        return output;
     }
 }
