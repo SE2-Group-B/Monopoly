@@ -155,7 +155,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
 
-        gameField = new CreateGameField(monopoly, batch, stage);
+        gameField = new CreateGameField(monopoly);
 
         Gdx.input.setInputProcessor(stage);
         buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons - 45, buttonsize / 2);

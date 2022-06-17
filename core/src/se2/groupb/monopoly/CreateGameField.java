@@ -113,12 +113,10 @@ public class CreateGameField extends GameScreenAdapter {
         createRightPositions();
     }
 
-    public CreateGameField(Monopoly monopoly, SpriteBatch spriteBatch, Stage stage) {
+    public CreateGameField(Monopoly monopoly) {
         super(monopoly);
-//        this.stage = stage;
         this.stage = new Stage(new ScreenViewport());
         this.spriteBatch = new SpriteBatch();
-//        this.spriteBatch = spriteBatch;
         GameFieldUnits gf = new GameFieldUnits();
         gf.createField("monopoly");
         fields = gf.getFields();
@@ -139,11 +137,12 @@ public class CreateGameField extends GameScreenAdapter {
         createModels();
 
         camera.update();
+//        Gdx.input.setInputProcessor(stage);
+        render(Gdx.graphics.getDeltaTime());
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
     }
 
     public void checkIfPlayerIsAlone(Player player) {
