@@ -139,7 +139,7 @@ public class CreateGameField extends GameScreenAdapter {
 
     public void checkIfPlayerIsAlone(Player player) {
         for (int i = 0; i < players.size(); i++) {
-            if (player.getId() != players.get(i).getId() && player.getPosition() == players.get(i).getPosition()) {
+            if (player.getId() != players.get(i).getId() && player.getPosition() == players.get(i).getPosition() && !players.get(i).isNotAlone()) {
                 player.setNotAlone(true);
                 players.get(i).setNotAlone(true);
             }
@@ -151,42 +151,43 @@ public class CreateGameField extends GameScreenAdapter {
         Vector3[] newPos = positions.clone();
 
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).isNotAlone()) {
+            if (players.get(i).isNotAlone() && newPos != positions) {
                 switch (i) {
                     case 0:
                         newPos[players.get(i).getPosition()].x -= 2;
                         newPos[players.get(i).getPosition()].z += 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
-                        players.get(i).setNotAlone(false);
+//                        players.get(i).setNotAlone(false);
 
                         break;
                     case 1:
                         newPos[players.get(i).getPosition()].x += 2;
                         newPos[players.get(i).getPosition()].z += 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
-                        players.get(i).setNotAlone(false);
+//                        players.get(i).setNotAlone(false);
 
                         break;
                     case 2:
                         newPos[players.get(i).getPosition()].x -= 2;
                         newPos[players.get(i).getPosition()].z -= 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
-                        players.get(i).setNotAlone(false);
+//                        players.get(i).setNotAlone(false);
 
                         break;
                     case 3:
                         newPos[players.get(i).getPosition()].x += 2;
                         newPos[players.get(i).getPosition()].z -= 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
-                        players.get(i).setNotAlone(false);
+//                        players.get(i).setNotAlone(false);
 
                         break;
                     default:
                         throw new IllegalArgumentException("ERROR");
                 }
             }
+            newPos = positions.clone();
         }
-        newPos = positions.clone();
+
     }
 
 
