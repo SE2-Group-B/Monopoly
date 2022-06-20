@@ -81,13 +81,13 @@ public class ClientFoundation {
     }
 
     private void handlePlayerInformationMessages(PlayerInformation object) {
-        if (((PlayerInformation) object).getMessageType().equals("INITIALIZE_GAME")) {
+        if (object.getMessageType().equals("INITIALIZE_GAME")) {
             // Server sends initialization of players
             // then do something
-            if (((PlayerInformation) object).getIsPlayer()) {
+            if (object.getIsPlayer()) {
                 player = (PlayerInformation) object;
-            } else if (!((PlayerInformation) object).getIsPlayer()) {
-                ((PlayerInformation) object).getMessageType();
+            } else if (!object.getIsPlayer()) {
+                object.getMessageType();
                 otherPlayers.add((PlayerInformation) object);
             }
         }
