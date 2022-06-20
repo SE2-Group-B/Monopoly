@@ -1,9 +1,7 @@
 package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
@@ -111,11 +108,10 @@ public class MonopolyScreen extends GameScreenAdapter {
                 player1 = monopoly.getClient().getPlayer().getPlayer();
                 player1.createSpielfigur();
                 playerList.add(player1);
-                if (monopoly.getClient().getOtherPlayers().size() > 0) {
-                    player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                    player2.createSpielfigur();
-                    playerList.add(player2);
-                }
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                playerList.add(player2);
+
                 if (monopoly.getClient().getOtherPlayers().size() > 1) {
                     player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
                     player3.createSpielfigur();
