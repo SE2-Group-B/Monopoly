@@ -153,16 +153,16 @@ public class CreateGameField extends GameScreenAdapter {
         Vector3[] newPos = positions.clone();
 
         if (playersToPosition.size() > 0) {
-            for (Player player : playersToPosition) {
-                if (pO.getCurrentPlayer().getId() != player.getId()) {
-                    if (player.getPosition() >= 0 && player.getPosition() <= 10 || player.getPosition() >= 21 && player.getPosition() <= 31) {
-                        newPos[player.getPosition()].x += 3;
-//                        players.get(pO.getCurrentPlayer().getId()).move(positions[players.get(currentPos).getPosition()]); //////???? what am i doing??????
-                        player.move(newPos[player.getPosition()]);
+            for (int i = 0; i < playersToPosition.size(); i++) {
+                if (pO.getCurrentPlayer() != playersToPosition.get(i)) {
+                    if (playersToPosition.get(i).getPosition() >= 0 && playersToPosition.get(i).getPosition() <= 10 || playersToPosition.get(i).getPosition() >= 21 && playersToPosition.get(i).getPosition() <= 31) {
+                        newPos[playersToPosition.get(i).getPosition()].x += 3;
+                        playersToPosition.get(i+1).move(newPos[playersToPosition.get(i).getPosition()]);
+                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
                     }
-                    if (player.getPosition() >= 11 && player.getPosition() <= 19 || player.getPosition() >= 32 && player.getPosition() <= 40) {
-                        newPos[player.getPosition()].z += 3;
-                        player.move(newPos[player.getPosition()]);
+                    if (playersToPosition.get(i).getPosition() >= 11 && playersToPosition.get(i).getPosition() <= 19 || playersToPosition.get(i).getPosition() >= 32 && playersToPosition.get(i).getPosition() <= 40) {
+                        newPos[playersToPosition.get(i).getPosition()].z += 3;
+                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
                     }
                 }
             }
