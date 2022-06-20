@@ -157,24 +157,28 @@ public class CreateGameField extends GameScreenAdapter {
                         newPos[players.get(i).getPosition()].x -= 2;
                         newPos[players.get(i).getPosition()].z += 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
+                        players.get(i).setNotAlone(false);
 
                         break;
                     case 1:
                         newPos[players.get(i).getPosition()].x += 2;
                         newPos[players.get(i).getPosition()].z += 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
+                        players.get(i).setNotAlone(false);
 
                         break;
                     case 2:
                         newPos[players.get(i).getPosition()].x -= 2;
                         newPos[players.get(i).getPosition()].z -= 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
+                        players.get(i).setNotAlone(false);
 
                         break;
                     case 3:
                         newPos[players.get(i).getPosition()].x += 2;
                         newPos[players.get(i).getPosition()].z -= 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
+                        players.get(i).setNotAlone(false);
 
                         break;
                     default:
