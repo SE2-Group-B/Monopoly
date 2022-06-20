@@ -144,6 +144,8 @@ public class CreateGameField extends GameScreenAdapter {
         camera.far = 500000f;
         createModels();
 
+
+
         camera.update();
 
 //        cameraController = new CameraInputController(camera);
