@@ -295,4 +295,8 @@ public class CreateGameField extends GameScreenAdapter {
             fieldModInstance[i].transform.rotate(vector3Rotate, degrees);
         }
     }
+
+    public void setPlayers(){
+
+    }
 }

@@ -103,8 +103,8 @@ public class MonopolyScreen extends GameScreenAdapter {
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
         //init Player
-        //initServerPlayer();
-        initOfflinePlayer();
+
+//        initOfflinePlayer();
 
         //init Andy
 //        gameField = new CreateGameField(monopoly);
@@ -148,6 +148,8 @@ public class MonopolyScreen extends GameScreenAdapter {
         kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
         showCard = false;
         timerCard = new Timer();
+
+        initServerPlayer();
     }
 
 
@@ -155,6 +157,7 @@ public class MonopolyScreen extends GameScreenAdapter {
     public void show() {
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
+
 
         gameField = new CreateGameField(monopoly);
 
@@ -279,6 +282,11 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public void initServerPlayer(){
+        if(monopoly.getClient() == null){
+            System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbllllllllllllllllllllllllllll");
+        }else{
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        }
         if(!monopoly.getClient().getOtherPlayers().isEmpty()){
             player1 = monopoly.getClient().getPlayer().getPlayer();
             player1.createSpielfigur();
@@ -302,7 +310,6 @@ public class MonopolyScreen extends GameScreenAdapter {
             }
         }
         playerOperation.setPlayerCount(monopoly.getClient().getOtherPlayers().size() + 1);
-        initPlayerList();
     }
 
     public void initOfflinePlayer(){

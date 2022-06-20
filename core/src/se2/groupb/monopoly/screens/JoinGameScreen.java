@@ -195,6 +195,7 @@ public class JoinGameScreen extends GameScreenAdapter {
                 InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
                 Gdx.input.setInputProcessor(inputMultiplexer);
                 allConnected = true;
+                while(monopoly.getClient().getPlayer() == null){}
                 switchScreenDelayed(this, 0.00000001f);
             } else {
                 allConnected = false;

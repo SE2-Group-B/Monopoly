@@ -107,6 +107,7 @@ public class HostGameScreen extends GameScreenAdapter {
                         if (client.getClient().isConnected()) {
                             // add client to monopoly
                             monopoly.addClient(client);
+                            System.out.println(monopoly.getClient());
                             isConnected = true;
                             connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
 
@@ -157,6 +158,7 @@ public class HostGameScreen extends GameScreenAdapter {
                                     InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
                                     Gdx.input.setInputProcessor(inputMultiplexer);
                                     allJoined = true;
+                                    System.out.println(monopoly.getClient().getPlayer().getPlayer().getName());
                                     switchScreenDelayed(getScreen(), 0.000000001f);
                                 } else allJoined = false;
                             }
