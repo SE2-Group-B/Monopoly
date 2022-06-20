@@ -41,6 +41,11 @@ public class CreateGameField extends GameScreenAdapter {
     public boolean showCard;
     private Timer timerCard;
     private PlayerOperation pO;
+    private boolean p1 = false;
+    private boolean p2 = false;
+    private boolean p3 = false;
+    private boolean p4 = false;
+
 
     // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
@@ -133,40 +138,87 @@ public class CreateGameField extends GameScreenAdapter {
     }
 
     public void checkIfPlayerIsAlone(Player player) {
-        ArrayList<Player> playersToPosition = new ArrayList<>();
-        if (player.getPosition() == player1.getPosition() && player != player1) {
-            playersToPosition.add(player1);
+        for (int i = 0; i < players.size(); i++) {
+            if (player.getId() != players.get(i).getId() && player.getPosition() == players.get(i).getPosition()) {
+                player.setNotAlone(true);
+                players.get(i).setNotAlone(true);
+            }
         }
-        if (player.getPosition() == player2.getPosition() && player != player2) {
-            playersToPosition.add(player2);
-        }
-        if (player.getPosition() == player3.getPosition() && player != player3) {
-            playersToPosition.add(player3);
-        }
-        if (player.getPosition() == player4.getPosition() && player != player4) {
-            playersToPosition.add(player4);
-        }
-        setMultiplePlayersOnField(playersToPosition);
+        setMultiplePlayersOnField();
     }
 
-    public void setMultiplePlayersOnField(ArrayList<Player> playersToPosition) {
+    public void setMultiplePlayersOnField() {
         Vector3[] newPos = positions.clone();
 
-        if (playersToPosition.size() > 0) {
-            for (int i = 0; i < playersToPosition.size(); i++) {
-                if (pO.getCurrentPlayer() != playersToPosition.get(i)) {
-                    if (playersToPosition.get(i).getPosition() >= 0 && playersToPosition.get(i).getPosition() <= 10 || playersToPosition.get(i).getPosition() >= 21 && playersToPosition.get(i).getPosition() <= 31) {
-                        newPos[playersToPosition.get(i).getPosition()].x += 3;
-                        playersToPosition.get(i+1).move(newPos[playersToPosition.get(i).getPosition()]);
-                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
-                    }
-                    if (playersToPosition.get(i).getPosition() >= 11 && playersToPosition.get(i).getPosition() <= 19 || playersToPosition.get(i).getPosition() >= 32 && playersToPosition.get(i).getPosition() <= 40) {
-                        newPos[playersToPosition.get(i).getPosition()].z += 3;
-                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
-                    }
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).isNotAlone()) {
+                switch (i) {
+                    case 0:
+                        newPos[players.get(i).getPosition()].x -= 5;
+                        newPos[players.get(i).getPosition()].z += 5;
+                        players.get(i).move(newPos[players.get(i).getPosition()]);
+                        
+                        break;
+                    case 1:
+                        newPos[players.get(i).getPosition()].x += 5;
+                        newPos[players.get(i).getPosition()].z += 5;
+                        players.get(i).move(newPos[players.get(i).getPosition()]);
+
+                        break;
+                    case 2:
+                        newPos[players.get(i).getPosition()].x -= 5;
+                        newPos[players.get(i).getPosition()].z -= 5;
+                        players.get(i).move(newPos[players.get(i).getPosition()]);
+
+                        break;
+                    case 3:
+                        newPos[players.get(i).getPosition()].x += 5;
+                        newPos[players.get(i).getPosition()].z -= 5;
+                        players.get(i).move(newPos[players.get(i).getPosition()]);
+
+                        break;
+                    default:
+                        throw new IllegalArgumentException("ERROR");
                 }
             }
         }
+
+
+//    public void checkIfPlayerIsAlone(Player player) {
+//        ArrayList<Player> playersToPosition = new ArrayList<>();
+//        if (player.getPosition() == player1.getPosition() && player != player1) {
+//            playersToPosition.add(player1);
+//        }
+//        if (player.getPosition() == player2.getPosition() && player != player2) {
+//            playersToPosition.add(player2);
+//        }
+//        if (player.getPosition() == player3.getPosition() && player != player3) {
+//            playersToPosition.add(player3);
+//        }
+//        if (player.getPosition() == player4.getPosition() && player != player4) {
+//            playersToPosition.add(player4);
+//        }
+//        setMultiplePlayersOnField(playersToPosition);
+//    }
+
+//    public void setMultiplePlayersOnField(ArrayList<Player> playersToPosition) {
+//        Vector3[] newPos = positions.clone();
+//
+//        if (playersToPosition.size() > 0) {
+//            for (int i = 0; i < playersToPosition.size(); i++) {
+//                if (pO.getCurrentPlayer() != playersToPosition.get(i)) {
+//                    if (playersToPosition.get(i).getPosition() >= 0 && playersToPosition.get(i).getPosition() <= 10 || playersToPosition.get(i).getPosition() >= 21 && playersToPosition.get(i).getPosition() <= 31) {
+//                        newPos[playersToPosition.get(i).getPosition()].x += 5;
+//                        playersToPosition.get(i+1).move(newPos[playersToPosition.get(i).getPosition()]);
+//                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
+//                    }
+//                    if (playersToPosition.get(i).getPosition() >= 11 && playersToPosition.get(i).getPosition() <= 19 || playersToPosition.get(i).getPosition() >= 32 && playersToPosition.get(i).getPosition() <= 40) {
+//                        newPos[playersToPosition.get(i).getPosition()].z += 5;
+//                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
+//                    }
+//                }
+//            }
+//        }
     }
 
 
@@ -187,16 +239,16 @@ public class CreateGameField extends GameScreenAdapter {
 
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
-        if(playerCount > 0){
+        if (playerCount > 0) {
             modelBatch.render(players.get(0).modInstance, environment);
         }
-        if(playerCount > 1){
+        if (playerCount > 1) {
             modelBatch.render(players.get(1).modInstance, environment);
         }
-        if(playerCount > 2){
+        if (playerCount > 2) {
             modelBatch.render(players.get(2).modInstance, environment);
         }
-        if(playerCount > 3){
+        if (playerCount > 3) {
             modelBatch.render(players.get(3).modInstance, environment);
         }
 
