@@ -1,9 +1,6 @@
 package se2.groupb.monopoly;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,23 +12,12 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
-
 import se2.groupb.monopoly.screens.GameScreenAdapter;
-import se2.groupb.monopoly.screens.InputBackProcessor;
-import se2.groupb.monopoly.screens.WinningScreen;
-
 
 public class CreateGameField extends GameScreenAdapter {
 
@@ -42,7 +28,6 @@ public class CreateGameField extends GameScreenAdapter {
     private ModelBatch modelBatch;
     private BitmapFont moneyfont;
     private Stage stage;
-    private LogicalGameField gameField;
     private Field[] fields;
     private Player player1;
     private Player player2;
@@ -50,20 +35,15 @@ public class CreateGameField extends GameScreenAdapter {
     private Player player4;
     private ArrayList<Player> players;
     private int playerCount;
-    private Deck ereigniskartenDeck = new Deck();
-    private Deck gemeinschaftskartenDeck = new Deck();
+    private Deck ereigniskartenDeck;
+    private Deck gemeinschaftskartenDeck;
     private Texture kartenHintergrund;
     public boolean showCard;
-    private Timer timerCard = new Timer();
+    private Timer timerCard;
 
     // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
-    private int buttonSizeX;
-    private int buttonSizeY;
-    private float buttonsize;
-    private float yPosInitialButtons;
-    private float yPosOffsetButtons;
-    private float xPosButtons;
+
 
     // variables for fieldoffsets
     public float leftX = 9.535f;
@@ -144,16 +124,10 @@ public class CreateGameField extends GameScreenAdapter {
         camera.far = 500000f;
         createModels();
 
-
-
         camera.update();
 
 //        cameraController = new CameraInputController(camera);
 //        Gdx.input.setInputProcessor(cameraController);
-    }
-
-    @Override
-    public void show() {
     }
 
     public void checkIfPlayerIsAlone(Player player) {
