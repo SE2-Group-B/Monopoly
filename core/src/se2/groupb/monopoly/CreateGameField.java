@@ -35,8 +35,6 @@ public class CreateGameField extends GameScreenAdapter {
     private Player player4;
     private ArrayList<Player> players;
     private int playerCount;
-    private Deck ereigniskartenDeck;
-    private Deck gemeinschaftskartenDeck;
     private Texture kartenHintergrund;
     public boolean showCard;
     private Timer timerCard;
