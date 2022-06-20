@@ -45,11 +45,14 @@ public class ServerFoundationTest {
     public void startGameTest1Player() {
         client2.getClient().close();
         client1.getClient().sendUDP("HOST");
+        Assert.assertTrue(client1.getClient().isConnected());
+        Assert.assertFalse(client2.getClient().isConnected());
     }
 
     @Test
     public void startGameTest2Players() {
         client1.getClient().sendUDP("HOST");
+        Assert.assertTrue(client1.getClient().isConnected());
     }
 
     @Test
@@ -57,6 +60,10 @@ public class ServerFoundationTest {
         client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client1.getClient().sendUDP("HOST");
+        Assert.assertTrue(client1.getClient().isConnected());
+        Assert.assertTrue(client2.getClient().isConnected());
+        Assert.assertTrue(client3.getClient().isConnected());
+        Assert.assertTrue(client4.getClient().isConnected());
     }
 
     @Test
@@ -65,6 +72,7 @@ public class ServerFoundationTest {
         client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client5 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client1.getClient().sendTCP("HOST");
+        Assert.assertTrue(client5.getClient().isConnected());
     }
 
     @Test

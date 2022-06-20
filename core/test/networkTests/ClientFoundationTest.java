@@ -45,6 +45,7 @@ public class ClientFoundationTest {
     @Test
     public void listenerTest() {
         server.getServer().sendToAllTCP("message");
+        Assert.assertTrue(server.getServer().getConnections()[0].isConnected());
     }
 
     @Test

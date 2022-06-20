@@ -1,6 +1,7 @@
 package networkTests;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,5 +33,6 @@ public class NetworkTest {
     public void registerTest() {
         Network.register(server.getServer());
         Network.register(client.getClient());
+        Assert.assertNotNull(network);
     }
 }
