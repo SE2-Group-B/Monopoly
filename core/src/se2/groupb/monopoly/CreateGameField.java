@@ -207,9 +207,7 @@ public class CreateGameField extends GameScreenAdapter {
         camera.far = 500000f;
         createModels();
 
-        if(monopoly.getOfflineGame()){
-            initOfflinePlayer();
-        }
+
 
         camera.update();
 
