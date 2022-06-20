@@ -1,5 +1,6 @@
 package se2.groupb.monopoly;
 
+
 public class Trainstation extends Property {
     private boolean sold;
     private int price;
@@ -38,10 +39,12 @@ public class Trainstation extends Property {
 
     public void increaseRent() {
         int rent1 = getRent();
-        int anzahl = 0; //Spielfigur.getAnzahlBahnhoefe()
+        int anzahl = 0;
+
+
 
         if(anzahl == 1){
-            rent1 = (int) (rent1 * 1);
+            rent1 = (int) (rent1 * 1.1);
         }else if(anzahl == 2){
             rent1 = (int) (rent1 + 50);
         }else if(anzahl == 3){

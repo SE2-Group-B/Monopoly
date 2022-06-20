@@ -14,17 +14,11 @@ import se2.groupb.monopoly.Monopoly;
 
 public class MainMenuScreen extends GameScreenAdapter {
 
-
-    /*private Texture exitButton;
-    private Texture playButton;
-    private Texture joinButton;
-    private Texture gameFieldButton;*/
-
     private Stage stage;
     private ImageButton hostBtn;
     private ImageButton joinBtn;
     private ImageButton exitBtn;
-    private ImageButton gameFieldButton;
+    private ImageButton offlineButton;
 
     private float buttonSize;
     private float yPosInitialButtons;
@@ -44,7 +38,7 @@ public class MainMenuScreen extends GameScreenAdapter {
     public void show() {
 
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        buttonSize = (float) (Gdx.graphics.getWidth()/3D);
+        buttonSize = (float) (Gdx.graphics.getWidth() / 3D);
 
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
@@ -53,14 +47,14 @@ public class MainMenuScreen extends GameScreenAdapter {
         hostBtn = drawImageButton("images/MenuButtons/host.png", xPosButtons, yPosInitialButtons, buttonSize);
         joinBtn = drawImageButton("images/MenuButtons/join.png", xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSize);
         exitBtn = drawImageButton("images/MenuButtons/exit.png", xPosButtons, yPosInitialButtons + 2 * yPosOffsetButtons, buttonSize);
-        gameFieldButton = drawImageButton("images/MenuButtons/switch_view.png", xPosButtons, yPosInitialButtons + 3 * yPosOffsetButtons, buttonSize);
+        offlineButton = drawImageButton("images/MenuButtons/switch_view.png", xPosButtons, yPosInitialButtons + 3 * yPosOffsetButtons, buttonSize);
 
 
         stage = new Stage(new ScreenViewport());
         stage.addActor(hostBtn);
         stage.addActor(joinBtn);
         stage.addActor(exitBtn);
-        stage.addActor(gameFieldButton);
+        stage.addActor(offlineButton);
 
         // add a inputProcessor multiplexer so you get button input have a custom InputProcessor
         InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
@@ -69,7 +63,7 @@ public class MainMenuScreen extends GameScreenAdapter {
         hostBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched()) {
                     monopoly.setScreen(new HostGameScreen(monopoly));
                     return true;
                 }
@@ -80,7 +74,7 @@ public class MainMenuScreen extends GameScreenAdapter {
         joinBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched()) {
                     monopoly.setScreen(new JoinGameScreen(monopoly));
                     return true;
                 }
@@ -91,18 +85,19 @@ public class MainMenuScreen extends GameScreenAdapter {
         exitBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched()) {
                     Gdx.app.exit();
                 }
                 return false;
             }
         });
 
-        gameFieldButton.addListener(new EventListener() {
+        offlineButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
-                    monopoly.setScreen(new CreateGameField(monopoly));
+                if (Gdx.input.justTouched()) {
+                    monopoly.setOfflineGame(true);
+                    monopoly.setScreen(new MonopolyScreen(monopoly));
                     return true;
                 }
                 return false;
@@ -117,17 +112,10 @@ public class MainMenuScreen extends GameScreenAdapter {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
-        monopoly.batch.begin();
-
-        monopoly.batch.end();
-
     }
 
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }
-
-
 }

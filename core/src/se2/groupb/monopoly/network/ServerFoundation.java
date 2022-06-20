@@ -61,8 +61,6 @@ public class ServerFoundation {
 
         try {
             this.server.bind(tcpPort, udpPort);
-            System.out.println("Ports opened at: " + tcpPort + " : " + udpPort);
-            // System.out.println("Server IP: " + getLocalIpAddress());
         } catch (IOException e) {
             e.printStackTrace();
         }

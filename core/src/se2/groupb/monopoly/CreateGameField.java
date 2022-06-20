@@ -1,9 +1,6 @@
 package se2.groupb.monopoly;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,101 +12,36 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
-
 import se2.groupb.monopoly.screens.GameScreenAdapter;
-import se2.groupb.monopoly.screens.InputBackProcessor;
-import se2.groupb.monopoly.screens.WinningScreen;
-
 
 public class CreateGameField extends GameScreenAdapter {
 
-    Monopoly monopoly;
-    SpriteBatch spriteBatch;
-    SpriteBatch spriteBatch2;
+    private Monopoly monopoly;
+    private SpriteBatch spriteBatch;
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
     private BitmapFont moneyfont;
-    private Property[] logicalGameField;
-
     private Stage stage;
-    private ImageButton buyButton;
-    private ImageButton diceButton;
-    private ImageButton cheatButton;
-    private ImageButton nextButton;
-    private LogicalGameField gameField;
-
-    private Field[] fields = new Field[40];
-
-    //private String buildingPath = "Spielfeld\\field.g3dj";
-
+    private Field[] fields;
     private Player player1;
     private Player player2;
     private Player player3;
     private Player player4;
-    private Pot moneyPot = new Pot();
-    private DiceRoll diceRoll = new DiceRoll();
-    private ArrayList<Player> players = new ArrayList();
-    public int player1mon = 0, player2mon = 0, player3mon = 0, player4mon = 0;
-    //private int[] sums = new int[4];
-    //private String[] placement = new String[4];
-    public ArrayList<Integer> sum = new ArrayList<>();
-    public ArrayList<String> placement = new ArrayList<>(4);
-
-    private Deck ereigniskartenDeck = new Deck();
-    private Deck gemeinschaftskartenDeck = new Deck();
+    private ArrayList<Player> players;
+    private int playerCount;
     private Texture kartenHintergrund;
     public boolean showCard;
-    private Timer timerCard = new Timer();
+    private Timer timerCard;
 
     // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
 
-    ArrayList<Property> arrayList = new ArrayList();
-    ArrayList<Property> arrayList2 = new ArrayList();
-    ArrayList<Property> arrayList3 = new ArrayList();
-    ArrayList<Property> arrayList4 = new ArrayList();
-
-    private int buttonSizeX;
-    private int buttonSizeY;
-    private float buttonsize;
-    private float yPosInitialButtons;
-    private float yPosOffsetButtons;
-    private float xPosButtons;
-
-    private int currentPlayerId;
-    private int playerCount;
-    private String screenOutput;
-    private int roundCount;
-
-    private Texture dice1;
-    private Texture dice2;
-
-    private int currentPos = 0;
 
     // variables for fieldoffsets
     public float leftX = 9.535f;
@@ -163,45 +95,20 @@ public class CreateGameField extends GameScreenAdapter {
         createRightPositions();
     }
 
-    public CreateGameField(Monopoly monopoly) {
+    public CreateGameField(Monopoly monopoly, ArrayList<Player> list) {
         super(monopoly);
-        spriteBatch = new SpriteBatch();
-        buttonSizeX = Gdx.graphics.getWidth() / 3;
-        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
-
+        this.stage = new Stage(new ScreenViewport());
+        this.spriteBatch = new SpriteBatch();
+        this.players = list;
+        this.playerCount = players.size();
         GameFieldUnits gf = new GameFieldUnits();
         gf.createField("monopoly");
         fields = gf.getFields();
 
-        buttonsize = (float) (Gdx.graphics.getWidth()/3D);
-        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
-        yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
-        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
-
-        dice1 = new Texture("images/Dice/dice_0.png");
-        dice2 = new Texture("images/Dice/dice_0.png");
-
-        ereigniskartenDeck.initializeEreigniskartenStapel();
-        ereigniskartenDeck.shuffle();
-        gemeinschaftskartenDeck.initializeGemeinschaftskartenStapel();
-        gemeinschaftskartenDeck.shuffle();
-        kartenHintergrund = new Texture("images/KartenImages/Karte1.png");
-        showCard = false;
-
-        currentPlayerId = 1;
-
-        screenOutput = "";
-
-        gameField = new LogicalGameField();
-
-//        Gdx.app.setLogLevel(Application.LOG_DEBUG);
-//        Gdx.app.debug("GDSAFA", "Hello");
         createPositions();
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
-
         modelBatch = new ModelBatch();
-
         camera = new OrthographicCamera(100, 100);
         camera.rotate(90);
         camera.position.set(40f, 100f, -40f);  // 20,100,-20
@@ -214,117 +121,11 @@ public class CreateGameField extends GameScreenAdapter {
 //        camera.near = -10000f;
         camera.far = 500000f;
         createModels();
-        
-//        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
-//            player1 = monopoly.getClient().getPlayer().getPlayer();
-//            player1.createSpielfigur();
-//            if (monopoly.getClient().getOtherPlayers().size() == 1){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                System.out.println("Your Color: " + player1.getName());
-//                System.out.println("Player 2: " + player2.getName());
-//            }else if (monopoly.getClient().getOtherPlayers().size() == 2){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-//                player3.createSpielfigur();
-//                System.out.println("Your Color: " + player1.getName());
-//                System.out.println("Player 2: " + player2.getName());
-//            }else if (monopoly.getClient().getOtherPlayers().size() == 3){
-//                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-//                player2.createSpielfigur();
-//                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-//                player3.createSpielfigur();
-//                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
-//                player4.createSpielfigur();
-//                System.out.println("Your Color: " + player1.getName());
-//                System.out.println("Player 2: " + player2.getName());
-//            }
-//        }
-        player1 = new Player(1, "Blue", 2000, arrayList, 0, Color.BLUE);
-        player1.createSpielfigur();
-        player2 = new Player(2, "Red", 2000, arrayList2, 0, Color.RED);
-        player2.createSpielfigur();
-        player3 = new Player(3, "Yellow", 2000, arrayList3, 0, Color.YELLOW);
-        player3.createSpielfigur();
-        player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
-        player4.createSpielfigur();
-        playerCount = 4;
 
         camera.update();
 
 //        cameraController = new CameraInputController(camera);
 //        Gdx.input.setInputProcessor(cameraController);
-    }
-
-    @Override
-    public void show() {
-        stage = new Stage(new ScreenViewport());
-
-        Gdx.input.setInputProcessor(stage);
-        buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons-45,buttonsize/2);
-        diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
-        cheatButton = drawImageButton("images/MenuButtons/report_cheat.png",xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
-        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth()-90,50, buttonsize/5);
-
-
-        diceButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                    if(Gdx.input.justTouched()) {
-                        int dice = diceRoll.roll(getCurrentPlayer());
-                        ArrayList<Texture> l = diceRoll.getDiceTextures();
-                        dice1 = l.get(0);
-                        dice2 = l.get(1);
-                        getCurrentPlayer().move(dice);
-                        checkIfPlayerIsAlone(getCurrentPlayer());
-                        //getCurrentPlayer().setPosition((getCurrentPlayer().getPosition() + dice) % 40);
-                        getCurrentPlayer().move(positions[getCurrentPlayer().getPosition()]);
-                        checkCurrentProperty();
-                        if (!diceRoll.getOnTurn()) {
-                            nextPlayer();
-                            //roundCount++;
-                        }
-                    }
-                    return true;
-            }
-        });
-
-        nextButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                    /** Here do something Andy*/
-                }
-                return true;
-            }
-        });
-
-        cheatButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                diceRoll.reportCheat();
-                return true;
-            }
-        });
-
-        buyButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                   winning();
-                }return true;
-            }
-        });
-
-        stage.addActor(buyButton);
-        stage.addActor(diceButton);
-        stage.addActor(cheatButton);
-        stage.addActor(nextButton);
-
-        InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
-        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     public void checkIfPlayerIsAlone(Player player) {
@@ -368,12 +169,6 @@ public class CreateGameField extends GameScreenAdapter {
 
     @Override
     public void render(float delta) {
-
-        final float userPosX = (float) Gdx.input.getX();
-        final float userPosY = (float) Gdx.graphics.getHeight() - Gdx.input.getY();
-        int count = 0;
-
-        spriteBatch2 = new SpriteBatch();
         moneyfont = new BitmapFont();
 
         ScreenUtils.clear(0, 0, 0, 1);
@@ -400,30 +195,7 @@ public class CreateGameField extends GameScreenAdapter {
             modelBatch.render(player4.modInstance, environment);
         }
 
-        diceRoll.checkManualPachCount();
-        diceRoll.checkForShakeCheat();
-
         renderModels();
-        drawDice(dice1, dice2);
-
-        /**
-         * Fonts for the Accounts of players
-         */
-        moneyfont.setColor(Color.WHITE);
-        moneyfont.getData().setScale(4, 4);
-        if (player1 != null && player2 != null) {
-            moneyfont.draw(spriteBatch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
-            moneyfont.draw(spriteBatch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
-        }
-        if (player3 != null) {
-            moneyfont.draw(spriteBatch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
-        }
-        if (player4 != null) {
-            moneyfont.draw(spriteBatch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
-        }
-        moneyfont.draw(spriteBatch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250);
-        moneyfont.draw(spriteBatch, "Rounds: " + roundCount, (float) (Gdx.graphics.getWidth()*0.9),yPosInitialButtons + 250);
-        moneyfont.draw(spriteBatch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
 
         /**
          * Check showCard is true and draw the card
@@ -448,9 +220,6 @@ public class CreateGameField extends GameScreenAdapter {
             spriteBatch.dispose();
             moneyfont.dispose();
             stage.dispose();
-
-//        ml1.dispose();
-//        ml2.dispose();
             disposeModels();
         }
 
@@ -458,8 +227,6 @@ public class CreateGameField extends GameScreenAdapter {
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }
-    //spielfigur.move(new Vector3(0f,0f,-6.5f));
-
 
         public void renderModels () {
             for (int i = 0; i < fields.length; i++) { // Don't forget to render the models
@@ -472,164 +239,6 @@ public class CreateGameField extends GameScreenAdapter {
             for (int i = 0; i < fieldModel.length; i++) {
                 fieldModel[i].dispose();
             }
-        }
-
-        private void drawDice (Texture d1, Texture d2){
-            spriteBatch.draw(d1, xPosButtons + 500, yPosInitialButtons - 400, 500, 500);
-            spriteBatch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
-        }
-
-        /**
-         * Method for output of the field on the Screen
-         */
-        private void checkCurrentProperty () {
-            int playerPosition = getCurrentPlayer().getPosition();
-            String propertyType = getPropertyType(playerPosition);
-            String output = "";
-            switch (propertyType) {
-                case "Street":
-                    output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
-                    if (isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId() != getPropertyOwner(playerPosition).getId())) {
-                        Street s = (Street) gameField.getGameField()[playerPosition];
-                        output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), s.getRent());
-                    }
-                    break;
-                case "Trainstation":
-                    output = "Spieler " + getCurrentPlayer().getName() + " befindet sich auf " + gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
-                    if (isSomeonesProperty(playerPosition) && (getCurrentPlayer().getId() != getPropertyOwner(playerPosition).getId())) {
-                        Trainstation t = (Trainstation) gameField.getGameField()[playerPosition];
-                        output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), t.getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
-                    }
-                    break;
-                case "PenaltyField":
-                    PenaltyField p = (PenaltyField) gameField.getGameField()[playerPosition];
-                    output = moneyPot.donateToPot(getCurrentPlayer(), p.getPenalty());
-                    break;
-                case "Property":
-                    Property prop = gameField.getGameField()[playerPosition];
-                    output = checkSoleProperty(prop);
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + propertyType);
-            }
-            screenOutput = output;
-        }
-
-        private String screenOutputCheck () {
-            String playerName = getCurrentPlayer().getName();
-            String playerPosition = gameField.getGameField()[getCurrentPlayer().getPosition()].getName();
-            return playerName + " befindet sich bei " + playerPosition;
-        }
-
-        /**
-         * Method for controll of special fields as well as their methods
-         * @param property to be controlled
-         * @return additional Output text for the screen for special fields
-         */
-        private String checkSoleProperty (Property property){
-            String output = "Spieler " + getCurrentPlayer().getName();
-            switch (property.getName()) {
-                case "Los":
-                    getCurrentPlayer().changeMoney(200);
-                    output += " ist direkt auf Los gekommen und zieht 400€ ein.";
-                    break;
-                case "Gemeinschaftsfeld":
-                    output += " ist auf einem Gemeinschaftsfeld.";
-                    kartenHintergrund = getCurrentPlayer().drawCard(gemeinschaftskartenDeck);
-                    showCard = true;
-                    break;
-                case "Ereignisfeld":
-                    output += " ist auf einem Ereignisfeld.";
-                    kartenHintergrund = getCurrentPlayer().drawCard(ereigniskartenDeck);
-                    showCard = true;
-                    break;
-                case "Gefängnis":
-                    if(getCurrentPlayer().getPrison()){
-                        int häfn = 4-getCurrentPlayer().getPrisonCount();
-                        output += " sitzt noch für " + häfn + " Runden im Gefängnis";
-                    }else{
-                        output += " ist nur zu Besuch im Gefägnis.";
-                    }
-                    break;
-                case "Sofa":
-                    output = moneyPot.winPot(getCurrentPlayer());
-                    break;
-                case "Gehe ins Gefängnis":
-                    getCurrentPlayer().move(positions[10]);
-                    getCurrentPlayer().goToJail();
-                    output += " sitzt jetzt im Gefägnis.";
-                    break;
-            }
-            return output;
-        }
-
-        /**
-         * method for the prison
-         */
-        private void checkPrison () {
-            int playerPosition = getCurrentPlayer().getPosition();
-            if (playerPosition == 30) {
-                getCurrentPlayer().setPrison(true);
-            }
-        }
-
-        private boolean isSomeonesProperty ( int position){
-            return gameField.getGameField()[position].getOwnerId() != 0;
-        }
-
-        private Player getPropertyOwner ( int pos){
-            return getPlayerById(gameField.getGameField()[pos].getOwnerId());
-        }
-
-        private void nextPlayer () {
-            if (currentPlayerId == playerCount) {
-                currentPlayerId = 1;
-            } else {
-                currentPlayerId++;
-            }
-            diceRoll.reset();
-        }
-
-    /**
-     * Change Method with Server
-     */
-        private Player getCurrentPlayer () {
-            return getPlayerById(currentPlayerId);
-        }
-
-        private Player getPlayerById ( int id){
-            Player p;
-            switch (id) {
-                case 1:
-                    p = player1;
-                    break;
-                case 2:
-                    p = player2;
-                    break;
-                case 3:
-                    p = player3;
-                    break;
-                case 4:
-                    p = player4;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + currentPlayerId);
-            }
-            return p;
-        }
-
-        public static boolean isCorrectPosition(float userPosX, float userPosY, float xPosButton,
-                                                float yPosButton, float buttonSizeX, float buttonSizeY, float yPosOffset){
-            return (userPosX > xPosButton && userPosX < xPosButton + buttonSizeX && userPosY > (yPosButton + yPosOffset) && userPosY < yPosButton + yPosOffset + buttonSizeY);
-        }
-
-        public String getPropertyType ( int n){
-            return getLastSubString("" + gameField.getGameField()[n].getClass());
-        }
-
-        private String getLastSubString (String filename){
-            String[] parts = filename.split("\\."); // String array, each element is text between dots
-            return parts[parts.length - 1];
         }
 
         public void createModels () {
@@ -666,106 +275,5 @@ public class CreateGameField extends GameScreenAdapter {
                 fieldModInstance[i].transform.rotate(vector3Rotate, degrees);
             }
         }
-
-        /**
-         * Winning Condition which changes to the final Screen of the game
-         */
-        public void winning () {
-            int amount = 0;
-
-            for (int i = 0; i < 40; i++) {
-                if (gameField.getGameField()[i].getOwnerId() == 1) {
-                    String propertyType = getPropertyType(i);
-                    switch (propertyType) {
-                        case "Street":
-                            Street s = (Street) gameField.getGameField()[i];
-                            amount = s.getPrice();
-                            amount += s.getHousePrice();
-                            amount += s.getHotel();
-                            player1mon += amount;
-                            amount = 0;
-                            break;
-                        case "Trainstation":
-                            Trainstation t = (Trainstation) gameField.getGameField()[i];
-                            amount = t.getPrice();
-                            player1mon += amount;
-                            amount = 0;
-                            break;
-                        default:
-                            throw new IllegalStateException("Unexpected value: " + propertyType);
-                    }
-                }
-            }
-            player1mon += player1.getBankBalance();
-            player2mon += player2.getBankBalance();
-            player3mon += player3.getBankBalance();
-            player4mon += player4.getBankBalance();
-
-            sum.add(player1mon);
-            sum.add(player2mon);
-            sum.add(player3mon);
-            sum.add(player4mon);
-            Collections.sort(sum);
-            //Arrays.sort(sum);
-
-            for (int j = 0; j < 4; j++) {
-                if (sum.get(j) == player1mon) {
-                    placement.add(0, player1.getName());
-                    //placement.set(j, player1.getName());
-                } else if (sum.get(j) == player2mon) {
-                    //placement.set(j, player2.getName());
-                    placement.add(1,player2.getName());
-                } else if (sum.get(j) == player3mon) {
-                    //placement.set(j, player3.getName());
-                    placement.add(2,player3.getName());
-                } else if (sum.get(j) == player4mon) {
-                    //placement.set(j, player4.getName());
-                    placement.add(3,player4.getName());
-                }
-            }
-
-            //monopoly.setSums(sums);
-            //monopoly.setPlacement(placement);
-            /** Debugging necessary*/
-            monopoly.setScreen(new WinningScreen(monopoly, sum, placement));
-        }
-
-        public void buying() {
-            int pos = getCurrentPlayer().getPosition();
-            if (!isSomeonesProperty(pos)) {
-                String propertyType = getPropertyType(pos);
-                switch (propertyType) {
-                    case "Street":
-                        Street s = (Street) gameField.getGameField()[pos];
-                        getCurrentPlayer().changeMoney(-s.getPrice());
-                        gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
-                        break;
-                    case "Trainstation":
-                        Trainstation t = (Trainstation) gameField.getGameField()[pos];
-                        getCurrentPlayer().changeMoney(-t.getPrice());
-                        gameField.getGameField()[pos].setOwnerId(getCurrentPlayer().getId());
-                        t.increaseRent();
-                        break;
-                    default:
-                        if (gameField.getGameField()[pos].getOwnerId() == getCurrentPlayer().getId()) {
-                            if (propertyType.equals("Street")) {
-                                Street s1 = (Street) gameField.getGameField()[pos];
-                                boolean bought = s1.buyhouse();
-                                if (bought) {
-                                    getCurrentPlayer().changeMoney(-s1.getHousePrice());
-                                } else {
-                                    break;
-                                }
-                            } else {
-                                screenOutput = "Hier kannst du nichts zukaufen";
-                            }
-                        } else {
-                            screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
-                        }
-                }
-            } else {
-                screenOutput = "Du kannst das nicht kaufen. Es gehört schon jemandem";
-            }
-        }
-    }
+}
 

@@ -144,7 +144,7 @@ public class Player {
 
     public void move(int augenzahl) {
         if(!this.getPrison()) {
-            if ((this.getPosition() + augenzahl) > 39) {
+            if ((this.getPosition() + augenzahl) > 39 && (this.getPosition() + augenzahl) != 40) {
                 roundmoney();
             }
             this.setPosition((this.getPosition() + augenzahl) % 40);
