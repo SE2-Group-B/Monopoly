@@ -1,20 +1,16 @@
 package se2.groupb.monopoly.network;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 
 import se2.groupb.monopoly.Player;
-import se2.groupb.monopoly.Property;
 import se2.groupb.monopoly.network.messages.PlayerInformation;
 import se2.groupb.monopoly.network.messages.RoundCounter;
 
@@ -66,7 +62,6 @@ public class ServerFoundation {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
-                    Gdx.app.log("Server received message", object + "\n");
                     handleStringMessage(object.toString());
                 }
                 if (object instanceof RoundCounter) {
@@ -117,13 +112,10 @@ public class ServerFoundation {
             for (int i = 0; i < players.size(); i++) {
                 players.get(i).setIsPlayer(true);
                 server.sendToTCP(i + 1, players.get(i));
-                Gdx.app.log("Server", "sending message to user " + i + ": You are " + players.get(i).getPlayer().getName());
                 for (int j = 0; j < players.size(); j++) {
                     if (j != i) {
                         players.get(i).setIsPlayer(false);
                         server.sendToTCP(i + 1, players.get(j));
-                        Gdx.app.log("Server", "sending message to user " + i + ": Player " + (j + 1) + " is " + players.get(j).getPlayer().getName());
-
                     }
                 }
             }
@@ -132,7 +124,6 @@ public class ServerFoundation {
 
     private void handleStringMessage(String object) {
         if (object.equals("HOST")) {
-            Gdx.app.log("\n Server", "Number of Players connected:" + server.getConnections().length);
             // start game when 2-4 Players are connected
             if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
                 countPlayers = server.getConnections().length;

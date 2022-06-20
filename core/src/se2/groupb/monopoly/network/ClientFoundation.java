@@ -1,6 +1,5 @@
 package se2.groupb.monopoly.network;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -33,8 +32,6 @@ public class ClientFoundation {
             }
             try {
                 ip = client.discoverHost(udpPort, 500);
-                if (ip != null) Gdx.app.log("connected on host ", ip.toString());
-                else Gdx.app.log("not connected ", "No host discovered!");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -59,7 +56,6 @@ public class ClientFoundation {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
-                    Gdx.app.log("\nClient received message:\t", object.toString());
                     handleStringMessages(object.toString());
                 }
                 if (object instanceof RoundCounter) {
@@ -67,7 +63,6 @@ public class ClientFoundation {
                 }
 
                 if (object instanceof PlayerInformation) {
-                    Gdx.app.log("\nClient received message:\t", ((PlayerInformation) object).getMessageType());
                     handlePlayerInformationMessages((PlayerInformation) object);
                 }
             }
