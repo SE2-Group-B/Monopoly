@@ -210,8 +210,35 @@ public class CreateGameField extends GameScreenAdapter {
         if(monopoly.getOfflineGame()){
             initOfflinePlayer();
         }else{
-            initServerPlayer();
+//            initServerPlayer();
+            if(!monopoly.getClient().getOtherPlayers().isEmpty()){
+                player1 = monopoly.getClient().getPlayer().getPlayer();
+                player1.createSpielfigur();
+                players.add(player1);
+                if (monopoly.getClient().getOtherPlayers().size() > 0){
+                    player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                    player2.createSpielfigur();
+                    players.add(player2);
+                    System.out.println("Your Color: " + player1.getName());
+                    System.out.println("Player 2: " + player2.getName());
+                }
+                if (monopoly.getClient().getOtherPlayers().size() > 1){
+                    player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                    player3.createSpielfigur();
+                    players.add(player3);
+                    System.out.println("Your Color: " + player1.getName());
+                    System.out.println("Player 2: " + player2.getName());
+                }
+                if (monopoly.getClient().getOtherPlayers().size() > 2){
+                    player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
+                    player4.createSpielfigur();
+                    players.add(player4);
+                    System.out.println("Your Color: " + player1.getName());
+                    System.out.println("Player 2: " + player2.getName());
+                }
+            }
         }
+
 
         camera.update();
 
