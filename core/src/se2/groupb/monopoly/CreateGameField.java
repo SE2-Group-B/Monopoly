@@ -154,26 +154,26 @@ public class CreateGameField extends GameScreenAdapter {
             if (players.get(i).isNotAlone()) {
                 switch (i) {
                     case 0:
-                        newPos[players.get(i).getPosition()].x -= 5;
-                        newPos[players.get(i).getPosition()].z += 5;
+                        newPos[players.get(i).getPosition()].x -= 2;
+                        newPos[players.get(i).getPosition()].z += 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
-                        
+
                         break;
                     case 1:
-                        newPos[players.get(i).getPosition()].x += 5;
-                        newPos[players.get(i).getPosition()].z += 5;
+                        newPos[players.get(i).getPosition()].x += 2;
+                        newPos[players.get(i).getPosition()].z += 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
 
                         break;
                     case 2:
-                        newPos[players.get(i).getPosition()].x -= 5;
-                        newPos[players.get(i).getPosition()].z -= 5;
+                        newPos[players.get(i).getPosition()].x -= 2;
+                        newPos[players.get(i).getPosition()].z -= 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
 
                         break;
                     case 3:
-                        newPos[players.get(i).getPosition()].x += 5;
-                        newPos[players.get(i).getPosition()].z -= 5;
+                        newPos[players.get(i).getPosition()].x += 2;
+                        newPos[players.get(i).getPosition()].z -= 2;
                         players.get(i).move(newPos[players.get(i).getPosition()]);
 
                         break;
@@ -182,43 +182,7 @@ public class CreateGameField extends GameScreenAdapter {
                 }
             }
         }
-
-
-//    public void checkIfPlayerIsAlone(Player player) {
-//        ArrayList<Player> playersToPosition = new ArrayList<>();
-//        if (player.getPosition() == player1.getPosition() && player != player1) {
-//            playersToPosition.add(player1);
-//        }
-//        if (player.getPosition() == player2.getPosition() && player != player2) {
-//            playersToPosition.add(player2);
-//        }
-//        if (player.getPosition() == player3.getPosition() && player != player3) {
-//            playersToPosition.add(player3);
-//        }
-//        if (player.getPosition() == player4.getPosition() && player != player4) {
-//            playersToPosition.add(player4);
-//        }
-//        setMultiplePlayersOnField(playersToPosition);
-//    }
-
-//    public void setMultiplePlayersOnField(ArrayList<Player> playersToPosition) {
-//        Vector3[] newPos = positions.clone();
-//
-//        if (playersToPosition.size() > 0) {
-//            for (int i = 0; i < playersToPosition.size(); i++) {
-//                if (pO.getCurrentPlayer() != playersToPosition.get(i)) {
-//                    if (playersToPosition.get(i).getPosition() >= 0 && playersToPosition.get(i).getPosition() <= 10 || playersToPosition.get(i).getPosition() >= 21 && playersToPosition.get(i).getPosition() <= 31) {
-//                        newPos[playersToPosition.get(i).getPosition()].x += 5;
-//                        playersToPosition.get(i+1).move(newPos[playersToPosition.get(i).getPosition()]);
-//                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
-//                    }
-//                    if (playersToPosition.get(i).getPosition() >= 11 && playersToPosition.get(i).getPosition() <= 19 || playersToPosition.get(i).getPosition() >= 32 && playersToPosition.get(i).getPosition() <= 40) {
-//                        newPos[playersToPosition.get(i).getPosition()].z += 5;
-//                        playersToPosition.get(i).move(newPos[playersToPosition.get(i).getPosition()]);
-//                    }
-//                }
-//            }
-//        }
+        newPos = positions.clone();
     }
 
 
