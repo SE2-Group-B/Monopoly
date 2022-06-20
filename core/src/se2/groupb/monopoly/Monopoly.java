@@ -18,6 +18,7 @@ public class Monopoly extends Game {
     private ClientFoundation client;
     int[] sums = new int[4];
     String[] placement = new String[4];
+    private boolean offlineGame;
 
     /**
      * for later, when online game can be finished
@@ -32,9 +33,9 @@ public class Monopoly extends Game {
 
     @Override
     public void create() {
+        offlineGame = false;
         batch = new SpriteBatch();
         setScreen(new MainMenuScreen(this));
-
     }
 
 //	public static Monopoly INSTANCE;
@@ -82,5 +83,13 @@ public class Monopoly extends Game {
 
     public void setPlacement(String[] placement) {
         this.placement = placement;
+    }
+
+    public boolean getOfflineGame() {
+        return offlineGame;
+    }
+
+    public void setOfflineGame(boolean offlineGame) {
+        this.offlineGame = offlineGame;
     }
 }
