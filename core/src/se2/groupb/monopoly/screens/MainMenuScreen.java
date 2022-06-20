@@ -15,15 +15,6 @@ import se2.groupb.monopoly.Monopoly;
 public class MainMenuScreen extends GameScreenAdapter {
 
     private Stage stage;
-    private ImageButton hostBtn;
-    private ImageButton joinBtn;
-    private ImageButton exitBtn;
-    private ImageButton offlineButton;
-
-    private float buttonSize;
-    private float yPosInitialButtons;
-    private float yPosOffsetButtons;
-    private float xPosButtons;
 
 
     /**
@@ -38,16 +29,16 @@ public class MainMenuScreen extends GameScreenAdapter {
     public void show() {
 
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        buttonSize = (float) (Gdx.graphics.getWidth() / 3D);
+        float buttonSize = (float) (Gdx.graphics.getWidth() / 3D);
 
-        xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
-        yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
-        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
+        float xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
+        float yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
+        float yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
-        hostBtn = drawImageButton("images/MenuButtons/host.png", xPosButtons, yPosInitialButtons, buttonSize);
-        joinBtn = drawImageButton("images/MenuButtons/join.png", xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSize);
-        exitBtn = drawImageButton("images/MenuButtons/exit.png", xPosButtons, yPosInitialButtons + 2 * yPosOffsetButtons, buttonSize);
-        offlineButton = drawImageButton("images/MenuButtons/switch_view.png", xPosButtons, yPosInitialButtons + 3 * yPosOffsetButtons, buttonSize);
+        ImageButton hostBtn = drawImageButton("images/MenuButtons/host.png", xPosButtons, yPosInitialButtons, buttonSize);
+        ImageButton joinBtn = drawImageButton("images/MenuButtons/join.png", xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSize);
+        ImageButton exitBtn = drawImageButton("images/MenuButtons/exit.png", xPosButtons, yPosInitialButtons + 2 * yPosOffsetButtons, buttonSize);
+        ImageButton offlineButton = drawImageButton("images/MenuButtons/switch_view.png", xPosButtons, yPosInitialButtons + 3 * yPosOffsetButtons, buttonSize);
 
 
         stage = new Stage(new ScreenViewport());
@@ -116,6 +107,8 @@ public class MainMenuScreen extends GameScreenAdapter {
 
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
-
+        /**
+         * we don't use this method here
+         */
     }
 }

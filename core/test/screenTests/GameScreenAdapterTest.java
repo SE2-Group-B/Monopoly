@@ -34,8 +34,8 @@ public class GameScreenAdapterTest {
             }
 
             @Override
-            public ImageButton drawImageButtonTester(String texturePath, float X, float Y, float size) {
-                return super.drawImageButtonTester(texturePath, X, Y, size);
+            public ImageButton drawImageButtonTester(String texturePath, float x, float y, float size) {
+                return super.drawImageButtonTester(texturePath, x, y, size);
             }
         };
     }

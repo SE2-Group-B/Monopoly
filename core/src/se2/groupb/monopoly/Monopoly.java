@@ -9,7 +9,7 @@ import se2.groupb.monopoly.screens.MainMenuScreen;
 
 
 public class Monopoly extends Game {
-    public SpriteBatch batch;
+    private SpriteBatch batch;
     private ClientFoundation client;
     private boolean offlineGame;
 
@@ -18,11 +18,6 @@ public class Monopoly extends Game {
     public void create() {
         batch = new SpriteBatch();
         setScreen(new MainMenuScreen(this));
-    }
-
-    @Override
-    public void render() {
-        super.render();
     }
 
     @Override
@@ -48,5 +43,9 @@ public class Monopoly extends Game {
 
     public void setOfflineGame(boolean offlineGame) {
         this.offlineGame = offlineGame;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
     }
 }
