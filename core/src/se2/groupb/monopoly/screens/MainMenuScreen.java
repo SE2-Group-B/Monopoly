@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 
 public class MainMenuScreen extends GameScreenAdapter {
@@ -24,7 +23,7 @@ public class MainMenuScreen extends GameScreenAdapter {
     private ImageButton hostBtn;
     private ImageButton joinBtn;
     private ImageButton exitBtn;
-    private ImageButton gameFieldButton;
+    private ImageButton offlineButton;
 
     private float buttonSize;
     private float yPosInitialButtons;
@@ -53,14 +52,14 @@ public class MainMenuScreen extends GameScreenAdapter {
         hostBtn = drawImageButton("images/MenuButtons/host.png", xPosButtons, yPosInitialButtons, buttonSize);
         joinBtn = drawImageButton("images/MenuButtons/join.png", xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSize);
         exitBtn = drawImageButton("images/MenuButtons/exit.png", xPosButtons, yPosInitialButtons + 2 * yPosOffsetButtons, buttonSize);
-        gameFieldButton = drawImageButton("images/MenuButtons/switch_view.png", xPosButtons, yPosInitialButtons + 3 * yPosOffsetButtons, buttonSize);
+        offlineButton = drawImageButton("images/MenuButtons/switch_view.png", xPosButtons, yPosInitialButtons + 3 * yPosOffsetButtons, buttonSize);
 
 
         stage = new Stage(new ScreenViewport());
         stage.addActor(hostBtn);
         stage.addActor(joinBtn);
         stage.addActor(exitBtn);
-        stage.addActor(gameFieldButton);
+        stage.addActor(offlineButton);
 
         // add a inputProcessor multiplexer so you get button input have a custom InputProcessor
         InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.backDoesNothingProcessor(), stage);
@@ -98,10 +97,11 @@ public class MainMenuScreen extends GameScreenAdapter {
             }
         });
 
-        gameFieldButton.addListener(new EventListener() {
+        offlineButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 if (Gdx.input.justTouched()){
+                    monopoly.setOfflineGamecount(true);
                     monopoly.setScreen(new MonopolyScreen(monopoly));
                     return true;
                 }

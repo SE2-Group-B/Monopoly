@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -37,7 +38,7 @@ import se2.groupb.monopoly.screens.WinningScreen;
 public class CreateGameField extends GameScreenAdapter {
 
     SpriteBatch spriteBatch;
-    SpriteBatch spriteBatch2;
+
     private Environment environment;
     private OrthographicCamera camera;
     private ModelBatch modelBatch;
@@ -70,18 +71,21 @@ public class CreateGameField extends GameScreenAdapter {
     private float rightX = 40f;
     private float rightZ = 3.25f;
     private Monopoly monopoly = new Monopoly();
-    private MonopolyScreen monopolyScreen = new MonopolyScreen(monopoly);
+//    private MonopolyScreen monopolyScreen = new MonopolyScreen(monopoly);
 
     Model[] fieldModel = new Model[40];
     ModelInstance[] fieldModInstance = new ModelInstance[40];
-    ArrayList<Player> players = monopolyScreen.initPlayerList();
+    ArrayList<Player> players;
+    private int playerCount;
 
 
 
-    public CreateGameField(Monopoly monopoly) {
+    public CreateGameField(Monopoly monopoly, ArrayList<Player> list) {
         super(monopoly);
         this.stage = new Stage(new ScreenViewport());
         this.spriteBatch = new SpriteBatch();
+        this.players = list;
+        this.playerCount = players.size();
         GameFieldUnits gf = new GameFieldUnits();
         gf.createField("monopoly");
         fields = gf.getFields();
@@ -100,6 +104,8 @@ public class CreateGameField extends GameScreenAdapter {
 
         camera.far = 500000f;
         createModels();
+
+
 
         camera.update();
 //        Gdx.input.setInputProcessor(stage);
@@ -142,7 +148,7 @@ public class CreateGameField extends GameScreenAdapter {
 
     @Override
     public void render(float delta) {
-        spriteBatch2 = new SpriteBatch();
+
         moneyfont = new BitmapFont();
 
         ScreenUtils.clear(0, 0, 0, 1);
@@ -156,16 +162,17 @@ public class CreateGameField extends GameScreenAdapter {
         stage.draw();
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
-        monopolyScreen.initOfflinePlayer();
-
-        if (players.get(0) != null && players.get(1) != null) {
+//        monopolyScreen.initOfflinePlayer();
+        if(playerCount > 0){
             modelBatch.render(players.get(0).modInstance, environment);
+        }
+        if(playerCount > 1){
             modelBatch.render(players.get(1).modInstance, environment);
         }
-        if (players.get(2) != null) {
+        if(playerCount > 2){
             modelBatch.render(players.get(2).modInstance, environment);
         }
-        if (players.get(3) != null) {
+        if(playerCount > 3){
             modelBatch.render(players.get(3).modInstance, environment);
         }
 
@@ -254,11 +261,9 @@ public class CreateGameField extends GameScreenAdapter {
         createRightPositions();
     }
 
-    public void drawDice(Texture d1, Texture d2) {
-        spriteBatch.begin();
-        spriteBatch.draw(d1, xPosButtons + 500, yPosInitialButtons - 400, 500, 500);
-        spriteBatch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
-        spriteBatch.end();
+    public void drawDice(Texture d1, Texture d2, SpriteBatch batch) {
+        batch.draw(d1, xPosButtons + 500, yPosInitialButtons - 400, 500, 500);
+        batch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
     }
 
     public void createModels() {

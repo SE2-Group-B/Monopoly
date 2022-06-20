@@ -38,6 +38,7 @@ public class Monopoly extends Game {
     private ClientFoundation client;
 
     public SpriteBatch batch;
+    public boolean offlineGamecount;
 
     public Monopoly(){
 
@@ -81,5 +82,13 @@ public class Monopoly extends Game {
 
     public void removeClient(){
         this.client = null;
+    }
+
+    public boolean isOfflineGamecount() {
+        return offlineGamecount;
+    }
+
+    public void setOfflineGamecount(boolean offlineGamecount) {
+        this.offlineGamecount = offlineGamecount;
     }
 }
