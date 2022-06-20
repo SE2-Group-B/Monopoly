@@ -85,10 +85,10 @@ public class ClientFoundation {
             // Server sends initialization of players
             // then do something
             if (object.getIsPlayer()) {
-                player = (PlayerInformation) object;
+                player = object;
             } else if (!object.getIsPlayer()) {
                 object.getMessageType();
-                otherPlayers.add((PlayerInformation) object);
+                otherPlayers.add(object);
             }
         }
     }
