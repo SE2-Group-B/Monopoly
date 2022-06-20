@@ -1,5 +1,6 @@
 package se2.groupb.monopoly.network;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -13,7 +14,8 @@ import se2.groupb.monopoly.network.messages.RoundCounter;
 
 public class ClientFoundation {
     private Client client;
-    boolean allJoined = false, gameEnd = false;
+    boolean allJoined = false;
+    boolean gameEnd = false;
     PlayerInformation player;
     private ArrayList<PlayerInformation> otherPlayers = new ArrayList<>();
     RoundCounter roundCounter;
@@ -31,8 +33,8 @@ public class ClientFoundation {
             }
             try {
                 ip = client.discoverHost(udpPort, 500);
-                if (ip != null) System.out.println("host: " + ip);
-                else System.out.println("No host discovered!");
+                if (ip != null) Gdx.app.log("connected on host ", ip.toString());
+                else Gdx.app.log("not connected ", "No host discovered!");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -59,35 +61,42 @@ public class ClientFoundation {
                 if (object instanceof String) {
                     System.out.println("\nClient received message:\t" + object + "\n");
                     // if 4 Players (Server) connected then server sends message to all clients and starts game automatically
-                    if (object.equals("START")) {
-                        allJoined = true;
-                    } else if (object.equals("WAITINGFORPLAYER")) {
-                        allJoined = false;
-                    }else if(object.equals("FINISH")){
-                        gameEnd = true;
-                    }
+                    handleStringMessages(object.toString());
                 }
-                if(object instanceof RoundCounter) {
+                if (object instanceof RoundCounter) {
                     roundCounter = (RoundCounter) object;
                 }
 
                 if (object instanceof PlayerInformation) {
                     System.out.println("Client received message: " + ((PlayerInformation) object).getMessageType());
-                    if (((PlayerInformation) object).getMessageType().equals("INITIALIZE_GAME")) {
-                        // Server sends initialization of players
-                        // then do something
-                        if (((PlayerInformation) object).getIsPlayer()) {
-                            player = (PlayerInformation) object;
-                        } else if (!((PlayerInformation) object).getIsPlayer()) {
-                            ((PlayerInformation) object).getMessageType();
-                            otherPlayers.add((PlayerInformation) object);
-                        }
-                    }
+                    handlePlayerInformationMessages((PlayerInformation) object);
                 }
             }
         });
     }
 
+    private void handleStringMessages(String object){
+        if (object.equals("START")) {
+            allJoined = true;
+        } else if (object.equals("WAITINGFORPLAYER")) {
+            allJoined = false;
+        } else if (object.equals("FINISH")) {
+            gameEnd = true;
+        }
+    }
+
+    private void handlePlayerInformationMessages(PlayerInformation object){
+        if (((PlayerInformation) object).getMessageType().equals("INITIALIZE_GAME")) {
+            // Server sends initialization of players
+            // then do something
+            if (((PlayerInformation) object).getIsPlayer()) {
+                player = (PlayerInformation) object;
+            } else if (!((PlayerInformation) object).getIsPlayer()) {
+                ((PlayerInformation) object).getMessageType();
+                otherPlayers.add((PlayerInformation) object);
+            }
+        }
+    }
 
     public Client getClient() {
         return client;
