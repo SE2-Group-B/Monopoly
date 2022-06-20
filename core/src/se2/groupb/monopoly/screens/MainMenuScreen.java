@@ -14,12 +14,6 @@ import se2.groupb.monopoly.Monopoly;
 
 public class MainMenuScreen extends GameScreenAdapter {
 
-
-    /*private Texture exitButton;
-    private Texture playButton;
-    private Texture joinButton;
-    private Texture gameFieldButton;*/
-
     private Stage stage;
     private ImageButton hostBtn;
     private ImageButton joinBtn;
@@ -44,7 +38,7 @@ public class MainMenuScreen extends GameScreenAdapter {
     public void show() {
 
         InputBackProcessor inputProcessor = new InputBackProcessor(monopoly);
-        buttonSize = (float) (Gdx.graphics.getWidth()/3D);
+        buttonSize = (float) (Gdx.graphics.getWidth() / 3D);
 
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
@@ -69,7 +63,7 @@ public class MainMenuScreen extends GameScreenAdapter {
         hostBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched()) {
                     monopoly.setScreen(new HostGameScreen(monopoly));
                     return true;
                 }
@@ -80,7 +74,7 @@ public class MainMenuScreen extends GameScreenAdapter {
         joinBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched()) {
                     monopoly.setScreen(new JoinGameScreen(monopoly));
                     return true;
                 }
@@ -91,7 +85,7 @@ public class MainMenuScreen extends GameScreenAdapter {
         exitBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched()) {
                     Gdx.app.exit();
                 }
                 return false;
@@ -101,9 +95,9 @@ public class MainMenuScreen extends GameScreenAdapter {
         offlineButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()){
+                if (Gdx.input.justTouched()) {
                     monopoly.setOfflineGame(true);
-                    monopoly.setScreen(new CreateGameField(monopoly));
+                    monopoly.setScreen(new MonopolyScreen(monopoly));
                     return true;
                 }
                 return false;
@@ -118,17 +112,10 @@ public class MainMenuScreen extends GameScreenAdapter {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
-        monopoly.batch.begin();
-
-        monopoly.batch.end();
-
     }
 
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }
-
-
 }

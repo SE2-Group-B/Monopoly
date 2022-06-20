@@ -119,13 +119,10 @@ public class HostGameScreen extends GameScreenAdapter {
                             isConnected = false;
                             connectedText.setText(font, "Could not connect, please retry!");
                         }
-
                         return true;
                     }
                     if (!client.getClient().isConnected()) isConnected = false;
                 }
-
-
                 return false;
             }
         });
@@ -206,7 +203,7 @@ public class HostGameScreen extends GameScreenAdapter {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
+                screen.monopoly.setScreen(new MonopolyScreen(screen.monopoly));
             }
         }, delay);
     }
@@ -214,6 +211,4 @@ public class HostGameScreen extends GameScreenAdapter {
     public GameScreenAdapter getScreen() {
         return this;
     }
-
-
 }
