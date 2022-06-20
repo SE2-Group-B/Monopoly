@@ -88,7 +88,7 @@ public class WinningScreen extends GameScreenAdapter{
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         buttonsize = (float) (Gdx.graphics.getWidth()/3D);
-        monopoly.batch.begin();
+        monopoly.getBatch().begin();
         spriteBatch.begin();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -106,7 +106,7 @@ public class WinningScreen extends GameScreenAdapter{
         font.draw(spriteBatch, fourth, (float) (Gdx.graphics.getWidth()/3.75), (Gdx.graphics.getHeight()/2)-150);
 
         spriteBatch.end();
-        monopoly.batch.end();
+        monopoly.getBatch().end();
     }
 
     @Override

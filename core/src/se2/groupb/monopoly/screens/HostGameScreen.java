@@ -175,19 +175,19 @@ public class HostGameScreen extends GameScreenAdapter {
         stage.draw(); //Draw the ui
 
 
-        monopoly.batch.begin();
-        font.draw(monopoly.batch, connectedText,
+        monopoly.getBatch().begin();
+        font.draw(monopoly.getBatch(), connectedText,
                 (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons - yPosOffsetButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
 
         if (!allJoined && buttonPressed) {
-            font.draw(monopoly.batch, waitingText,
+            font.draw(monopoly.getBatch(), waitingText,
                     (float) (Gdx.graphics.getWidth() / 2D - waitingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         } else if (allJoined && buttonPressed) {
-            font.draw(monopoly.batch, loadingText,
+            font.draw(monopoly.getBatch(), loadingText,
                     (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
 
-        monopoly.batch.end();
+        monopoly.getBatch().end();
     }
 
     @Override

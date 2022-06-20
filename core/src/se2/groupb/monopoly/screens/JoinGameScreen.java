@@ -164,24 +164,24 @@ public class JoinGameScreen extends GameScreenAdapter {
 
 
         // start drawing text
-        monopoly.batch.begin();
+        monopoly.getBatch().begin();
 
         if (buttonPressed && !allConnected) {
             // if server response: client connected is still missing
-            font.draw(monopoly.batch, connectedText,
+            font.draw(monopoly.getBatch(), connectedText,
                     (float) (Gdx.graphics.getWidth() / 2D - connectedText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
         if (buttonPressed && allConnected && isConnected) {
             // if server found and connected
-            font.draw(monopoly.batch, loadingText,
+            font.draw(monopoly.getBatch(), loadingText,
                     (float) (Gdx.graphics.getWidth() / 2D - loadingText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
         if (buttonPressed && !isConnected && !isValidInput) {
-            font.draw(monopoly.batch, groupText,
+            font.draw(monopoly.getBatch(), groupText,
                     (float) (Gdx.graphics.getWidth() / 2D - groupText.width / 2D), (yPosInitialButtons + 1.5f * connectBtn.getHeight() * connectBtn.getImage().getScaleY()));
         }
 
-        font.draw(monopoly.batch, enterGroupNumberText,
+        font.draw(monopoly.getBatch(), enterGroupNumberText,
                 (float) (Gdx.graphics.getWidth() / 2D - enterGroupNumberText.width / 2D), (yPosInput + 1.5f * inputHeight));
 
         if (isConnected) {
@@ -198,7 +198,7 @@ public class JoinGameScreen extends GameScreenAdapter {
                 allConnected = false;
             }
         }
-        monopoly.batch.end();
+        monopoly.getBatch().end();
     }
 
     @Override
