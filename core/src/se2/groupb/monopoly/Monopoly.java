@@ -1,36 +1,11 @@
 package se2.groupb.monopoly;
 
 
-import static se2.groupb.monopoly.screens.GameScreenAdapter.drawImageButton;
-
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.util.ArrayList;
 
 import se2.groupb.monopoly.network.ClientFoundation;
-import se2.groupb.monopoly.network.ServerFoundation;
-import se2.groupb.monopoly.screens.GameScreenAdapter;
-import se2.groupb.monopoly.screens.InputBackProcessor;
 import se2.groupb.monopoly.screens.MainMenuScreen;
-import se2.groupb.monopoly.screens.SensorScreen;
 
 
 public class Monopoly extends Game {
