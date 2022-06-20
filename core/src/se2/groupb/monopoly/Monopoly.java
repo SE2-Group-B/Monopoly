@@ -42,7 +42,7 @@ public class Monopoly extends Game {
         this.client = null;
     }
 
-    public boolean getOfflineGame() {
+    public boolean isOfflineGame() {
         return offlineGame;
     }
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class PlayerOperation {
     private LogicalGameField logicalGameField;
     private ArrayList<Player> playerList;
-//    private Player currentPlayer;
     private Pot moneyPot;
     private int currentPlayerId;
     private int playerCount;
@@ -34,7 +33,6 @@ public class PlayerOperation {
     }
 
     public String checkCurrentProperty(Player player) {
-//        currentPlayer = player;
         int playerPosition = player.getPosition();
         Property p = logicalGameField.getGameField()[playerPosition];
         String output = "Player " + player.getName() + " is on " + p.getName();
