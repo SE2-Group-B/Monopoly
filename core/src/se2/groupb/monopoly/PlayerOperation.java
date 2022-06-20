@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class PlayerOperation {
     private LogicalGameField logicalGameField;
     private ArrayList<Player> playerList;
-    private Player currentPlayer;
+//    private Player currentPlayer;
     private Pot moneyPot;
     private int currentPlayerId;
     private int playerCount;
@@ -14,6 +14,7 @@ public class PlayerOperation {
         this.playerList = playerList;
         logicalGameField = new LogicalGameField();
         currentPlayerId = 1;
+        this.playerCount = playerList.size();
     }
 
     public boolean isSomeonesProperty(int position) {
@@ -33,20 +34,20 @@ public class PlayerOperation {
     }
 
     public String checkCurrentProperty(Player player) {
-        currentPlayer = player;
+//        currentPlayer = player;
         int playerPosition = player.getPosition();
         Property p = logicalGameField.getGameField()[playerPosition];
         String output = "Player " + player.getName() + " is on " + p.getName();
         if (p instanceof Street) {
             if (isEnemyProperty(playerPosition)) {
-                output = currentPlayer.payToOtherPlayer(getPropertyOwner(playerPosition), ((Street) p).getRent());
+                output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), ((Street) p).getRent());
             }
         } else if (p instanceof Trainstation) {
             if (isEnemyProperty(playerPosition)) {
-                output = currentPlayer.payToOtherPlayer(getPropertyOwner(playerPosition), ((Trainstation) p).getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
+                output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), ((Trainstation) p).getRent() * getPropertyOwner(playerPosition).getNumOfTrainstaitions());
             }
         } else if (p instanceof PenaltyField) {
-            output = moneyPot.donateToPot(currentPlayer, ((PenaltyField) p).getPenalty());
+            output = moneyPot.donateToPot(getCurrentPlayer(), ((PenaltyField) p).getPenalty());
         } else {
             output = checkSoleProperty(p);
         }
@@ -54,14 +55,14 @@ public class PlayerOperation {
     }
 
     public boolean isEnemyProperty(int position) {
-        return (isSomeonesProperty(position) && (currentPlayer.getId() != getPropertyOwner(position).getId()));
+        return (isSomeonesProperty(position) && (getCurrentPlayer().getId() != getPropertyOwner(position).getId()));
     }
 
     public String checkSoleProperty(Property property) {
-        String output = "Player " + currentPlayer.getName();
+        String output = "Player " + getCurrentPlayer().getName();
         switch (property.getName()) {
             case "Los":
-                currentPlayer.changeMoney(200);
+                getCurrentPlayer().changeMoney(400);
                 output += " landed directly on GO and earned 400€";
                 break;
             case "Gemeinschaftsfeld":
@@ -75,19 +76,18 @@ public class PlayerOperation {
 //                showCard = true;
                 break;
             case "Gefängnis":
-                if (currentPlayer.getPrison()) {
-                    int hefn = 4 - currentPlayer.getPrisonCount();
+                if (getCurrentPlayer().getPrison()) {
+                    int hefn = 4 - getCurrentPlayer().getPrisonCount();
                     output += " sits " + hefn + " more rounds in prison";
                 } else {
                     output += " is just visiting the prison";
                 }
                 break;
             case "Sofa":
-                output = moneyPot.winPot(currentPlayer);
+                output = moneyPot.winPot(getCurrentPlayer());
                 break;
             case "Gehe ins Gefängnis":
-//                currentPlayer.move(gameField.positions[10]);
-                currentPlayer.goToJail();
+                getCurrentPlayer().goToJail();
                 output += " went to prison";
                 break;
         }
@@ -95,7 +95,7 @@ public class PlayerOperation {
     }
 
     public String nextPlayer() {
-        if (currentPlayer.getId() == playerCount) {
+        if (getCurrentPlayer().getId() == playerCount) {
             currentPlayerId = 1;
         } else {
             currentPlayerId++;
@@ -105,10 +105,6 @@ public class PlayerOperation {
 
     public void setMoneyPotForOperation(Pot pot) {
         this.moneyPot = pot;
-    }
-
-    public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
     }
 
     public String buying() {

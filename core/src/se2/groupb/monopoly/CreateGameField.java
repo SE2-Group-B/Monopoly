@@ -229,8 +229,7 @@ public class CreateGameField extends GameScreenAdapter {
         cheatButton = drawImageButton("images/MenuButtons/report_cheat.png",xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
         nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth()-90,50, buttonsize/5);
 
-        playerOperation = new PlayerOperation(initPlayerList());
-        playerOperation.setPlayerCount(4);
+        playerOperation = new PlayerOperation(players);
 
         diceButton.addListener(new EventListener() {
             @Override
@@ -242,9 +241,9 @@ public class CreateGameField extends GameScreenAdapter {
                     dice2 = l.get(1);
                     playerOperation.getCurrentPlayer().move(dice);
 //                checkIfPlayerIsAlone(getCurrentPlayer());
-                    playerOperation.getCurrentPlayer().move(positions[playerOperation.getCurrentPlayer().getPosition()]);
                     playerOperation.setMoneyPotForOperation(moneyPot);
                     screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                    playerOperation.getCurrentPlayer().move(positions[playerOperation.getCurrentPlayer().getPosition()]);
                 }
                     return true;
             }
@@ -567,6 +566,18 @@ public class CreateGameField extends GameScreenAdapter {
             monopoly.setScreen(new WinningScreen(monopoly, sum, placement));
         }
 
+        private void checkCardField(Property property) {
+            switch (property.getName()) {
+                case "Gemeinschaftsfeld":
+                    kartenHintergrund = playerOperation.getCurrentPlayer().drawCard(gemeinschaftskartenDeck);
+                    showCard = true;
+                    break;
+                case "Ereignisfeld":
+                    kartenHintergrund = playerOperation.getCurrentPlayer().drawCard(ereigniskartenDeck);
+                    showCard = true;
+                    break;
+            }
+        }
 
         private ArrayList<Player> initPlayerList(){
             players.add(player1);
@@ -580,26 +591,29 @@ public class CreateGameField extends GameScreenAdapter {
             if(!monopoly.getClient().getOtherPlayers().isEmpty()){
                 player1 = monopoly.getClient().getPlayer().getPlayer();
                 player1.createSpielfigur();
+                players.add(player1);
                 if (monopoly.getClient().getOtherPlayers().size() > 0){
                     player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
                     player2.createSpielfigur();
+                    players.add(player2);
                     System.out.println("Your Color: " + player1.getName());
                     System.out.println("Player 2: " + player2.getName());
                 }
                 if (monopoly.getClient().getOtherPlayers().size() > 1){
                     player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
                     player3.createSpielfigur();
+                    players.add(player3);
                     System.out.println("Your Color: " + player1.getName());
                     System.out.println("Player 2: " + player2.getName());
                 }
                 if (monopoly.getClient().getOtherPlayers().size() > 2){
                     player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
                     player4.createSpielfigur();
+                    players.add(player4);
                     System.out.println("Your Color: " + player1.getName());
                     System.out.println("Player 2: " + player2.getName());
                 }
             }
-            playerOperation.setPlayerCount(monopoly.getClient().getOtherPlayers().size() + 1);
         }
 
         private void initOfflinePlayer(){
@@ -611,7 +625,10 @@ public class CreateGameField extends GameScreenAdapter {
             player3.createSpielfigur();
             player4 = new Player(4, "Green", 2000, arrayList4, 0, Color.GREEN);
             player4.createSpielfigur();
-            playerCount = 4;
+            players.add(player1);
+            players.add(player2);
+            players.add(player3);
+            players.add(player4);
         }
 }
 
