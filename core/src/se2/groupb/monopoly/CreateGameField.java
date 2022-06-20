@@ -16,7 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import java.util.ArrayList;
+
 import se2.groupb.monopoly.screens.GameScreenAdapter;
 
 public class CreateGameField extends GameScreenAdapter {
@@ -38,6 +40,7 @@ public class CreateGameField extends GameScreenAdapter {
     private Texture kartenHintergrund;
     public boolean showCard;
     private Timer timerCard;
+    private PlayerOperation pO;
 
     // private CameraInputController cameraController;
     public Vector3[] positions = new Vector3[40];
@@ -104,6 +107,7 @@ public class CreateGameField extends GameScreenAdapter {
         GameFieldUnits gf = new GameFieldUnits();
         gf.createField("monopoly");
         fields = gf.getFields();
+        pO = new PlayerOperation(players);
 
         createPositions();
         environment = new Environment();
@@ -150,10 +154,10 @@ public class CreateGameField extends GameScreenAdapter {
 
         if (playersToPosition.size() > 0) {
             for (Player player : playersToPosition) {
-                if (currentPlayerId != player.getId()) {
+                if (pO.getCurrentPlayer().getId() != player.getId()) {
                     if (player.getPosition() >= 0 && player.getPosition() <= 10 || player.getPosition() >= 21 && player.getPosition() <= 31) {
                         newPos[player.getPosition()].x += 3;
-                        players.get(currentPlayerId).move(positions[players.get(currentPos).getPosition()]); //////???? what am i doing??????
+//                        players.get(pO.getCurrentPlayer().getId()).move(positions[players.get(currentPos).getPosition()]); //////???? what am i doing??????
                         player.move(newPos[player.getPosition()]);
                     }
                     if (player.getPosition() >= 11 && player.getPosition() <= 19 || player.getPosition() >= 32 && player.getPosition() <= 40) {
@@ -164,7 +168,6 @@ public class CreateGameField extends GameScreenAdapter {
             }
         }
     }
-
 
 
     @Override
@@ -184,15 +187,17 @@ public class CreateGameField extends GameScreenAdapter {
 
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
-        if (player1 != null && player2 != null){
-            modelBatch.render(player1.modInstance, environment);
-            modelBatch.render(player2.modInstance, environment);
+        if(playerCount > 0){
+            modelBatch.render(players.get(0).modInstance, environment);
         }
-        if (player3 != null){
-            modelBatch.render(player3.modInstance, environment);
+        if(playerCount > 1){
+            modelBatch.render(players.get(1).modInstance, environment);
         }
-        if (player4 != null){
-            modelBatch.render(player4.modInstance, environment);
+        if(playerCount > 2){
+            modelBatch.render(players.get(2).modInstance, environment);
+        }
+        if(playerCount > 3){
+            modelBatch.render(players.get(3).modInstance, environment);
         }
 
         renderModels();
@@ -214,66 +219,66 @@ public class CreateGameField extends GameScreenAdapter {
         modelBatch.end();
     }
 
-        @Override
-        public void dispose () {
-            modelBatch.dispose();
-            spriteBatch.dispose();
-            moneyfont.dispose();
-            stage.dispose();
-            disposeModels();
-        }
+    @Override
+    public void dispose() {
+        modelBatch.dispose();
+        spriteBatch.dispose();
+        moneyfont.dispose();
+        stage.dispose();
+        disposeModels();
+    }
 
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }
 
-        public void renderModels () {
-            for (int i = 0; i < fields.length; i++) { // Don't forget to render the models
-                modelBatch.render(fieldModInstance[i], environment);
+    public void renderModels() {
+        for (int i = 0; i < fields.length; i++) { // Don't forget to render the models
+            modelBatch.render(fieldModInstance[i], environment);
 
+        }
+    }
+
+    public void disposeModels() {
+        for (int i = 0; i < fieldModel.length; i++) {
+            fieldModel[i].dispose();
+        }
+    }
+
+    public void createModels() {
+        transformModelsOnField(0, 10, 0, 0, 0, 0);
+        transformModelsOnField(11, 19, leftX, leftZ, 270, 0);
+        transformModelsOnField(20, 30, topX, topZ, 180, 0);
+        transformModelsOnField(31, 39, rightX, rightZ, 90, 3);
+    }
+
+    public void transformModelsOnField(int start, int end, float v3X, float v3Z, int degrees,
+                                       int offset) {
+        Vector3 vector3 = new Vector3(0, 0, 0);
+        Vector3 vector3Rotate = new Vector3(0, 1, 0);
+        float distanceWidth = 6.5f;
+        for (int i = start; i <= end; i++) {
+            fieldModInstance[i] = new ModelInstance(fields[i].getModel());
+            fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
+            if (i <= 10) { // bot side
+                vector3.z = -((i) * distanceWidth);
             }
-        }
-
-        public void disposeModels () {
-            for (int i = 0; i < fieldModel.length; i++) {
-                fieldModel[i].dispose();
+            if (i >= 11 && i <= 19) { // left side
+                vector3.x = ((i - v3X) * distanceWidth);
+                vector3.z = -v3Z;
             }
-        }
-
-        public void createModels () {
-            transformModelsOnField(0, 10, 0, 0, 0, 0);
-            transformModelsOnField(11, 19, leftX, leftZ, 270, 0);
-            transformModelsOnField(20, 30, topX, topZ, 180, 0);
-            transformModelsOnField(31, 39, rightX, rightZ, 90, 3);
-        }
-
-        public void transformModelsOnField ( int start, int end, float v3X, float v3Z, int degrees,
-        int offset){
-            Vector3 vector3 = new Vector3(0, 0, 0);
-            Vector3 vector3Rotate = new Vector3(0, 1, 0);
-            float distanceWidth = 6.5f;
-            for (int i = start; i <= end; i++) {
-                fieldModInstance[i] = new ModelInstance(fields[i].getModel());
-                fieldModInstance[i].materials.get(1).set(new ColorAttribute(ColorAttribute.Diffuse, fields[i].getFieldColors()));
-                if (i <= 10) { // bot side
-                    vector3.z = -((i) * distanceWidth);
-                }
-                if (i >= 11 && i <= 19) { // left side
-                    vector3.x = ((i - v3X) * distanceWidth);
-                    vector3.z = -v3Z;
-                }
-                if (i >= 20 && i <= 30) { // top side
-                    vector3.x = v3X;
-                    vector3.z = ((i - v3Z) * distanceWidth);
-                }
-                if (i >= 31 && i < fields.length) { // right Side
-                    vector3.x = -((i - v3X) * distanceWidth) + offset;
-                    vector3.z = v3Z;
-                }
-                fieldModInstance[i].transform.translate(vector3);
-                fieldModInstance[i].transform.rotate(vector3Rotate, degrees);
+            if (i >= 20 && i <= 30) { // top side
+                vector3.x = v3X;
+                vector3.z = ((i - v3Z) * distanceWidth);
             }
+            if (i >= 31 && i < fields.length) { // right Side
+                vector3.x = -((i - v3X) * distanceWidth) + offset;
+                vector3.z = v3Z;
+            }
+            fieldModInstance[i].transform.translate(vector3);
+            fieldModInstance[i].transform.rotate(vector3Rotate, degrees);
         }
+    }
 }
 
