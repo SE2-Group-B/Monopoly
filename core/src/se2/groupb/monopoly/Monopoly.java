@@ -85,7 +85,7 @@ public class Monopoly extends Game {
         this.placement = placement;
     }
 
-    public boolean getOfflineGame() {
+    public boolean isOfflineGame() {
         return offlineGame;
     }
 
