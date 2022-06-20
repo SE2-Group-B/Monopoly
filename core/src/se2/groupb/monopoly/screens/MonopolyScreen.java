@@ -184,15 +184,13 @@ public class MonopolyScreen extends GameScreenAdapter {
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
 
-
-        gameField = new CreateGameField(monopoly, playerList);
-
         Gdx.input.setInputProcessor(stage);
         buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons - 45, buttonsize / 2);
         diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
         cheatButton = drawImageButton("images/MenuButtons/report_cheat.png", xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
         nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90, 50, buttonsize / 5);
 
+        gameField = new CreateGameField(monopoly, playerList);
         playerOperation = new PlayerOperation(playerList);
 
         diceButton.addListener(new EventListener() {
@@ -304,35 +302,6 @@ public class MonopolyScreen extends GameScreenAdapter {
         stage.dispose();
         dice1.dispose();
         dice2.dispose();
-    }
-
-    public void initServerPlayer(){
-        if(!monopoly.getClient().getOtherPlayers().isEmpty()){
-            player1 = monopoly.getClient().getPlayer().getPlayer();
-            player1.createSpielfigur();
-            playerList.add(player1);
-            if (monopoly.getClient().getOtherPlayers().size() > 0){
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                playerList.add(player2);
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }
-            if (monopoly.getClient().getOtherPlayers().size() > 1){
-                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-                player3.createSpielfigur();
-                playerList.add(player3);
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }
-            if (monopoly.getClient().getOtherPlayers().size() > 2){
-                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
-                player4.createSpielfigur();
-                playerList.add(player4);
-                System.out.println("Your Color: " + player1.getName());
-                System.out.println("Player 2: " + player2.getName());
-            }
-        }
     }
 
     public void initOfflinePlayer(){
