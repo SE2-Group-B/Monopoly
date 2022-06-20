@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
 import se2.groupb.monopoly.network.ServerFoundation;
@@ -42,21 +41,15 @@ public class HostGameScreen extends GameScreenAdapter {
     private ImageButton connectBtn;
     private ImageButton startBtn;
 
-    private float buttonSize;
+
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
     private float xPosButtons;
+    private float buttonSize;
 
     public HostGameScreen(Monopoly monopoly) {
         super(monopoly);
-    }
 
-    @Override
-    public void show() {
-        /**
-         * instead of closing the App go to Main Menu
-         * close server if leaving
-         */
         inputProcessor = new InputBackProcessor(monopoly);
 
         // draw text
@@ -73,6 +66,14 @@ public class HostGameScreen extends GameScreenAdapter {
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
+    }
+
+    @Override
+    public void show() {
+        /**
+         * instead of closing the App go to Main Menu
+         * close server if leaving
+         */
 
         // Buttons for connecting to Server and starting the game
         connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
@@ -89,8 +90,7 @@ public class HostGameScreen extends GameScreenAdapter {
          *                                                                          *
          * start a server, connect as client
          *
-         * TODO: show ports on user screen
-         * sometimes crashes when connecting?
+         *
          */
         connectBtn.addListener(new EventListener() {
             @Override
@@ -103,22 +103,8 @@ public class HostGameScreen extends GameScreenAdapter {
 
                         // connect client (the host) to the server
                         client = new ClientFoundation(instance.getTcpPort(), instance.getUdpPort());
-                        System.out.println(client.getClient().isConnected());
-                        if (client.getClient().isConnected()) {
-                            // add client to monopoly
-                            monopoly.addClient(client);
-                            isConnected = true;
-                            connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
-
-                            // new input processor that disconnects server if you go back
-                            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
-                            Gdx.input.setInputProcessor(inputMultiplexer);
-
-                            stage.addActor(startBtn);
-                        } else {
-                            isConnected = false;
-                            connectedText.setText(font, "Could not connect, please retry!");
-                        }
+                        // show text on screen if is or is not connected
+                        writeConnectedText(client.getClient().isConnected());
                         return true;
                     }
                     if (!client.getClient().isConnected()) isConnected = false;
@@ -206,6 +192,24 @@ public class HostGameScreen extends GameScreenAdapter {
                 screen.monopoly.setScreen(new MonopolyScreen(screen.monopoly));
             }
         }, delay);
+    }
+
+    private void writeConnectedText(boolean connected){
+        if (connected) {
+            // add client to monopoly
+            monopoly.addClient(client);
+            isConnected = true;
+            connectedText.setText(font, "Your Room Number is: " + instance.getTcpPort());
+
+            // new input processor that disconnects server if you go back
+            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.hostMenuServerProcessor(instance.getServer(), client.getClient()), stage);
+            Gdx.input.setInputProcessor(inputMultiplexer);
+
+            stage.addActor(startBtn);
+        } else {
+            isConnected = false;
+            connectedText.setText(font, "Could not connect, please retry!");
+        }
     }
 
     public GameScreenAdapter getScreen() {
