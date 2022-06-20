@@ -149,11 +149,9 @@ public class JoinGameScreen extends GameScreenAdapter {
                         groupText.setText(font, "The Groups range from 1000 to 7000");
                     }
                 }
-
                 return false;
             }
         });
-
     }
 
     @Override
@@ -201,8 +199,6 @@ public class JoinGameScreen extends GameScreenAdapter {
             }
         }
         monopoly.batch.end();
-
-
     }
 
     @Override
@@ -210,7 +206,7 @@ public class JoinGameScreen extends GameScreenAdapter {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                screen.monopoly.setScreen(new CreateGameField(screen.monopoly));
+                screen.monopoly.setScreen(new MonopolyScreen(screen.monopoly));
             }
         }, delay);
     }
@@ -223,5 +219,4 @@ public class JoinGameScreen extends GameScreenAdapter {
             return false;
         }
     }
-
 }

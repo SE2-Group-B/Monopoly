@@ -77,7 +77,6 @@ public class ClientFoundation {
                         // Server sends initialization of players
                         // then do something
                         if (((PlayerInformation) object).getIsPlayer()) {
-                            System.out.println(((PlayerInformation) object).getMessageType());
                             player = (PlayerInformation) object;
                         } else if (!((PlayerInformation) object).getIsPlayer()) {
                             ((PlayerInformation) object).getMessageType();
