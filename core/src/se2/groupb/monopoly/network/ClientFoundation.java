@@ -59,8 +59,7 @@ public class ClientFoundation {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
-                    System.out.println("\nClient received message:\t" + object + "\n");
-                    // if 4 Players (Server) connected then server sends message to all clients and starts game automatically
+                    Gdx.app.log("\nClient received message:\t", object.toString());
                     handleStringMessages(object.toString());
                 }
                 if (object instanceof RoundCounter) {
@@ -68,7 +67,7 @@ public class ClientFoundation {
                 }
 
                 if (object instanceof PlayerInformation) {
-                    System.out.println("Client received message: " + ((PlayerInformation) object).getMessageType());
+                    Gdx.app.log("\nClient received message:\t",((PlayerInformation) object).getMessageType());
                     handlePlayerInformationMessages((PlayerInformation) object);
                 }
             }
@@ -76,6 +75,7 @@ public class ClientFoundation {
     }
 
     private void handleStringMessages(String object){
+        // if 4 Players (Server) connected then server sends message to all clients and starts game automatically
         if (object.equals("START")) {
             allJoined = true;
         } else if (object.equals("WAITINGFORPLAYER")) {

@@ -15,6 +15,9 @@ import se2.groupb.monopoly.network.messages.PlayerInformation;
 import se2.groupb.monopoly.network.messages.RoundCounter;
 
 public class Network {
+    private Network() throws IllegalAccessException {
+        throw new IllegalAccessException("Utility Class");
+    }
     // register objects that are sent over the Network
     static public void register (EndPoint endPoint){
         Kryo kryo = endPoint.getKryo();
