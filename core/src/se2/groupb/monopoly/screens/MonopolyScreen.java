@@ -83,7 +83,6 @@ public class MonopolyScreen extends GameScreenAdapter {
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
         //init Marko
-        currentPlayerId = 1;
         screenOutput = "";
         dice1 = new Texture("images/Dice/dice_0.png");
         dice2 = new Texture("images/Dice/dice_0.png");
@@ -236,8 +235,8 @@ public class MonopolyScreen extends GameScreenAdapter {
         if (player4 != null) {
             moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
         }
-        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250);
-        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
+        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), (float) (yPosInitialButtons + 250));
+        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, (float) (Gdx.graphics.getHeight() - 400));
 
         batch.end();
     }
