@@ -1,6 +1,7 @@
 package se2.groupb.monopoly.network;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -29,21 +30,16 @@ public class ServerFoundation {
     private PlayerInformation player3;
     private PlayerInformation player4;
 
-    public int countPlayers = 0;
-    private int currentPlayerID = 0;
+    private int countPlayers;
 
-    public RoundCounter roundcount = new RoundCounter();
-    public int minigamecount;
+    private RoundCounter roundcount = new RoundCounter();
+    // public int minigamecount;
 
     public ServerFoundation() {
+        countPlayers = 0;
         random = new Random();
         System.setProperty("java.net.preferIPv4Stack", "true");
         this.server = new Server(1_000_000, 1_000_000);
-        try {
-            System.out.println(InetAddress.getLocalHost());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
 
         setTcpPort(randomInt());
         setUdpPort(getTcpPort());
@@ -70,21 +66,8 @@ public class ServerFoundation {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
-                    System.out.println("\nNumber of Players connected: " + server.getConnections().length);
-                    System.out.println("Server received message:\t" + object + "\n");
-
-                    if (object.equals("HOST")) {
-                        // start game when 2-4 Players are connected
-                        if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
-                            countPlayers = server.getConnections().length;
-                            initPlayers(countPlayers);
-                            sendcount(roundcount);
-                            server.sendToAllTCP("START");
-                        } else { // wait for players if not all connected
-                            server.sendToAllTCP("WAITFORPLAYER");
-                        }
-
-                    }
+                    Gdx.app.log("Server received message", object + "\n");
+                    handleStringMessage(object.toString());
                 }
                 if (object instanceof RoundCounter) {
                     if (((RoundCounter) object).getRoundcount() >= 0 && ((RoundCounter) object).getRoundcount() <= 8 && ((RoundCounter) object).getRoundcount() > roundcount.getRoundcount()) {
@@ -96,26 +79,23 @@ public class ServerFoundation {
                 }
             }
         });
-
-
     }
-
 
     // server initializes the players and sends information to client
     private void initPlayers(int countPlayers) {
         ArrayList<PlayerInformation> players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
-            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<Property>(), 0, Color.BLUE));
-            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<Property>(), 0, Color.RED));
+            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<>(), 0, Color.BLUE));
+            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<>(), 0, Color.RED));
             players.add(player1);
             players.add(player2);
         }
         if (countPlayers >= 3 && countPlayers <= 4) {
-            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<Property>(), 0, Color.YELLOW));
+            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<>(), 0, Color.YELLOW));
             players.add(player3);
         }
         if (countPlayers >= 4) {
-            this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<Property>(), 0, Color.GREEN));
+            this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<>(), 0, Color.GREEN));
             players.add(player4);
         }
 
@@ -137,15 +117,30 @@ public class ServerFoundation {
             for (int i = 0; i < players.size(); i++) {
                 players.get(i).setIsPlayer(true);
                 server.sendToTCP(i + 1, players.get(i));
-                System.out.println("Server sending message to user " + i + ": You are " + players.get(i).getPlayer().getName());
+                Gdx.app.log("Server", "sending message to user " + i + ": You are " + players.get(i).getPlayer().getName());
                 for (int j = 0; j < players.size(); j++) {
                     if (j != i) {
                         players.get(i).setIsPlayer(false);
                         server.sendToTCP(i + 1, players.get(j));
-                        System.out.println("Server sending message to user " + i + ": Player " + (j + 1) + " is " + players.get(j).getPlayer().getName());
+                        Gdx.app.log("Server", "sending message to user " + i + ": Player " + (j + 1) + " is " + players.get(j).getPlayer().getName());
 
                     }
                 }
+            }
+        }
+    }
+
+    private void handleStringMessage(String object){
+        if (object.equals("HOST")) {
+            Gdx.app.log("\n Server", "Number of Players connected:" + server.getConnections().length);
+            // start game when 2-4 Players are connected
+            if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
+                countPlayers = server.getConnections().length;
+                initPlayers(countPlayers);
+                sendcount(roundcount);
+                server.sendToAllTCP("START");
+            } else { // wait for players if not all connected
+                server.sendToAllTCP("WAITFORPLAYER");
             }
         }
     }
@@ -178,5 +173,23 @@ public class ServerFoundation {
 
     public int getUdpPort() {
         return udpPort;
+    }
+
+    /************ Players ************/
+
+    public PlayerInformation getPlayer1() {
+        return player1;
+    }
+
+    public PlayerInformation getPlayer2() {
+        return player2;
+    }
+
+    public PlayerInformation getPlayer3() {
+        return player3;
+    }
+
+    public PlayerInformation getPlayer4() {
+        return player4;
     }
 }

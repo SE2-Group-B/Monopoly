@@ -14,7 +14,7 @@ public abstract class GameScreenAdapter extends ScreenAdapter implements Screen 
 
     Monopoly monopoly;
 
-    public GameScreenAdapter(Monopoly monopoly) {
+    protected GameScreenAdapter(Monopoly monopoly) {
         this.monopoly = monopoly;
     }
 
@@ -33,15 +33,15 @@ public abstract class GameScreenAdapter extends ScreenAdapter implements Screen 
      * Method for making ImageButtons with relative ease
      *
      * @param texturePath
-     * @param X           centered positioning of the button on the X axis ->
+     * @param x           centered positioning of the button on the X axis ->
      *                    the width of the button is already calculated in the method just give it Gdx.graphics.getWidth() / x
-     * @param Y
+     * @param y
      * @param size        how big should the button be in the screen ->
      *                    use Gdx.graphics.getWidth() / x as size and give it to method, the rest will be done in the method
      *                    Button is as big as x of the screen size, height is automatically scaled to width
      * @return ImageButton that is positioned and scaled
      */
-    protected static ImageButton drawImageButton(String texturePath, float X, float Y, float size) {
+    protected static ImageButton drawImageButton(String texturePath, float x, float y, float size) {
         Texture buttonTexture = new Texture(Gdx.files.internal(texturePath));
         TextureRegion buttonTextureRegion = new TextureRegion(buttonTexture);
         TextureRegionDrawable buttonRegionDrawable = new TextureRegionDrawable(buttonTextureRegion);
@@ -49,14 +49,14 @@ public abstract class GameScreenAdapter extends ScreenAdapter implements Screen 
         float scale = size / buttonTexture.getWidth();
         button.getImage().setFillParent(true);
         button.getImage().setScale(scale, scale);
-        button.setX(X - (((button.getWidth()*scale) / 2.0f)));
-        button.setY(Y);
+        button.setX(x - ((button.getWidth()*scale) / 2.0f));
+        button.setY(y);
         return button;
     }
 
     // for testing protected static method drawImageButton()
-    public ImageButton drawImageButtonTester(String texturePath, float X, float Y, float size) {
-        return drawImageButton(texturePath, X, Y, size);
+    public ImageButton drawImageButtonTester(String texturePath, float x, float y, float size) {
+        return drawImageButton(texturePath, x, y, size);
     }
 
     public abstract void switchScreenDelayed(final GameScreenAdapter screen, float delay);
