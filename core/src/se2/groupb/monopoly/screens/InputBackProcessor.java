@@ -32,7 +32,6 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        /*Gdx.input.setInputProcessor(backProcessor);*/
         return backProcessor;
     }
 
@@ -51,7 +50,6 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        /*Gdx.input.setInputProcessor(backProcessor);*/
         return backProcessor;
     }
 
@@ -75,7 +73,6 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        /*Gdx.input.setInputProcessor(backProcessor);*/
         return backProcessor;
     }
 
@@ -98,7 +95,6 @@ public class InputBackProcessor {
             }
         };
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        /*Gdx.input.setInputProcessor(backProcessor);*/
         return backProcessor;
     }
 }

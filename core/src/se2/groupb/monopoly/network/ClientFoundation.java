@@ -67,14 +67,14 @@ public class ClientFoundation {
                 }
 
                 if (object instanceof PlayerInformation) {
-                    Gdx.app.log("\nClient received message:\t",((PlayerInformation) object).getMessageType());
+                    Gdx.app.log("\nClient received message:\t", ((PlayerInformation) object).getMessageType());
                     handlePlayerInformationMessages((PlayerInformation) object);
                 }
             }
         });
     }
 
-    private void handleStringMessages(String object){
+    private void handleStringMessages(String object) {
         // if 4 Players (Server) connected then server sends message to all clients and starts game automatically
         if (object.equals("START")) {
             allJoined = true;
@@ -85,7 +85,7 @@ public class ClientFoundation {
         }
     }
 
-    private void handlePlayerInformationMessages(PlayerInformation object){
+    private void handlePlayerInformationMessages(PlayerInformation object) {
         if (((PlayerInformation) object).getMessageType().equals("INITIALIZE_GAME")) {
             // Server sends initialization of players
             // then do something

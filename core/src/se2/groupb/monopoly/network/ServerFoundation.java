@@ -130,7 +130,7 @@ public class ServerFoundation {
         }
     }
 
-    private void handleStringMessage(String object){
+    private void handleStringMessage(String object) {
         if (object.equals("HOST")) {
             Gdx.app.log("\n Server", "Number of Players connected:" + server.getConnections().length);
             // start game when 2-4 Players are connected

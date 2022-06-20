@@ -49,7 +49,7 @@ public abstract class GameScreenAdapter extends ScreenAdapter implements Screen 
         float scale = size / buttonTexture.getWidth();
         button.getImage().setFillParent(true);
         button.getImage().setScale(scale, scale);
-        button.setX(x - ((button.getWidth()*scale) / 2.0f));
+        button.setX(x - ((button.getWidth() * scale) / 2.0f));
         button.setY(y);
         return button;
     }

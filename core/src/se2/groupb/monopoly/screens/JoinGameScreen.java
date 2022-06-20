@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.network.ClientFoundation;
 
@@ -50,13 +49,7 @@ public class JoinGameScreen extends GameScreenAdapter {
 
     public JoinGameScreen(Monopoly monopoly) {
         super(monopoly);
-    }
 
-    @Override
-    public void show() {
-        /**
-         * instead of closing the App go to Main Menu
-         */
         // setup custom InputProcessor
         inputProcessor = new InputBackProcessor(monopoly);
 
@@ -73,7 +66,13 @@ public class JoinGameScreen extends GameScreenAdapter {
         buttonSize = (float) (Gdx.graphics.getWidth() / 4D);
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
+    }
 
+    @Override
+    public void show() {
+        /**
+         * instead of closing the App go to Main Menu
+         */
         // make image button
         connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
 
@@ -125,19 +124,7 @@ public class JoinGameScreen extends GameScreenAdapter {
                             // button press
                             // connect client (new client) to the server
                             client = new ClientFoundation(port, port);
-                            if (client.getClient().isConnected()) {
-                                // add client to monopoly
-                                monopoly.addClient(client);
-                                // new input processor that disconnects from server if user goes back
-                                InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.joinMenuServerProcessor(client.getClient()), stage);
-                                Gdx.input.setInputProcessor(inputMultiplexer);
-                                // if client is connected, show player that he has connection
-                                isConnected = true;
-                                connectedText.setText(font, "Joined server, waiting for players");
-                            } else {
-                                isConnected = false;
-                                connectedText.setText(font, "Could not connect, please retry!");
-                            }
+                            writeConnectedText(client.getClient().isConnected());
                             return true;
                         }
                     } else {
@@ -209,6 +196,22 @@ public class JoinGameScreen extends GameScreenAdapter {
                 screen.monopoly.setScreen(new MonopolyScreen(screen.monopoly));
             }
         }, delay);
+    }
+
+    private void writeConnectedText(boolean connected){
+        if (connected) {
+            // add client to monopoly
+            monopoly.addClient(client);
+            // new input processor that disconnects from server if user goes back
+            InputMultiplexer inputMultiplexer = new InputMultiplexer(inputProcessor.joinMenuServerProcessor(client.getClient()), stage);
+            Gdx.input.setInputProcessor(inputMultiplexer);
+            // if client is connected, show player that he has connection
+            isConnected = true;
+            connectedText.setText(font, "Joined server, waiting for players");
+        } else {
+            isConnected = false;
+            connectedText.setText(font, "Could not connect, please retry!");
+        }
     }
 
     public boolean isParsable(String s) {

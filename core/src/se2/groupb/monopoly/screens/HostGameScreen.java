@@ -194,7 +194,7 @@ public class HostGameScreen extends GameScreenAdapter {
         }, delay);
     }
 
-    private void writeConnectedText(boolean connected){
+    private void writeConnectedText(boolean connected) {
         if (connected) {
             // add client to monopoly
             monopoly.addClient(client);
