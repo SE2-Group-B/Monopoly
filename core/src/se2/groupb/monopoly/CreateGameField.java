@@ -105,8 +105,6 @@ public class CreateGameField extends GameScreenAdapter {
         camera.far = 500000f;
         createModels();
 
-
-
         camera.update();
 //        Gdx.input.setInputProcessor(stage);
 //        render(Gdx.graphics.getDeltaTime());
@@ -162,7 +160,6 @@ public class CreateGameField extends GameScreenAdapter {
         stage.draw();
 
         // Let our ModelBatch take care of efficient rendering of our ModelInstance
-//        monopolyScreen.initOfflinePlayer();
         if(playerCount > 0){
             modelBatch.render(players.get(0).modInstance, environment);
         }
@@ -261,11 +258,6 @@ public class CreateGameField extends GameScreenAdapter {
         createRightPositions();
     }
 
-    public void drawDice(Texture d1, Texture d2, SpriteBatch batch) {
-        batch.draw(d1, xPosButtons + 500, yPosInitialButtons - 400, 500, 500);
-        batch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
-    }
-
     public void createModels() {
         transformModelsOnField(0, 10, 0, 0, 0, 0);
         transformModelsOnField(11, 19, leftX, leftZ, 270, 0);
@@ -299,9 +291,5 @@ public class CreateGameField extends GameScreenAdapter {
             fieldModInstance[i].transform.translate(vector3);
             fieldModInstance[i].transform.rotate(vector3Rotate, degrees);
         }
-    }
-
-    public void setPlayers(){
-
     }
 }
