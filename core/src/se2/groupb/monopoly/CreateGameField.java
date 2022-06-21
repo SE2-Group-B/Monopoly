@@ -24,7 +24,6 @@ import se2.groupb.monopoly.screens.GameScreenAdapter;
 
 public class CreateGameField extends GameScreenAdapter {
 
-    private Monopoly monopoly;
     private SpriteBatch spriteBatch;
     private Environment environment;
     private OrthographicCamera camera;
@@ -225,19 +224,6 @@ public class CreateGameField extends GameScreenAdapter {
 
         renderModels();
 
-        /**
-         * Check showCard is true and draw the card
-         */
-        if (showCard) {
-            spriteBatch.draw(kartenHintergrund, (Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 3) - 200, 600, 750);
-            timerCard.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    showCard = false;
-                }
-            }, 5);
-            timerCard.stop();
-        }
         spriteBatch.end();
         modelBatch.end();
     }

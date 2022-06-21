@@ -1,5 +1,7 @@
 package se2.groupb.monopoly;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import java.util.ArrayList;
 
 public class PlayerOperation {
@@ -8,6 +10,10 @@ public class PlayerOperation {
     private Pot moneyPot;
     private int currentPlayerId;
     private int playerCount;
+    private Texture cardBackground;
+    private Deck communityCards;
+    private Deck eventCards;
+    private boolean showCard;
     private boolean bought;
 
     public PlayerOperation(ArrayList<Player> playerList) {
@@ -66,13 +72,13 @@ public class PlayerOperation {
                 break;
             case "Gemeinschaftsfeld":
                 output += " stepped on a Gemeinschaftsfeld.";
-//                kartenHintergrund = getCurrentPlayer().drawCard(gemeinschaftskartenDeck);
-//                showCard = true;
+                cardBackground = getCurrentPlayer().drawCard(communityCards);
+                showCard = true;
                 break;
             case "Ereignisfeld":
                 output += " stepped on a Ereignisfeld.";
-//                kartenHintergrund = getCurrentPlayer().drawCard(ereigniskartenDeck);
-//                showCard = true;
+                cardBackground = getCurrentPlayer().drawCard(eventCards);
+                showCard = true;
                 break;
             case "Gefängnis":
                 if (getCurrentPlayer().getPrison()) {
@@ -132,6 +138,26 @@ public class PlayerOperation {
         return output;
     }
 
+    public void setCommunityCards(Deck communityCards){
+        this.communityCards = communityCards;
+    }
+
+    public void setEventCards(Deck eventCards){
+        this.eventCards = eventCards;
+    }
+
+    public Texture getCardTexture(){
+        return this.cardBackground;
+    }
+
+    public boolean getCardBoolean(){
+        return this.showCard;
+    }
+
+    public void setCardBoolean(boolean showCard){
+        this.showCard = showCard;
+    }
+    
     public boolean isBought() {
         return bought;
     }
