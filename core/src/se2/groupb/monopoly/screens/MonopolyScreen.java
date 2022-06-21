@@ -7,12 +7,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -70,9 +68,6 @@ public class MonopolyScreen extends GameScreenAdapter {
     private ArrayList<Property> player4Propertylist;
 
     //Vivi
-    private Deck communityCards;
-    private Deck eventCards;
-    public boolean showCard;
     private Timer timerCard;
 
     private SpriteBatch batch;
@@ -235,7 +230,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400f);
 
         if (playerOperation.getCardBoolean()) {
-            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 3) - 200, 600, 750);
+            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2) - 100.f, (Gdx.graphics.getHeight() / 3) - 200.f, 600, 750);
             timerCard.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -284,11 +279,9 @@ public class MonopolyScreen extends GameScreenAdapter {
             player1 = monopoly.getClient().getPlayer().getPlayer();
             player1.createSpielfigur();
             playerList.add(player1);
-            if (monopoly.getClient().getOtherPlayers().size() > 0) {
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                playerList.add(player2);
-            }
+            player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+            player2.createSpielfigur();
+            playerList.add(player2);
             if (monopoly.getClient().getOtherPlayers().size() > 1) {
                 player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
                 player3.createSpielfigur();
@@ -308,10 +301,10 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     private void initCardDeck() {
-        communityCards = new Deck();
+        Deck communityCards = new Deck();
         communityCards.initializeGemeinschaftskartenStapel();
         communityCards.shuffle();
-        eventCards = new Deck();
+        Deck eventCards = new Deck();
         eventCards.initializeEreigniskartenStapel();
         eventCards.shuffle();
         playerOperation.setCommunityCards(communityCards);
