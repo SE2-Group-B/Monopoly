@@ -36,27 +36,4 @@ public class Trainstation extends Property {
     public void setRent(int rent) {
         this.rent = rent;
     }
-
-    public void increaseRent() {
-        int rent1 = getRent();
-        int anzahl = 0;
-
-
-
-        if(anzahl == 1){
-            rent1 = (int) (rent1 * 1.1);
-        }else if(anzahl == 2){
-            rent1 = (int) (rent1 + 50);
-        }else if(anzahl == 3){
-            rent1 = (int) (rent1 + 50);
-        }else if(anzahl == 4){
-            rent1 = (int) (rent1 + 50);
-        }else if(anzahl == 0){
-            return;
-        }else{
-            return;
-        }
-
-        setRent(rent1);
-    }
 }

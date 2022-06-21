@@ -125,7 +125,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons - 45, buttonsize / 2);
         diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
         cheatButton = drawImageButton("images/MenuButtons/report_cheat.png", xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
-        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90, 50, buttonsize / 5);
+        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90f, 50, buttonsize / 5);
 
         gameField = new CreateGameField(monopoly, playerList);
         playerOperation = new PlayerOperation(playerList);
@@ -141,6 +141,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                     dice2 = l.get(1);
                     playerOperation.getCurrentPlayer().move(dice);
                     playerOperation.setMoneyPotForOperation(moneyPot);
+                    playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
                     screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
                     playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
 //                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
@@ -217,20 +218,20 @@ public class MonopolyScreen extends GameScreenAdapter {
         drawDice(dice1, dice2);
 
         if (player1 != null && player2 != null) {
-            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
-            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
+            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100f);
+            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150f);
         }
         if (player3 != null) {
-            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
+            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200f);
         }
         if (player4 != null) {
-            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
+            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250f);
         }
-        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250f);
-        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400f);
+        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75f), yPosInitialButtons + 250);
+        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
 
         if (playerOperation.getCardBoolean()) {
-            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2) - 100.f, (Gdx.graphics.getHeight() / 3) - 200.f, 600, 750);
+            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2f) - 100f, (Gdx.graphics.getHeight() / 3f) - 200.f, 600, 750);
             timerCard.schedule(new Timer.Task() {
                 @Override
                 public void run() {

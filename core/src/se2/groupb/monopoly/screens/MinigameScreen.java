@@ -36,7 +36,7 @@ public class MinigameScreen extends GameScreenAdapter{
     @Override
     public void show() {
         stage = new Stage();
-        clicker = drawImageButton("images/MenuButtons/clicker.png", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, (float) (Gdx.graphics.getWidth()/3D));
+        clicker = drawImageButton("images/MenuButtons/clicker.png", Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, (float) (Gdx.graphics.getWidth()/3D));
 
         clicker.addListener(new EventListener() {
             @Override

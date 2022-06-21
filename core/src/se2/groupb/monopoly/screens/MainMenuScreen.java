@@ -8,8 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 
 public class MainMenuScreen extends GameScreenAdapter {
