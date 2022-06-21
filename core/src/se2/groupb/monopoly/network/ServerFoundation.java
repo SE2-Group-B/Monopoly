@@ -76,6 +76,9 @@ public class ServerFoundation {
                         server.sendToAllTCP("FINISH");
                     }
                 }
+                if (object instanceof PlayerInformation) {
+                    handlePlayerInformationMessage((PlayerInformation) object);
+                }
             }
         });
     }
@@ -132,6 +135,7 @@ public class ServerFoundation {
     }
 
     private void handleStringMessage(String object) {
+        System.out.println("server got message: " + object);
         if (object.equals("HOST")) {
             // start game when 2-4 Players are connected
             if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
@@ -142,6 +146,41 @@ public class ServerFoundation {
             } else { // wait for players if not all connected
                 server.sendToAllTCP("WAITFORPLAYER");
             }
+        }
+    }
+
+    private void handlePlayerInformationMessage(PlayerInformation object) {
+        System.out.println("server received message: " + object.getMessageType());
+        if (object.getMessageType().equals("NEXTTURN")) {
+            System.out.println("server got message :" + object.getPlayer().getName());
+            incrementCurrentPlayer(countPlayers);
+            if (countPlayers > 1 && countPlayers <= 4) {
+                if (object.getPlayer().getId() == player1.getPlayer().getId()) {
+                    player1 = object;
+                    player1.setCurrentPlayerID(getCurrentPlayerID());
+                    player1.setMessageType("STARTNEXTTURN");
+                }
+                if (object.getPlayer().getId() == player2.getPlayer().getId()) {
+                    player2 = object;
+                    player2.setCurrentPlayerID(getCurrentPlayerID());
+                    player2.setMessageType("STARTNEXTTURN");
+                }
+            }
+            if (countPlayers > 2 && countPlayers <= 4) {
+                if (object.getPlayer().getId() == player3.getPlayer().getId()) {
+                    player3 = object;
+                    player3.setCurrentPlayerID(getCurrentPlayerID());
+                    player3.setMessageType("STARTNEXTTURN");
+                }
+            }
+            if (countPlayers > 3 && countPlayers <= 4) {
+                if (object.getPlayer().getId() == player4.getPlayer().getId()) {
+                    player4 = object;
+                    player4.setCurrentPlayerID(getCurrentPlayerID());
+                    player4.setMessageType("STARTNEXTTURN");
+                }
+            }
+            server.sendToAllTCP(object);
         }
     }
 

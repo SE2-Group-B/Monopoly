@@ -26,6 +26,7 @@ import se2.groupb.monopoly.Player;
 import se2.groupb.monopoly.PlayerOperation;
 import se2.groupb.monopoly.Pot;
 import se2.groupb.monopoly.Property;
+import se2.groupb.monopoly.network.messages.PlayerInformation;
 
 public class MonopolyScreen extends GameScreenAdapter {
     //Buttons
@@ -136,10 +137,11 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerOperation = new PlayerOperation(playerList);
         initCardDeck();
 
+
         diceButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
+                if (Gdx.input.justTouched() && diceRoll.getOnTurn() && clientIsCurrentPlayer()) {
                     int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
                     ArrayList<Texture> l = diceRoll.getDiceTextures();
                     dice1 = l.get(0);
@@ -157,10 +159,14 @@ public class MonopolyScreen extends GameScreenAdapter {
         nextButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()) {
+                if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
                     if (!diceRoll.getOnTurn()) {
+                        monopoly.getClient().getPlayer().setPlayer(playerOperation.getCurrentPlayer());
                         screenOutput = playerOperation.nextPlayer();
                         diceRoll.reset();
+//                        monopoly.getClient().getPlayer().setMessageType("NEXTTURN");
+//                        PlayerInformation play = monopoly.getClient().getPlayer();
+//                        monopoly.getClient().getClient().sendTCP(play.getPlayer());
                     } else {
                         screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
                     }
@@ -172,7 +178,9 @@ public class MonopolyScreen extends GameScreenAdapter {
         cheatButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                diceRoll.reportCheat();
+                if (!clientIsCurrentPlayer()) {
+                    diceRoll.reportCheat();
+                }
                 return true;
             }
         });
@@ -180,7 +188,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         buyButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched()) {
+                if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
                     //winning();
                     screenOutput = playerOperation.buying();
                     if (playerOperation.isBought()) {
@@ -316,5 +324,9 @@ public class MonopolyScreen extends GameScreenAdapter {
         eventCards.shuffle();
         playerOperation.setCommunityCards(communityCards);
         playerOperation.setEventCards(eventCards);
+    }
+
+    public boolean clientIsCurrentPlayer() {
+        return playerOperation.getCurrentPlayer().getId() == monopoly.getClient().getPlayer().getCurrentPlayerID();
     }
 }

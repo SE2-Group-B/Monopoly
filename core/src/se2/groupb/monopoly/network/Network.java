@@ -1,8 +1,12 @@
 package se2.groupb.monopoly.network;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
@@ -31,5 +35,11 @@ public class Network {
         kryo.register(Vector3.class);
         kryo.register(CreateGameField.class);
         kryo.register(Property.class);
+//        kryo.register(Array.class);
+//        kryo.register(Object[].class);
+//        kryo.register(Material.class);
+//        kryo.register(ColorAttribute.class);
+//        kryo.register(FloatAttribute.class);
+//        kryo.register(Array.ArrayIterable.class);
     }
 }

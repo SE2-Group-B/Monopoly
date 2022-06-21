@@ -80,6 +80,7 @@ public class ClientFoundation {
         }
     }
 
+
     private void handlePlayerInformationMessages(PlayerInformation object) {
         if (object.getMessageType().equals("INITIALIZE_GAME")) {
             // Server sends initialization of players
@@ -89,6 +90,13 @@ public class ClientFoundation {
             } else if (!object.getIsPlayer()) {
                 object.getMessageType();
                 otherPlayers.add(object);
+            }
+        }
+        if(object.getMessageType().equals("STARTNEXTTURN")){
+            for (int i = 0; i < otherPlayers.size(); i++) {
+                if(otherPlayers.get(i).getPlayer().getId() == object.getPlayer().getId()){
+                    otherPlayers.set(i, object);
+                }
             }
         }
     }
