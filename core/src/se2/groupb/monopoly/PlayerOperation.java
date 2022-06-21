@@ -1,5 +1,7 @@
 package se2.groupb.monopoly;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import java.util.ArrayList;
 
 public class PlayerOperation {
@@ -8,6 +10,9 @@ public class PlayerOperation {
     private Pot moneyPot;
     private int currentPlayerId;
     private int playerCount;
+    private Texture cardBackground;
+    private Deck communityCards;
+    private Deck eventCards;
 
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
@@ -65,12 +70,12 @@ public class PlayerOperation {
                 break;
             case "Gemeinschaftsfeld":
                 output += " stepped on a Gemeinschaftsfeld.";
-//                kartenHintergrund = getCurrentPlayer().drawCard(gemeinschaftskartenDeck);
+                cardBackground = getCurrentPlayer().drawCard(communityCards);
 //                showCard = true;
                 break;
             case "Ereignisfeld":
                 output += " stepped on a Ereignisfeld.";
-//                kartenHintergrund = getCurrentPlayer().drawCard(ereigniskartenDeck);
+                cardBackground = getCurrentPlayer().drawCard(eventCards);
 //                showCard = true;
                 break;
             case "Gefängnis":
@@ -126,5 +131,17 @@ public class PlayerOperation {
             output = "You can't buy this Property";
         }
         return output;
+    }
+
+    public void setCommunityCards(Deck communityCards){
+        this.communityCards = communityCards;
+    }
+
+    public void setEventCards(Deck eventCards){
+        this.eventCards = eventCards;
+    }
+
+    public Texture getCardTexture(){
+        return cardBackground;
     }
 }
