@@ -12,11 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
 import se2.groupb.monopoly.CreateGameField;
+import se2.groupb.monopoly.Deck;
 import se2.groupb.monopoly.DiceRoll;
 import se2.groupb.monopoly.Monopoly;
 import se2.groupb.monopoly.Player;
@@ -66,6 +69,12 @@ public class MonopolyScreen extends GameScreenAdapter {
     private ArrayList<Property> player3Propertylist;
     private ArrayList<Property> player4Propertylist;
 
+    //Vivi
+    private Deck communityCards;
+    private Deck eventCards;
+    public boolean showCard;
+    private Timer timerCard;
+
     private SpriteBatch batch;
     private Stage stage;
 
@@ -88,7 +97,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         diceRoll = new DiceRoll();
         playerList = new ArrayList<>();
 
-        //initAlen
+        //init Alen
         moneyfont = new BitmapFont();
         player1mon = 0;
         player2mon = 0;
@@ -102,28 +111,13 @@ public class MonopolyScreen extends GameScreenAdapter {
         player4Propertylist = new ArrayList<>();
         playerList = new ArrayList();
 
+        //init Vivi
+        timerCard = new Timer();
+
         if (monopoly.isOfflineGame()) {
             initOfflinePlayer();
         } else {
-            if (!monopoly.getClient().getOtherPlayers().isEmpty()) {
-                player1 = monopoly.getClient().getPlayer().getPlayer();
-                player1.createSpielfigur();
-                playerList.add(player1);
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                playerList.add(player2);
-
-                if (monopoly.getClient().getOtherPlayers().size() > 1) {
-                    player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
-                    player3.createSpielfigur();
-                    playerList.add(player3);
-                }
-                if (monopoly.getClient().getOtherPlayers().size() > 2) {
-                    player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
-                    player4.createSpielfigur();
-                    playerList.add(player4);
-                }
-            }
+            initOnlinePlayer();
         }
     }
 
@@ -140,6 +134,7 @@ public class MonopolyScreen extends GameScreenAdapter {
 
         gameField = new CreateGameField(monopoly, playerList);
         playerOperation = new PlayerOperation(playerList);
+        initCardDeck();
 
         diceButton.addListener(new EventListener() {
             @Override
@@ -239,13 +234,24 @@ public class MonopolyScreen extends GameScreenAdapter {
         moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250f);
         moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400f);
 
+        if (playerOperation.getCardBoolean()) {
+            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 3) - 200, 600, 750);
+            timerCard.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    playerOperation.setCardBoolean(false);
+                }
+            }, 3);
+            timerCard.stop();
+        }
+
         batch.end();
     }
 
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
         /**
-         * is not used
+         *not used
          */
     }
 
@@ -273,8 +279,42 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerList.add(player4);
     }
 
+    public void initOnlinePlayer() {
+        if (!monopoly.getClient().getOtherPlayers().isEmpty()) {
+            player1 = monopoly.getClient().getPlayer().getPlayer();
+            player1.createSpielfigur();
+            playerList.add(player1);
+            if (monopoly.getClient().getOtherPlayers().size() > 0) {
+                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+                player2.createSpielfigur();
+                playerList.add(player2);
+            }
+            if (monopoly.getClient().getOtherPlayers().size() > 1) {
+                player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
+                player3.createSpielfigur();
+                playerList.add(player3);
+            }
+            if (monopoly.getClient().getOtherPlayers().size() > 2) {
+                player4 = monopoly.getClient().getOtherPlayers().get(2).getPlayer();
+                player4.createSpielfigur();
+                playerList.add(player4);
+            }
+        }
+    }
+
     public void drawDice(Texture d1, Texture d2) {
         batch.draw(d1, xPosButtons + 500, yPosInitialButtons - 400, 500, 500);
         batch.draw(d2, xPosButtons, yPosInitialButtons - 400, 500, 500);
+    }
+
+    private void initCardDeck() {
+        communityCards = new Deck();
+        communityCards.initializeGemeinschaftskartenStapel();
+        communityCards.shuffle();
+        eventCards = new Deck();
+        eventCards.initializeEreigniskartenStapel();
+        eventCards.shuffle();
+        playerOperation.setCommunityCards(communityCards);
+        playerOperation.setEventCards(eventCards);
     }
 }
