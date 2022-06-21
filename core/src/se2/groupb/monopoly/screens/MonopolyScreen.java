@@ -73,10 +73,8 @@ public class MonopolyScreen extends GameScreenAdapter {
     //Vivi
     private Deck communityCards;
     private Deck eventCards;
-    private Texture cardBackground;
     public boolean showCard;
     private Timer timerCard;
-
 
     private SpriteBatch batch;
     private Stage stage;
@@ -115,7 +113,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerList = new ArrayList();
 
         //init Vivi
-
+        timerCard = new Timer();
 
         if (monopoly.isOfflineGame()) {
             initOfflinePlayer();
@@ -233,14 +231,14 @@ public class MonopolyScreen extends GameScreenAdapter {
         moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250f);
         moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400f);
 
-        if (showCard) {
+        if (playerOperation.getCardBoolean()) {
             batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 3) - 200, 600, 750);
             timerCard.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    showCard = false;
+                    playerOperation.setCardBoolean(false);
                 }
-            }, 5);
+            }, 3);
             timerCard.stop();
         }
 

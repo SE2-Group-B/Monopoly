@@ -13,6 +13,7 @@ public class PlayerOperation {
     private Texture cardBackground;
     private Deck communityCards;
     private Deck eventCards;
+    private boolean showCard;
 
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
@@ -71,12 +72,12 @@ public class PlayerOperation {
             case "Gemeinschaftsfeld":
                 output += " stepped on a Gemeinschaftsfeld.";
                 cardBackground = getCurrentPlayer().drawCard(communityCards);
-//                showCard = true;
+                showCard = true;
                 break;
             case "Ereignisfeld":
                 output += " stepped on a Ereignisfeld.";
                 cardBackground = getCurrentPlayer().drawCard(eventCards);
-//                showCard = true;
+                showCard = true;
                 break;
             case "Gefängnis":
                 if (getCurrentPlayer().getPrison()) {
@@ -142,6 +143,14 @@ public class PlayerOperation {
     }
 
     public Texture getCardTexture(){
-        return cardBackground;
+        return this.cardBackground;
+    }
+
+    public boolean getCardBoolean(){
+        return this.showCard;
+    }
+
+    public void setCardBoolean(boolean showCard){
+        this.showCard = showCard;
     }
 }
