@@ -18,28 +18,25 @@ public class Player {
     private int position;
     private int bankBalance;
     private ArrayList<Property> myProperties;
-    private int NumOfTrainstaitions;
+    private int numOfTrainstaitions;
     private Color color;
     ModelInstance modInstance;
     Vector3 fieldPos;
     private boolean prison;
     private boolean isNotAlone;
     private int prisoncount = 0;
-//    private Pot pot;
-
     private String buildingPath = "Spielfeld\\char.g3dj";
-    private CreateGameField field;
-
+    private Pot pot;
 
     public Player() {
     }
 
-    public Player(int id, String name, int bankBalance, ArrayList<Property> myProperties, int NumOfTrainstaitions, Color color) {
+    public Player(int id, String name, int bankBalance, ArrayList<Property> myProperties, int numOfTrainstaitions, Color color) {
         this.id = id;
         this.name = name;
         this.bankBalance = bankBalance;
         this.myProperties = myProperties;
-        this.NumOfTrainstaitions = NumOfTrainstaitions;
+        this.numOfTrainstaitions = numOfTrainstaitions;
         this.position = 0;
         this.color = color;
     }
@@ -107,11 +104,11 @@ public class Player {
     }
 
     public int getNumOfTrainstaitions() {
-        return NumOfTrainstaitions;
+        return numOfTrainstaitions;
     }
 
     public void setNumOfTrainstaitions(int numOfTrainstaitions) {
-        this.NumOfTrainstaitions = numOfTrainstaitions;
+        this.numOfTrainstaitions = numOfTrainstaitions;
     }
 
     public void changeMoney(int betrag) {
@@ -196,27 +193,27 @@ public class Player {
             case 6:
                 kartenbild = new Texture("images/KartenImages/Karte6.png");
                 changeMoney(-100);
-//                pot.addToPot(100);
+                pot.addToPot(100);
                 break;
             case 7:
                 kartenbild = new Texture("images/KartenImages/Karte7.png");
                 changeMoney(-100);
-//                pot.addToPot(100);
+                pot.addToPot(100);
                 break;
             case 8:
                 kartenbild = new Texture("images/KartenImages/Karte8.png");
                 changeMoney(-20);
-//                pot.addToPot(20);
+                pot.addToPot(20);
                 break;
             case 9:
                 kartenbild = new Texture("images/KartenImages/Karte9.png");
                 changeMoney(-40);
-//                pot.addToPot(40);
+                pot.addToPot(40);
                 break;
             case 10:
                 kartenbild = new Texture("images/KartenImages/Karte10.png");
                 changeMoney(-200);
-//                pot.addToPot(200);
+                pot.addToPot(200);
                 break;
             case 11:
                 kartenbild = new Texture("images/KartenImages/Karte11.png");
@@ -305,27 +302,27 @@ public class Player {
             case 32:
                 kartenbild = new Texture("images/KartenImages/Karte32.png");
                 changeMoney(-250);
-//                pot.addToPot(250);
+                pot.addToPot(250);
                 break;
             case 33:
                 kartenbild = new Texture("images/KartenImages/Karte33.png");
                 changeMoney(-100);
-//                pot.addToPot(100);
+                pot.addToPot(100);
                 break;
             case 34:
                 kartenbild = new Texture("images/KartenImages/Karte34.png");
                 changeMoney(-250);
-//                pot.addToPot(250);
+                pot.addToPot(250);
                 break;
             case 35:
                 kartenbild = new Texture("images/KartenImages/Karte35.png");
                 changeMoney(-200);
-//                pot.addToPot(200);
+                pot.addToPot(200);
                 break;
             case 36:
                 kartenbild = new Texture("images/KartenImages/Karte36.png");
                 changeMoney(-100);
-//                pot.addToPot(100);
+                pot.addToPot(100);
                 break;
             default:
                 break;
@@ -340,5 +337,9 @@ public class Player {
 
     public void setNotAlone(boolean notAlone) {
         isNotAlone = notAlone;
+    }
+
+    public void setMoneyPotForPlayer(Pot pot) {
+        this.pot = pot;
     }
 }

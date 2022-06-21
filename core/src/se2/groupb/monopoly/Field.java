@@ -15,7 +15,7 @@ public class Field {
     public Field(Model model, Color color, Type type) {
         this.model = model;
         this.color = color;
-        this.type = type;;
+        this.type = type;
     }
 
     public Model getModel() {
