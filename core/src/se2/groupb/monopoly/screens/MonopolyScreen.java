@@ -227,8 +227,8 @@ public class MonopolyScreen extends GameScreenAdapter {
         if (player4 != null) {
             moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250f);
         }
-        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75f), yPosInitialButtons + 250);
-        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
+        moneyfont.draw(batch, screenOutput, (Gdx.graphics.getWidth() / 3.75f), yPosInitialButtons + 250);
+        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400f);
 
         if (playerOperation.getCardBoolean()) {
             batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2f) - 100f, (Gdx.graphics.getHeight() / 3f) - 200.f, 600, 750);

@@ -99,11 +99,11 @@ public class WinningScreen extends GameScreenAdapter{
         fourth = "Vierter: " + placement.get(3) + " with:" + sums.get(3);
 
         font.setColor(Color.BLACK);
-        font.draw(spriteBatch, text, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)+250f);
-        font.draw(spriteBatch, first, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)+150f);
-        font.draw(spriteBatch, second, (float) (Gdx.graphics.getWidth()/3.75), (Gdx.graphics.getHeight()/2)+50f);
-        font.draw(spriteBatch, third, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)-50f);
-        font.draw(spriteBatch, fourth, (float) (Gdx.graphics.getWidth()/3.75), (Gdx.graphics.getHeight()/2)-150f);
+        font.draw(spriteBatch, text, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)+250);
+        font.draw(spriteBatch, first, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)+150);
+        font.draw(spriteBatch, second, (float) (Gdx.graphics.getWidth()/3.75), (Gdx.graphics.getHeight()/2)+50);
+        font.draw(spriteBatch, third, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)-50);
+        font.draw(spriteBatch, fourth, (float) (Gdx.graphics.getWidth()/3.75), (Gdx.graphics.getHeight()/2)-150);
 
         spriteBatch.end();
         monopoly.getBatch().end();
