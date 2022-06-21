@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -152,6 +153,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                     playerOperation.setMoneyPotForOperation(moneyPot);
                     screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
                     playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
                 }
                 return true;
             }
@@ -186,6 +188,9 @@ public class MonopolyScreen extends GameScreenAdapter {
                 if (Gdx.input.justTouched()) {
                     //winning();
                     screenOutput = playerOperation.buying();
+                    if (playerOperation.isBought()) {
+                        gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                    }
                 }
                 return true;
             }

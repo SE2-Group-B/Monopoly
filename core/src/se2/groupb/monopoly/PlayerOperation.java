@@ -8,6 +8,7 @@ public class PlayerOperation {
     private Pot moneyPot;
     private int currentPlayerId;
     private int playerCount;
+    private boolean bought;
 
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
@@ -114,17 +115,28 @@ public class PlayerOperation {
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
                 output += " bought " + p.getName() + " for " + ((Street) p).getPrice() + "€";
                 getCurrentPlayer().changeMoney(-((Street) p).getPrice());
+                bought = true;
             } else if (p instanceof Trainstation) {
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
-                getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions()+1);
-                output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";;
+                getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
+                output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
+
                 getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
+                bought = true;
             } else {
                 output = "You can't buy this Property";
             }
-        }else {
+        } else {
             output = "You can't buy this Property";
         }
         return output;
+    }
+
+    public boolean isBought() {
+        return bought;
+    }
+
+    public void setBought(boolean bought) {
+        this.bought = bought;
     }
 }
