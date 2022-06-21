@@ -67,7 +67,7 @@ public class ServerFoundationTest {
     }
 
     @Test
-    public void startGameTest5Players(){
+    public void startGameTest5Players() {
         client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         ClientFoundation client5 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
@@ -81,11 +81,61 @@ public class ServerFoundationTest {
     }
 
     @Test
-    public void randomizeTest(){
+    public void randomizeTest() {
         ServerFoundation server2 = new ServerFoundation();
         Assert.assertNotEquals(server2.getTcpPort(), server.getTcpPort());
     }
 
+    @Test
+    public void incrementCurrentPlayerTestWithTooLittleAndTooMuchPlayers() {
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(1);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
 
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(5);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(5);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(5);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(5);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(5);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+    }
+
+    @Test
+    public void incrementCurrentPlayerTestWith4Players() {
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(4);
+        Assert.assertEquals(2, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(4);
+        Assert.assertEquals(3, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(4);
+        Assert.assertEquals(4, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(4);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+    }
+
+    @Test
+    public void incrementCurrentPlayerTestWith2Players() {
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(2);
+        Assert.assertEquals(2, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(2);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+    }
+
+    @Test
+    public void incrementCurrentPlayerTestWith3Players() {
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(3);
+        Assert.assertEquals(2, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(3);
+        Assert.assertEquals(3, server.getCurrentPlayerID());
+        server.incrementCurrentPlayer(3);
+        Assert.assertEquals(1, server.getCurrentPlayerID());
+    }
 
 }

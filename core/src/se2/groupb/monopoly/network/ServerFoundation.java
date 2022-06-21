@@ -28,12 +28,16 @@ public class ServerFoundation {
 
     private int countPlayers;
 
+    // send the player who is allowed to move to clients
+    private int currentPlayerID;
+
     private RoundCounter roundcount = new RoundCounter();
     // public int minigamecount;
 
     public ServerFoundation() {
-        countPlayers = 0;
-        random = new Random();
+        this.currentPlayerID = 1;
+        this.countPlayers = 0;
+        this.random = new Random();
         System.setProperty("java.net.preferIPv4Stack", "true");
         this.server = new Server(1_000_000, 1_000_000);
 
@@ -82,15 +86,19 @@ public class ServerFoundation {
         if (countPlayers >= 2 && countPlayers <= 4) {
             this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<>(), 0, Color.BLUE));
             this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<>(), 0, Color.RED));
+            this.player1.setCurrentPlayerID(this.currentPlayerID);
+            this.player2.setCurrentPlayerID(this.currentPlayerID);
             players.add(player1);
             players.add(player2);
         }
         if (countPlayers >= 3 && countPlayers <= 4) {
             this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<>(), 0, Color.YELLOW));
+            this.player3.setCurrentPlayerID(this.currentPlayerID);
             players.add(player3);
         }
         if (countPlayers >= 4) {
             this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<>(), 0, Color.GREEN));
+            this.player4.setCurrentPlayerID(this.currentPlayerID);
             players.add(player4);
         }
 
@@ -112,6 +120,7 @@ public class ServerFoundation {
             for (int i = 0; i < players.size(); i++) {
                 players.get(i).setIsPlayer(true);
                 server.sendToTCP(i + 1, players.get(i));
+                System.out.println("server sends currentPlayer: " + players.get(i).getCurrentPlayerID() + " to client");
                 for (int j = 0; j < players.size(); j++) {
                     if (j != i) {
                         players.get(i).setIsPlayer(false);
@@ -164,6 +173,29 @@ public class ServerFoundation {
 
     public int getUdpPort() {
         return udpPort;
+    }
+
+    // method to increment the currentPlayerID after a player has finished the move
+    public void incrementCurrentPlayer(int countPlayers) {
+        if (countPlayers == 2) {
+            checkPlayerIDForMoves(countPlayers);
+        }
+        if (countPlayers == 3) {
+            checkPlayerIDForMoves(countPlayers);
+        }
+        if (countPlayers == 4) {
+            checkPlayerIDForMoves(countPlayers);
+        }
+    }
+
+    public void checkPlayerIDForMoves(int countPlayers) {
+        if (this.currentPlayerID == countPlayers) {
+            this.currentPlayerID = 1;
+        } else this.currentPlayerID++;
+    }
+
+    public int getCurrentPlayerID() {
+        return currentPlayerID;
     }
 
     /************ Players ************/

@@ -15,6 +15,7 @@ public class PlayerInformation {
     String messageType;
     //boolean for seeing if the player on client is the actual user or the other players
     boolean isPlayer;
+    int currentPlayerID;
 
     public PlayerInformation() {
     }
@@ -47,4 +48,11 @@ public class PlayerInformation {
         isPlayer = player;
     }
 
+    public int getCurrentPlayerID() {
+        return currentPlayerID;
+    }
+
+    public void setCurrentPlayerID(int currentPlayerID) {
+        this.currentPlayerID = currentPlayerID;
+    }
 }
