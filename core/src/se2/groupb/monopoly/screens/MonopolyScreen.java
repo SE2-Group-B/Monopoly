@@ -143,7 +143,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                     playerOperation.setMoneyPotForOperation(moneyPot);
                     screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
                     playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
-                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
+//                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
                 }
                 return true;
             }
