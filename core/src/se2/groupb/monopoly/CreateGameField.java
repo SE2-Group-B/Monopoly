@@ -1,6 +1,7 @@
 package se2.groupb.monopoly;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,10 +32,6 @@ public class CreateGameField extends GameScreenAdapter {
     private BitmapFont moneyfont;
     private Stage stage;
     private Field[] fields;
-    private Player player1;
-    private Player player2;
-    private Player player3;
-    private Player player4;
     private ArrayList<Player> players;
     private int playerCount;
     private Texture kartenHintergrund;
@@ -139,10 +136,15 @@ public class CreateGameField extends GameScreenAdapter {
 
     public void checkIfPlayerIsAlone(Player player) {
         for (int i = 0; i < players.size(); i++) {
-            if (player.getId() != players.get(i).getId() && player.getPosition() == players.get(i).getPosition() && !players.get(i).isNotAlone()) {
+            if (player.getId() != players.get(i).getId() && player.getPosition() == players.get(i).getPosition()) {
+                if(players.get(i).isNotAlone()) {
+                    players.get(i).setNotAlone(false);
+                } else players.get(i).setNotAlone(true);
+
                 player.setNotAlone(true);
                 players.get(i).setNotAlone(true);
             }
+
         }
         setMultiplePlayersOnField();
     }
@@ -300,6 +302,11 @@ public class CreateGameField extends GameScreenAdapter {
             fieldModInstance[i].transform.translate(vector3);
             fieldModInstance[i].transform.rotate(vector3Rotate, degrees);
         }
+    }
+
+    public void changeColor(int field, Color color) {
+        fieldModInstance[field].materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, color));
+        pO.setBought(false);
     }
 }
 
