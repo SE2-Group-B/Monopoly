@@ -121,21 +121,24 @@ public class PlayerOperation {
         String output = playerString + " bought ";
         if (!isSomeonesProperty(playerPosition)) {
             if (p instanceof Street) {
+                bought = true;
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
                 output += p.getName() + " for " + ((Street) p).getPrice() + "€";
                 getCurrentPlayer().changeMoney(-((Street) p).getPrice());
-                bought = true;
+
             } else if (p instanceof Trainstation) {
+                bought = true;
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
                 getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
                 output += p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
 
                 getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
-                bought = true;
             } else {
+                bought = false;
                 output = "You can't buy this Property";
             }
         } else {
+            bought = false;
             output = "You can't buy this Property";
         }
         return output;
