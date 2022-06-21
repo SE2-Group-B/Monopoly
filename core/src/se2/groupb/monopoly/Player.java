@@ -22,7 +22,8 @@ public class Player {
     private Color color;
     ModelInstance modInstance;
     Vector3 fieldPos;
-    private boolean prison = false;
+    private boolean prison;
+    private boolean isNotAlone;
     private int prisoncount = 0;
 //    private Pot pot;
 
@@ -331,5 +332,13 @@ public class Player {
 
         }
         return kartenbild;
+    }
+
+    public boolean isNotAlone() {
+        return isNotAlone;
+    }
+
+    public void setNotAlone(boolean notAlone) {
+        isNotAlone = notAlone;
     }
 }
