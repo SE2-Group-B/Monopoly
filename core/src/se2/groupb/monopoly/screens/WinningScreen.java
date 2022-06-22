@@ -27,8 +27,6 @@ public class WinningScreen extends GameScreenAdapter{
     private GlyphLayout waitingText;
     private Environment environment;
     private float buttonsize;
-    //private int[] sums;
-    //private String[] placement;
     private ArrayList<Integer> sums;
     private ArrayList<String> placement;
 
@@ -41,16 +39,10 @@ public class WinningScreen extends GameScreenAdapter{
     private String second;
     private String third;
     private String fourth;
-    /*private String first = "Sieger: Player 1 with: 2000$";
-    private String second = "Zweiter: Player 2 with: 1800$";
-    private String third = "Dritter: Player 3 with: 1600$";
-    private String fourth = "Vierter: Player 4 with: 100$";*/
 
 
     public WinningScreen(Monopoly monopoly, ArrayList<Integer> sums, ArrayList<String> placement) {
         super(monopoly);
-        //environment = new Environment();
-        //environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
         this.sums = sums;
         this.placement = placement;
     }
@@ -60,13 +52,10 @@ public class WinningScreen extends GameScreenAdapter{
         stage = new Stage();
         end = drawImageButton("images/MenuButtons/arrow.png", Gdx.graphics.getWidth()-100f, 50,buttonsize/4);
 
-        end.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                    Gdx.app.exit();
-                }return true;
-            }
+        end.addListener(event -> {
+            if(Gdx.input.justTouched()){
+                Gdx.app.exit();
+            }return true;
         });
         stage.addActor(end);
 

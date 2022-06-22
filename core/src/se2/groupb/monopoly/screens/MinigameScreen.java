@@ -38,13 +38,10 @@ public class MinigameScreen extends GameScreenAdapter{
         stage = new Stage();
         clicker = drawImageButton("images/MenuButtons/clicker.png", Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, (float) (Gdx.graphics.getWidth()/3D));
 
-        clicker.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                    counter++;
-                }return true;
-            }
+        clicker.addListener(event -> {
+            if(Gdx.input.justTouched()){
+                counter++;
+            }return true;
         });
         stage.addActor(clicker);
 

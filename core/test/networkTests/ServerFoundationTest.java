@@ -76,7 +76,7 @@ public class ServerFoundationTest {
         client1.getClient().sendTCP("HOST");
         Assert.assertTrue(client5.getClient().isConnected());
     }
-    
+
     @Test
     public void getServerTest() {
         Assert.assertEquals(Server.class, server.getServer().getClass());

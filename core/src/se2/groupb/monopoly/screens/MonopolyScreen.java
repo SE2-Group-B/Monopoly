@@ -30,10 +30,8 @@ public class MonopolyScreen extends GameScreenAdapter {
     private ImageButton cheatButton;
     private ImageButton nextButton;
     private int buttonSizeX;
-    private int buttonSizeY;
     private float buttonsize;
     private float yPosInitialButtons;
-    private float yPosOffsetButtons;
     private float xPosButtons;
 
     //Players
@@ -76,11 +74,9 @@ public class MonopolyScreen extends GameScreenAdapter {
 
         //InitButtons
         buttonSizeX = Gdx.graphics.getWidth() / 3;
-        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
         buttonsize = (float) (Gdx.graphics.getWidth() / 3D);
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
-        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
         //init Marko
         screenOutput = "";
