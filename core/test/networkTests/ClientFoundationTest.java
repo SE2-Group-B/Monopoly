@@ -42,11 +42,11 @@ public class ClientFoundationTest {
         Assert.assertFalse(client.getClient().isConnected());
     }
 
-    @Test
+    /*@Test
     public void listenerTest() {
         server.getServer().sendToAllTCP("message");
         Assert.assertTrue(server.getServer().getConnections()[0].isConnected());
-    }
+    }*/
 
 //    @Test
 //    public void startGameTestEnoughPlayers() {
