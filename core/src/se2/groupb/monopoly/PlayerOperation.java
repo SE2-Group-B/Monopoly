@@ -14,14 +14,12 @@ public class PlayerOperation {
     private Deck eventCards;
     private boolean showCard;
     private boolean bought;
-    private String playerString;
 
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
         logicalGameField = new LogicalGameField();
         currentPlayerId = 1;
         this.playerCount = playerList.size();
-        this.playerString = "Player "+getCurrentPlayer().getName();
     }
 
     public boolean isSomeonesProperty(int position) {
@@ -43,7 +41,7 @@ public class PlayerOperation {
     public String checkCurrentProperty(Player player) {
         int playerPosition = player.getPosition();
         Property p = logicalGameField.getGameField()[playerPosition];
-        String output = playerString + " is on " + p.getName();
+        String output = "Player "+getCurrentPlayer().getName() + " is on " + p.getName();
         if (p instanceof Street) {
             if (isEnemyProperty(playerPosition)) {
                 output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), ((Street) p).getRent());
@@ -65,7 +63,7 @@ public class PlayerOperation {
     }
 
     public String checkSoleProperty(Property property) {
-        String output = playerString;
+        String output = "Player "+getCurrentPlayer().getName();
         switch (property.getName()) {
             case "Los":
                 getCurrentPlayer().changeMoney(400);
@@ -118,19 +116,19 @@ public class PlayerOperation {
     public String buying() {
         int playerPosition = getCurrentPlayer().getPosition();
         Property p = logicalGameField.getGameField()[playerPosition];
-        String output = playerString + " bought ";
+        String output = "Player "+getCurrentPlayer().getName() + " bought ";
         if (!isSomeonesProperty(playerPosition)) {
             if (p instanceof Street) {
                 bought = true;
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
-                output += p.getName() + " for " + ((Street) p).getPrice() + "€";
+                output += p.getName() + " for " + ((Street) p).getPrice() + "$";
                 getCurrentPlayer().changeMoney(-((Street) p).getPrice());
 
             } else if (p instanceof Trainstation) {
                 bought = true;
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
                 getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
-                output += p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
+                output += p.getName() + " for " + ((Trainstation) p).getPrice() + "$";
 
                 getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
             } else {

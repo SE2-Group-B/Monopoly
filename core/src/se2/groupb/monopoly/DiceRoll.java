@@ -100,31 +100,7 @@ public class DiceRoll {
     }
 
     public Texture setDice(int value) {
-        String path;
-        switch (value) {
-            case 1:
-                path = "images/Dice/dice_1.png";
-                break;
-            case 2:
-                path = "images/Dice/dice_2.png";
-                break;
-            case 3:
-                path = "images/Dice/dice_3.png";
-                break;
-            case 4:
-                path = "images/Dice/dice_4.png";
-                break;
-            case 5:
-                path = "images/Dice/dice_5.png";
-                break;
-            case 6:
-                path = "images/Dice/dice_6.png";
-                break;
-            default:
-                path = "images/Dice/dice_0.png";
-                break;
-        }
-        return new Texture(path);
+        return new Texture("images/Dice/dice_"+value+".png");
     }
 
     public void checkManualPachCount() {
