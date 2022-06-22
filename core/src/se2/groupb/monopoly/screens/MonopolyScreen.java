@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Timer;
@@ -131,61 +129,48 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerOperation = new PlayerOperation(playerList);
         initCardDeck();
 
-        diceButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
-                    int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
-                    ArrayList<Texture> l = diceRoll.getDiceTextures();
-                    dice1 = l.get(0);
-                    dice2 = l.get(1);
-                    playerOperation.getCurrentPlayer().move(dice);
-                    playerOperation.setMoneyPotForOperation(moneyPot);
-                    playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
-                    screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
-                    playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+        diceButton.addListener(event -> {
+            if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
+                int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                ArrayList<Texture> l = diceRoll.getDiceTextures();
+                dice1 = l.get(0);
+                dice2 = l.get(1);
+                playerOperation.getCurrentPlayer().move(dice);
+                playerOperation.setMoneyPotForOperation(moneyPot);
+                playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
+                screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
 //                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
-                }
-                return true;
             }
+            return true;
         });
 
-        nextButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (Gdx.input.justTouched()) {
-                    if (!diceRoll.getOnTurn()) {
-                        screenOutput = playerOperation.nextPlayer();
-                        diceRoll.reset();
-                    } else {
-                        screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
-                    }
+        nextButton.addListener(event -> {
+            if (Gdx.input.justTouched()) {
+                if (!diceRoll.getOnTurn()) {
+                    screenOutput = playerOperation.nextPlayer();
+                    diceRoll.reset();
+                } else {
+                    screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
                 }
-                return true;
             }
+            return true;
         });
 
-        cheatButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                diceRoll.reportCheat();
-                return true;
-            }
+        cheatButton.addListener(event -> {
+            diceRoll.reportCheat();
+            return true;
         });
 
-        buyButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (Gdx.input.justTouched()) {
-                    //winning();
-                    screenOutput = playerOperation.buying();
-                    if (playerOperation.isBought()) {
-                        gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
-                    }
-                }
-                return true;
-            }
-        });
+         buyButton.addListener(event -> {
+             if (Gdx.input.justTouched()) {
+                 screenOutput = playerOperation.buying();
+                 if (playerOperation.isBought()) {
+                     gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                 }
+             }
+             return true;
+         });
 
         stage.addActor(buyButton);
         stage.addActor(diceButton);
@@ -218,14 +203,14 @@ public class MonopolyScreen extends GameScreenAdapter {
         drawDice(dice1, dice2);
 
         if (player1 != null && player2 != null) {
-            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100f);
-            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150f);
+            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 100f));
+            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 150f));
         }
         if (player3 != null) {
-            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200f);
+            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 200f));
         }
         if (player4 != null) {
-            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250f);
+            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 250f));
         }
         moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75f), yPosInitialButtons + 250);
         moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
