@@ -41,13 +41,13 @@ public class ServerFoundationTest {
         client1.getClient().sendTCP("test");
     }
 
-    @Test
+    /*@Test
     public void startGameTest1Player() {
         client2.getClient().close();
         client1.getClient().sendUDP("HOST");
         Assert.assertTrue(client1.getClient().isConnected());
         Assert.assertFalse(client2.getClient().isConnected());
-    }
+    }*/
 
     @Test
     public void startGameTest2Players() {
