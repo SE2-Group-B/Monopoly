@@ -64,7 +64,7 @@ public class ServerFoundationTest {
         Assert.assertTrue(client2.getClient().isConnected());
         Assert.assertTrue(client3.getClient().isConnected());
         Assert.assertTrue(client4.getClient().isConnected());
-    }*/
+    }
 
     @Test
     public void startGameTest5Players(){
