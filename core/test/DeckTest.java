@@ -41,24 +41,24 @@ public class DeckTest {
 
     @Test
     public void testAdd(){
-        Assert.assertEquals(deck.getDeck().get(0), k1);
-        Assert.assertEquals(deck.getDeck().get(1), k2);
-        Assert.assertEquals(deck.getDeck().get(2), k3);
+        Assert.assertEquals(deck.getCards().get(0), k1);
+        Assert.assertEquals(deck.getCards().get(1), k2);
+        Assert.assertEquals(deck.getCards().get(2), k3);
     }
 
     @Test
     public void testAddContains(){
-        Assert.assertTrue(deck.getDeck().contains(k1));
-        Assert.assertTrue(deck.getDeck().contains(k2));
-        Assert.assertTrue(deck.getDeck().contains(k3));
+        Assert.assertTrue(deck.getCards().contains(k1));
+        Assert.assertTrue(deck.getCards().contains(k2));
+        Assert.assertTrue(deck.getCards().contains(k3));
     }
 
     @Test
     public void testShuffleStillContains(){
         deck.shuffle();
-        Assert.assertTrue(deck.getDeck().contains(k1));
-        Assert.assertTrue(deck.getDeck().contains(k2));
-        Assert.assertTrue(deck.getDeck().contains(k3));
+        Assert.assertTrue(deck.getCards().contains(k1));
+        Assert.assertTrue(deck.getCards().contains(k2));
+        Assert.assertTrue(deck.getCards().contains(k3));
     }
 
     //Wie teste ich Shuffle Methode?
@@ -75,14 +75,14 @@ public class DeckTest {
 
     @Test
     public void testGetKartenstapelNotNull(){
-        Assert.assertNotNull(deck.getDeck());
+        Assert.assertNotNull(deck.getCards());
     }
 
     @Test
     public void testGetDeck(){
-        Assert.assertEquals(deck.getDeck().get(0), k1);
-        Assert.assertEquals(deck.getDeck().get(1), k2);
-        Assert.assertEquals(deck.getDeck().get(2), k3);
+        Assert.assertEquals(deck.getCards().get(0), k1);
+        Assert.assertEquals(deck.getCards().get(1), k2);
+        Assert.assertEquals(deck.getCards().get(2), k3);
     }
 
     @Test
@@ -90,8 +90,8 @@ public class DeckTest {
         ArrayList<Card> cardArraylist =new ArrayList<>();
         cardArraylist.add(k1);
         cardArraylist.add(k2);
-        deck.setDeck(cardArraylist);
-        Assert.assertNotNull(deck.getDeck());
+        deck.setCards(cardArraylist);
+        Assert.assertNotNull(deck.getCards());
     }
 
     @Test
@@ -99,9 +99,9 @@ public class DeckTest {
         ArrayList<Card> cardArraylist =new ArrayList<>();
         cardArraylist.add(k1);
         cardArraylist.add(k2);
-        deck.setDeck(cardArraylist);
-        Assert.assertEquals(deck.getDeck().get(0), k1);
-        Assert.assertEquals(deck.getDeck().get(1), k2);
+        deck.setCards(cardArraylist);
+        Assert.assertEquals(deck.getCards().get(0), k1);
+        Assert.assertEquals(deck.getCards().get(1), k2);
     }
 
     @Test
@@ -166,7 +166,7 @@ public class DeckTest {
         Deck ereigniskartenDeck=new Deck();
         ereigniskartenDeck.initializeEreigniskartenStapel();
         Card c1=new Card(1, "Gehe 3 Felder zurück");
-        Assert.assertEquals(ereigniskartenDeck.getDeck().get(0).getId(), c1.getId());
+        Assert.assertEquals(ereigniskartenDeck.getCards().get(0).getId(), c1.getId());
     }
     @Test
     public void testInitializeGemeinschaftskartenDeck(){
@@ -178,7 +178,7 @@ public class DeckTest {
     public void testInitializesGemeinschaftskartenDeckCard1(){
         Deck gemeinschaftsDeck=new Deck();
         gemeinschaftsDeck.initializeGemeinschaftskartenStapel();
-        Assert.assertEquals(gemeinschaftsDeck.getDeck().get(0).getId(), 21);
+        Assert.assertEquals(gemeinschaftsDeck.getCards().get(0).getId(), 21);
     }
 
 }
