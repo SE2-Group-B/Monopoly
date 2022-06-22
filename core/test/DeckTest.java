@@ -106,13 +106,13 @@ public class DeckTest {
 
     @Test
     public void testGetIndex(){
-        Assert.assertEquals(deck.getIndex(),0);
+        Assert.assertEquals(0, deck.getIndex());
     }
 
     @Test
     public void testSetIndex(){
         deck.setIndex(3);
-        Assert.assertEquals(deck.getIndex(),3);
+        Assert.assertEquals(3,deck.getIndex());
     }
 
     @Test
@@ -122,33 +122,33 @@ public class DeckTest {
 
     @Test
     public void testGetNextCardFirst(){
-        Assert.assertEquals(deck.getNextCard(),k1);
+        Assert.assertEquals(k1, deck.getNextCard());
     }
 
     @Test
     public void testGetNextCardSecond(){
         Card card1 = deck.getNextCard();
-        Assert.assertEquals(deck.getNextCard(),k2);
+        Assert.assertEquals(k2, deck.getNextCard());
     }
 
     @Test
     public void testGetNextCardLastCard(){
         deck.setIndex(2);
-        Assert.assertEquals(deck.getNextCard(),k3);
+        Assert.assertEquals(k3, deck.getNextCard());
     }
 
     @Test
     public void testGetNextCardIndex(){
         deck.setIndex(2);
         deck.getNextCard();
-        Assert.assertEquals(deck.getIndex(),0);
+        Assert.assertEquals(0, deck.getIndex());
     }
 
     @Test
     public void testGetNextCardOutOfBounce(){
         deck.setIndex(33);
         deck.getNextCard();
-        Assert.assertEquals(deck.getIndex(),1);
+        Assert.assertEquals(1, deck.getIndex());
     }
     @Test
     public void testGetNextCardOutOfBounceKarte(){
@@ -166,7 +166,7 @@ public class DeckTest {
         Deck ereigniskartenDeck=new Deck();
         ereigniskartenDeck.initializeEreigniskartenStapel();
         Card c1=new Card(1, "Gehe 3 Felder zurück");
-        Assert.assertEquals(ereigniskartenDeck.getCards().get(0).getId(), c1.getId());
+        Assert.assertEquals(c1.getId(), ereigniskartenDeck.getCards().get(0).getId());
     }
     @Test
     public void testInitializeGemeinschaftskartenDeck(){
@@ -178,7 +178,7 @@ public class DeckTest {
     public void testInitializesGemeinschaftskartenDeckCard1(){
         Deck gemeinschaftsDeck=new Deck();
         gemeinschaftsDeck.initializeGemeinschaftskartenStapel();
-        Assert.assertEquals(gemeinschaftsDeck.getCards().get(0).getId(), 21);
+        Assert.assertEquals(21, gemeinschaftsDeck.getCards().get(0).getId());
     }
 
 }

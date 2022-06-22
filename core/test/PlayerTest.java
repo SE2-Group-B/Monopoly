@@ -62,35 +62,35 @@ public class PlayerTest {
 
     @Test
     public void testGetId(){
-        Assert.assertEquals(rot.getId(), 1);
+        Assert.assertEquals(1, rot.getId());
     }
 
     @Test
     public void testSetId(){
         rot.setId(10);
-        Assert.assertEquals(rot.getId(), 10);
+        Assert.assertEquals(10, rot.getId());
     }
     @Test
     public void testGetName(){
-        Assert.assertEquals(rot.getName(), "Rot");
+        Assert.assertEquals("Rot", rot.getName());
     }
     @Test
     public void testSetName(){
         rot.setName("Vivienne");
-        Assert.assertEquals(rot.getName(), "Vivienne");
+        Assert.assertEquals("Vivienne", rot.getName());
     }
     @Test
     public void testSetKontostand(){
         rot.setBankBalance(1200);
-        Assert.assertEquals(rot.getBankBalance(), 1200);
+        Assert.assertEquals(1200, rot.getBankBalance());
     }
     @Test
     public void testGetKontostand(){
-        Assert.assertEquals(rot.getBankBalance(), 2000);
+        Assert.assertEquals(2000, rot.getBankBalance());
     }
     @Test
     public void testGetMyProperties(){
-        Assert.assertEquals(rot.getMyProperties(), myPropertiesRot);
+        Assert.assertEquals(myPropertiesRot, rot.getMyProperties());
     }
     @Test
     public void testSetMyProperties(){
@@ -98,144 +98,144 @@ public class PlayerTest {
         myProperties2.add(nordbahnhof);
         myProperties2.add(hauptstraße);
         rot.setMyProperties(myProperties2);
-        Assert.assertEquals(rot.getMyProperties(),myProperties2);
+        Assert.assertEquals(myProperties2, rot.getMyProperties());
     }
 
     @Test
     public void testGetNumOfTrainstaitions(){
-        Assert.assertEquals(rot.getNumOfTrainstaitions(),1);
+        Assert.assertEquals(1, rot.getNumOfTrainstaitions());
     }
 
     @Test
     public void testSetNumOfTrainstaitions(){
         rot.setNumOfTrainstaitions(4);
-        Assert.assertEquals(rot.getNumOfTrainstaitions(),4);
+        Assert.assertEquals(4, rot.getNumOfTrainstaitions());
     }
 
 
     @Test
     public void testChangeMoneyPlus(){
         rot.changeMoney(50);
-        Assert.assertEquals(rot.getBankBalance(),2050);
+        Assert.assertEquals(2050, rot.getBankBalance());
     }
 
     @Test
     public void testChangeMoneyMinus(){
         rot.changeMoney(-2000);
-        Assert.assertEquals(rot.getBankBalance(),0);
+        Assert.assertEquals(0, rot.getBankBalance());
     }
 
     @Test
     public void testChangeMoneyNull(){
         rot.changeMoney(0);
-        Assert.assertEquals(rot.getBankBalance(),2000);
+        Assert.assertEquals(2000, rot.getBankBalance());
     }
 
     @Test
     public void testGetPosition(){
-        Assert.assertEquals(rot.getPosition(),0);
+        Assert.assertEquals(0,rot.getPosition());
     }
 
     @Test
     public void testSetPosition(){
         rot.setPosition(12);
-        Assert.assertEquals(rot.getPosition(),12);
+        Assert.assertEquals(12, rot.getPosition());
     }
 
     @Test
     public void testGoToJailPos(){
         rot.goToJail();
-        Assert.assertEquals(rot.getPosition(), 10);
+        Assert.assertEquals(10, rot.getPosition());
     }
     @Test
     public void testGoToJailPrison(){
         rot.goToJail();
-        Assert.assertEquals(rot.getPrison(), true);
+        Assert.assertEquals(true, rot.getPrison());
     }
     @Test
     public void testGetPrison(){
-        Assert.assertEquals(rot.getPrison(), false);
+        Assert.assertEquals(false, rot.getPrison());
     }
     @Test
     public void testSetPrison(){
         rot.goToJail();
         rot.setPrison(false);
-        Assert.assertEquals(rot.getPrison(), false);
+        Assert.assertEquals(false, rot.getPrison());
     }
     @Test
     public void testGetPrisonCount(){
         rot.goToJail();
-        Assert.assertEquals(rot.getPrisonCount(), 0);
+        Assert.assertEquals(0, rot.getPrisonCount());
     }
     @Test
     public void testSetPrisonCount(){
         rot.setPrisonCount(4);
-        Assert.assertEquals(rot.getPrisonCount(), 4);
+        Assert.assertEquals(4, rot.getPrisonCount());
     }
 
     @Test
     public void testRoundmoney(){
         rot.roundmoney();
-        Assert.assertEquals(rot.getBankBalance(), 2200);
+        Assert.assertEquals(2200, rot.getBankBalance());
     }
     @Test
     public void testPayToOtherPlayerString(){
         String antwort=rot.payToOtherPlayer(gelb, 2000);
-        Assert.assertEquals(antwort, "Rot stepped on Gelb's Property and payed 2000 rent.");
+        Assert.assertEquals("Rot stepped on Gelb's Property and payed 2000 rent.", antwort);
     }
     @Test
     public void testPayToOtherPlayerStringBakrott(){
         String antwort=rot.payToOtherPlayer(gelb, 4000);
-        Assert.assertEquals(antwort, "Rot ist Bankrott.");
+        Assert.assertEquals("Rot ist Bankrott.", antwort);
     }
     @Test
     public void testPayToOtherPlayerBankAccount(){
         rot.payToOtherPlayer(gelb, 2000);
-        Assert.assertEquals(rot.getBankBalance(),0);
-        Assert.assertEquals(gelb.getBankBalance(), 4000);
+        Assert.assertEquals(0, rot.getBankBalance());
+        Assert.assertEquals(4000, gelb.getBankBalance());
     }
     @Test
     public void testPayToOtherPlayerBankAccountBankrott(){
         rot.payToOtherPlayer(gelb, 4000);
-        Assert.assertEquals(rot.getBankBalance(),0);
-        Assert.assertEquals(gelb.getBankBalance(), 6000);
+        Assert.assertEquals(0, rot.getBankBalance());
+        Assert.assertEquals(6000, gelb.getBankBalance());
     }
 
 
     @Test
     public void testMove(){
         rot.move(12);
-        Assert.assertEquals(rot.getPosition(),12);
+        Assert.assertEquals(12, rot.getPosition());
     }
 
     @Test
     public void testMoveUeberLos(){
         rot.setPosition(38);
         rot.move(5);
-        Assert.assertEquals(rot.getPosition(),3);
+        Assert.assertEquals(3, rot.getPosition());
     }
     @Test
     public void testMoveUeberLosMoney(){
         rot.setPosition(38);
         rot.move(5);
-        Assert.assertEquals(rot.getBankBalance(),2200);
+        Assert.assertEquals(2200, rot.getBankBalance());
     }
     @Test
     public void testMovePrison(){
         rot.goToJail();
         rot.move(5);
-        Assert.assertEquals(rot.getPosition(),10);
-        Assert.assertEquals(rot.getPrisonCount(),1);
-        Assert.assertEquals(rot.getPrison(),true);
+        Assert.assertEquals(10, rot.getPosition());
+        Assert.assertEquals(1, rot.getPrisonCount());
+        Assert.assertEquals(true, rot.getPrison());
     }
     @Test
     public void testMovePrisonAlmostFree(){
         rot.goToJail();
         rot.setPrisonCount(3);
         rot.move(5);
-        Assert.assertEquals(rot.getPosition(),10);
-        Assert.assertEquals(rot.getPrisonCount(),0);
-        Assert.assertEquals(rot.getPrison(),false);
+        Assert.assertEquals(10, rot.getPosition());
+        Assert.assertEquals(0, rot.getPrisonCount());
+        Assert.assertEquals(false, rot.getPrison());
     }
     @Test
     public void testMovePrisonFree(){
@@ -243,9 +243,9 @@ public class PlayerTest {
         rot.setPrisonCount(3);
         rot.move(5);
         rot.move(15);
-        Assert.assertEquals(rot.getPosition(),25);
-        Assert.assertEquals(rot.getPrisonCount(),0);
-        Assert.assertEquals(rot.getPrison(),false);
+        Assert.assertEquals(25, rot.getPosition());
+        Assert.assertEquals(0, rot.getPrisonCount());
+        Assert.assertEquals(false, rot.getPrison());
     }
 
     /*
