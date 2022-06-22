@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import se2.groupb.monopoly.Player;
+import se2.groupb.monopoly.PlayerOperation;
+import se2.groupb.monopoly.network.messages.NextTurnMessage;
 import se2.groupb.monopoly.network.messages.PlayerInformation;
 import se2.groupb.monopoly.network.messages.RoundCounter;
 
@@ -25,6 +27,7 @@ public class ServerFoundation {
     private PlayerInformation player2;
     private PlayerInformation player3;
     private PlayerInformation player4;
+    private ArrayList<PlayerInformation> players;
 
     private int countPlayers;
 
@@ -79,13 +82,16 @@ public class ServerFoundation {
                 if (object instanceof PlayerInformation) {
                     handlePlayerInformationMessage((PlayerInformation) object);
                 }
+                if(object instanceof NextTurnMessage){
+                    handleNextTurnMessage((NextTurnMessage) object);
+                }
             }
         });
     }
 
     // server initializes the players and sends information to client
     private void initPlayers(int countPlayers) {
-        ArrayList<PlayerInformation> players = new ArrayList<>();
+        players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
             this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<>(), 0, Color.BLUE));
             this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<>(), 0, Color.RED));
@@ -147,6 +153,25 @@ public class ServerFoundation {
                 server.sendToAllTCP("WAITFORPLAYER");
             }
         }
+    }
+
+    private void handleNextTurnMessage(NextTurnMessage object){
+        System.out.println("server received message: " + object.getId());
+        System.out.println("server received message: " + object.getBankBalance());
+        System.out.println("server received message: " + object.getPosition());
+        incrementCurrentPlayer(countPlayers);
+        object.setNextTurnPlayerID(getCurrentPlayerID());
+        System.out.println("CurrentPlayerID: " + object.getNextTurnPlayerID());
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).getPlayer().getId() == object.getId()){
+                players.get(i).getPlayer().setBankBalance(object.getBankBalance());
+                players.get(i).getPlayer().setNumOfTrainstaitions(object.getNumOfTrainstations());
+                players.get(i).getPlayer().setPosition(object.getPosition());
+                players.get(i).getPlayer().setMyProperties(object.getMyProperties());
+            }
+        }
+
+        server.sendToAllTCP(object);
     }
 
     private void handlePlayerInformationMessage(PlayerInformation object) {

@@ -6,6 +6,12 @@ public class Trainstation extends Property {
     private int price;
     private int rent;
 
+    public Trainstation(){
+        /**
+         * not used
+         */
+    }
+
     public Trainstation(String name, boolean sold, int rent) {
         super(name);
         this.sold = sold;

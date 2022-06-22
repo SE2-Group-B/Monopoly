@@ -16,6 +16,12 @@ public class PlayerOperation {
     private boolean showCard;
     private boolean bought;
 
+    public PlayerOperation(){
+        /**
+         * not used
+         */
+    }
+
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
         logicalGameField = new LogicalGameField();
@@ -53,6 +59,7 @@ public class PlayerOperation {
             }
         } else if (p instanceof PenaltyField) {
             output = moneyPot.donateToPot(getCurrentPlayer(), ((PenaltyField) p).getPenalty());
+            System.out.println(output);
         } else {
             output = checkSoleProperty(p);
         }
@@ -105,6 +112,7 @@ public class PlayerOperation {
         } else {
             currentPlayerId++;
         }
+
         return "It's " + getCurrentPlayer().getName() + "'s turn now";
     }
 

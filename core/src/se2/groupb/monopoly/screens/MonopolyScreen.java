@@ -26,6 +26,7 @@ import se2.groupb.monopoly.Player;
 import se2.groupb.monopoly.PlayerOperation;
 import se2.groupb.monopoly.Pot;
 import se2.groupb.monopoly.Property;
+import se2.groupb.monopoly.network.messages.NextTurnMessage;
 import se2.groupb.monopoly.network.messages.PlayerInformation;
 
 public class MonopolyScreen extends GameScreenAdapter {
@@ -50,7 +51,7 @@ public class MonopolyScreen extends GameScreenAdapter {
     //Marko
     private Pot moneyPot;
     private DiceRoll diceRoll;
-    private int currentPlayerId;
+//    private int currentPlayerId;
     private String screenOutput;
     private Texture dice1;
     private Texture dice2;
@@ -95,7 +96,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         dice1 = new Texture("images/Dice/dice_0.png");
         dice2 = new Texture("images/Dice/dice_0.png");
         moneyPot = new Pot();
-        diceRoll = new DiceRoll();
+
         playerList = new ArrayList<>();
 
         //init Alen
@@ -135,6 +136,7 @@ public class MonopolyScreen extends GameScreenAdapter {
 
         gameField = new CreateGameField(monopoly, playerList);
         playerOperation = new PlayerOperation(playerList);
+        diceRoll = new DiceRoll(playerOperation.getCurrentPlayer());
         initCardDeck();
 
 
@@ -142,6 +144,7 @@ public class MonopolyScreen extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if (Gdx.input.justTouched() && diceRoll.getOnTurn() && clientIsCurrentPlayer()) {
+                    System.out.println("SSSsssssss " + playerOperation.getCurrentPlayer().getId());
                     int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
                     ArrayList<Texture> l = diceRoll.getDiceTextures();
                     dice1 = l.get(0);
@@ -150,7 +153,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                     playerOperation.setMoneyPotForOperation(moneyPot);
                     screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
                     playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
-                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
+//                    gameField.checkIfPlayerIsAlone(monopoly.getClient().getPlayerOperation().getCurrentPlayer());
                 }
                 return true;
             }
@@ -160,10 +163,25 @@ public class MonopolyScreen extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
+
                     if (!diceRoll.getOnTurn()) {
+
                         monopoly.getClient().getPlayer().setPlayer(playerOperation.getCurrentPlayer());
-                        screenOutput = playerOperation.nextPlayer();
+
                         diceRoll.reset();
+                        NextTurnMessage ntm = new NextTurnMessage();
+                        ntm.setBankBalance(playerOperation.getCurrentPlayer().getBankBalance());
+                        ntm.setId(playerOperation.getCurrentPlayer().getId());
+                        ntm.setMyProperties(playerOperation.getCurrentPlayer().getMyProperties());
+                        ntm.setPosition(playerOperation.getCurrentPlayer().getPosition());
+                        ntm.setNumOfTrainstations(playerOperation.getCurrentPlayer().getNumOfTrainstaitions());
+                        monopoly.getClient().getClient().sendTCP(ntm);
+                        screenOutput = playerOperation.nextPlayer();
+//                        screenOutput = playerOperation.nextPlayer(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
+//                        monopoly.getClient().getClient().sendTCP(playerOperation.getCurrentPlayer().getBankBalance());
+//                        monopoly.getClient().getClient().sendTCP(playerOperation.getCurrentPlayer().get);
+
+
 //                        monopoly.getClient().getPlayer().setMessageType("NEXTTURN");
 //                        PlayerInformation play = monopoly.getClient().getPlayer();
 //                        monopoly.getClient().getClient().sendTCP(play.getPlayer());
@@ -252,7 +270,22 @@ public class MonopolyScreen extends GameScreenAdapter {
             }, 3);
             timerCard.stop();
         }
+        if(monopoly.getClient().getNextTurnMessage() != null) {
+            if (monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() != playerOperation.getCurrentPlayer().getId()) {
+//                screenOutput = monopoly.getClient().getPlayerOperation().nextPlayer();
+                for(Player player : playerList){
+                    if(monopoly.getClient().getNextTurnMessage().getId() == player.getId()){
+                        player.setPosition(monopoly.getClient().getNextTurnMessage().getPosition());
+                        player.setNumOfTrainstaitions(monopoly.getClient().getNextTurnMessage().getNumOfTrainstations());
+                        player.setBankBalance(monopoly.getClient().getNextTurnMessage().getBankBalance());
+                        player.setMyProperties(monopoly.getClient().getNextTurnMessage().getMyProperties());
+                    }
+                }
+//                playerOperation ;
 
+//                playerOperation.getCurrentPlayer().setId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
+            }
+        }
         batch.end();
     }
 
@@ -327,6 +360,16 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public boolean clientIsCurrentPlayer() {
-        return playerOperation.getCurrentPlayer().getId() == monopoly.getClient().getPlayer().getCurrentPlayerID();
+        System.out.println("client ID: " + monopoly.getClient().getPlayer().getPlayer().getId());
+        System.out.println("PlayerOP ID: " + playerOperation.getCurrentPlayer().getId());
+//        return playerOperation.getCurrentPlayer().getId() == monopoly.getClient().getPlayer().getPlayer().getId();
+        if(monopoly.getClient().getNextTurnMessage() == null){
+            return monopoly.getClient().getPlayer().getCurrentPlayerID() == monopoly.getClient().getPlayer().getPlayer().getId();
+        }else{
+            return monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() == monopoly.getClient().getPlayer().getPlayer().getId();
+
+        }
+
     }
+
 }

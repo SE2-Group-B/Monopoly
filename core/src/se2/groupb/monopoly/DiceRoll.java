@@ -33,6 +33,14 @@ public class DiceRoll {
 
     private Player player;
 
+    public DiceRoll(){
+        /**
+         * not used
+         */
+    }
+    public DiceRoll(Player player){
+        this.player = player;
+    }
 
     public int roll(Player player) {
         this.player=player;
