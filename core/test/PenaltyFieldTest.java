@@ -16,6 +16,7 @@ public class PenaltyFieldTest {
     public void teardown(){
         einkommenssteuer=null;
     }
+
     @Test
     public void testPenalty(){
         PenaltyField einkommenssteuer2=new PenaltyField("ab",500);
@@ -23,11 +24,11 @@ public class PenaltyFieldTest {
     }
     @Test
     public void testGetPenalty(){
-        Assert.assertEquals(einkommenssteuer.getPenalty(), 200);
+        Assert.assertEquals(200, einkommenssteuer.getPenalty());
     }
     @Test
     public void testSetPenalty(){
         einkommenssteuer.setPenalty(300);
-        Assert.assertEquals(einkommenssteuer.getPenalty(), 300);
+        Assert.assertEquals(300, einkommenssteuer.getPenalty());
     }
 }
