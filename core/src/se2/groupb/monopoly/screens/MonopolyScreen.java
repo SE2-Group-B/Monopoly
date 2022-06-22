@@ -222,7 +222,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                 public void run() {
                     playerOperation.setCardBoolean(false);
                 }
-            }, 3);
+            }, 4);
             timerCard.stop();
         }
 
