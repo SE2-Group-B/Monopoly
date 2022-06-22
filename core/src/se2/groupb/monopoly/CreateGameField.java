@@ -232,6 +232,8 @@ public class CreateGameField extends GameScreenAdapter {
         disposeModels();
     }
 
+    //Because GameScreenAdapter requires it
+    /** If Sonarcloud won't accept the Comment */
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 

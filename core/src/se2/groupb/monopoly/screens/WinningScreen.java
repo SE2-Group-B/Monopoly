@@ -3,22 +3,16 @@ package se2.groupb.monopoly.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
-import se2.groupb.monopoly.CreateGameField;
 import se2.groupb.monopoly.Monopoly;
 
 public class WinningScreen extends GameScreenAdapter{
@@ -39,6 +33,7 @@ public class WinningScreen extends GameScreenAdapter{
     private String second;
     private String third;
     private String fourth;
+    private String with = " with:"; //Sonarcloud
 
 
     public WinningScreen(Monopoly monopoly, ArrayList<Integer> sums, ArrayList<String> placement) {
@@ -82,17 +77,17 @@ public class WinningScreen extends GameScreenAdapter{
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        first = "Sieger: " + placement.get(0) + " with:" + sums.get(0);
-        second = "Zweiter: " + placement.get(1) + " with:" + sums.get(1);
-        third = "Dritter: " + placement.get(2) + " with:" + sums.get(2);
-        fourth = "Vierter: " + placement.get(3) + " with:" + sums.get(3);
+        first = "Sieger: " + placement.get(0) + with + sums.get(0);
+        second = "Zweiter: " + placement.get(1) + with + sums.get(1);
+        third = "Dritter: " + placement.get(2) + with + sums.get(2);
+        fourth = "Vierter: " + placement.get(3) + with + sums.get(3);
 
         font.setColor(Color.BLACK);
-        font.draw(spriteBatch, text, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)+250f);
-        font.draw(spriteBatch, first, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)+150f);
-        font.draw(spriteBatch, second, (float) (Gdx.graphics.getWidth()/3.75), (Gdx.graphics.getHeight()/2)+50f);
-        font.draw(spriteBatch, third, (float) (Gdx.graphics.getWidth()/3.75),(Gdx.graphics.getHeight()/2)-50f);
-        font.draw(spriteBatch, fourth, (float) (Gdx.graphics.getWidth()/3.75), (Gdx.graphics.getHeight()/2)-150f);
+        font.draw(spriteBatch, text, (float) (Gdx.graphics.getWidth()/3.75), (float) (Gdx.graphics.getHeight()/2)+250f);
+        font.draw(spriteBatch, first, (float) (Gdx.graphics.getWidth()/3.75),(float) (Gdx.graphics.getHeight()/2)+150f);
+        font.draw(spriteBatch, second, (float) (Gdx.graphics.getWidth()/3.75), (float) (Gdx.graphics.getHeight()/2)+50f);
+        font.draw(spriteBatch, third, (float) (Gdx.graphics.getWidth()/3.75),(float) (Gdx.graphics.getHeight()/2)-50f);
+        font.draw(spriteBatch, fourth, (float) (Gdx.graphics.getWidth()/3.75), (float) (Gdx.graphics.getHeight()/2)-150f);
 
         spriteBatch.end();
         monopoly.getBatch().end();
@@ -106,6 +101,8 @@ public class WinningScreen extends GameScreenAdapter{
         stage.dispose();
     }
 
+    //Because GameScreenAdapter requires it
+    /** If Sonarcloud won't accept the Comment */
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 
     }
