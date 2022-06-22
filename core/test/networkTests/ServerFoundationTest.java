@@ -55,7 +55,7 @@ public class ServerFoundationTest {
         Assert.assertTrue(client1.getClient().isConnected());
     }
 
-    @Test
+    /*@Test
     public void startGameTest4Players() {
         client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
         client4 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
@@ -64,7 +64,7 @@ public class ServerFoundationTest {
         Assert.assertTrue(client2.getClient().isConnected());
         Assert.assertTrue(client3.getClient().isConnected());
         Assert.assertTrue(client4.getClient().isConnected());
-    }
+    }*/
 
     @Test
     public void startGameTest5Players(){
