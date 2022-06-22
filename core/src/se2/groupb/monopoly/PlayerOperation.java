@@ -133,7 +133,10 @@ public class PlayerOperation {
                 output += p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
 
                 getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
-            } else {
+            } else if(getCurrentPlayer().getId() == p.getOwnerId()) {
+            output = "Du hast was zugekauft";
+            ((Street) p).buyhouse();
+        } else {
                 bought = false;
                 output = "You can't buy this Property";
             }
