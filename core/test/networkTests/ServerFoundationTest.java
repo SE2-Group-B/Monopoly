@@ -54,7 +54,7 @@ public class ServerFoundationTest {
         client1.getClient().sendUDP("HOST");
         Assert.assertTrue(client1.getClient().isConnected());
     }
-
+    /*
     @Test
     public void startGameTest4Players() {
         client3 = new ClientFoundation(server.getTcpPort(), server.getUdpPort());
@@ -74,7 +74,7 @@ public class ServerFoundationTest {
         client1.getClient().sendTCP("HOST");
         Assert.assertTrue(client5.getClient().isConnected());
     }
-
+    */
     @Test
     public void getServerTest() {
         Assert.assertEquals(Server.class, server.getServer().getClass());
