@@ -1,8 +1,7 @@
 package se2.groupb.monopoly.network.messages;
 
+import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
-
-import se2.groupb.monopoly.PlayerOperation;
 import se2.groupb.monopoly.Property;
 
 public class NextTurnMessage {
@@ -12,6 +11,7 @@ public class NextTurnMessage {
     private ArrayList<Property> myProperties;
     private int numOfTrainstations;
     private int nextTurnPlayerID;
+    private Vector3 graphicalPosition;
 
 
     public int getId() {
@@ -60,5 +60,13 @@ public class NextTurnMessage {
 
     public void setNextTurnPlayerID(int nextTurnPlayerID) {
         this.nextTurnPlayerID = nextTurnPlayerID;
+    }
+
+    public Vector3 getGraphicalPosition() {
+        return graphicalPosition;
+    }
+
+    public void setGraphicalPosition(Vector3 graphicalPosition) {
+        this.graphicalPosition = graphicalPosition;
     }
 }

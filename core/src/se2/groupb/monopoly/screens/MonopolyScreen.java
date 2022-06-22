@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -175,6 +176,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                         ntm.setMyProperties(playerOperation.getCurrentPlayer().getMyProperties());
                         ntm.setPosition(playerOperation.getCurrentPlayer().getPosition());
                         ntm.setNumOfTrainstations(playerOperation.getCurrentPlayer().getNumOfTrainstaitions());
+                        ntm.setGraphicalPosition(playerOperation.getCurrentPlayer().getGraphicalPosition());
                         monopoly.getClient().getClient().sendTCP(ntm);
                         screenOutput = playerOperation.nextPlayer();
 //                        screenOutput = playerOperation.nextPlayer(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
@@ -278,6 +280,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                         player.setNumOfTrainstaitions(monopoly.getClient().getNextTurnMessage().getNumOfTrainstations());
                         player.setBankBalance(monopoly.getClient().getNextTurnMessage().getBankBalance());
                         player.setMyProperties(monopoly.getClient().getNextTurnMessage().getMyProperties());
+                        player.move(monopoly.getClient().getNextTurnMessage().getGraphicalPosition());
                     }
                 }
                 playerOperation.setCurrentPlayerId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
@@ -318,9 +321,11 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public void initOnlinePlayer() {
+        new Vector3(0, 3.5f, 0);
         if (!monopoly.getClient().getOtherPlayers().isEmpty()) {
             player1 = monopoly.getClient().getPlayer().getPlayer();
             player1.createSpielfigur();
+
             playerList.add(player1);
             if (monopoly.getClient().getOtherPlayers().size() > 0) {
                 player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();

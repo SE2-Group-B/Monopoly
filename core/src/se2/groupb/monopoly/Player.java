@@ -21,10 +21,11 @@ public class Player {
     private int NumOfTrainstaitions;
     private Color color;
     ModelInstance modInstance;
-    Vector3 fieldPos;
+    private Vector3 fieldPos;
     private boolean prison;
     private boolean isNotAlone;
     private int prisoncount = 0;
+    private Vector3 graphicalPosition;
 //    private Pot pot;
 
     private String buildingPath = "Spielfeld\\char.g3dj";
@@ -49,7 +50,9 @@ public class Player {
         modInstance = new ModelInstance(model);
         modInstance.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
         fieldPos = new Vector3(0, 3.2f, 0);
-        modInstance.transform.translate(fieldPos);
+        graphicalPosition = new Vector3(0, 3.2f, 0);
+//        modInstance.transform.translate(fieldPos);
+        modInstance.transform.translate(graphicalPosition);
     }
 
     public String payToOtherPlayer(Player p, int value){
@@ -69,6 +72,7 @@ public class Player {
 
     public void move(Vector3 vector3) {
         this.fieldPos = vector3;
+        this.graphicalPosition = vector3;
         modInstance.transform.setTranslation(vector3);
     }
 
@@ -340,5 +344,13 @@ public class Player {
 
     public void setNotAlone(boolean notAlone) {
         isNotAlone = notAlone;
+    }
+
+    public Vector3 getGraphicalPosition() {
+        return graphicalPosition;
+    }
+
+    public void setGraphicalPosition(Vector3 graphicalPosition) {
+        this.graphicalPosition = graphicalPosition;
     }
 }
