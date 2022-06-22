@@ -51,7 +51,7 @@ public class MonopolyScreen extends GameScreenAdapter {
     //Marko
     private Pot moneyPot;
     private DiceRoll diceRoll;
-//    private int currentPlayerId;
+    //    private int currentPlayerId;
     private String screenOutput;
     private Texture dice1;
     private Texture dice2;
@@ -270,20 +270,17 @@ public class MonopolyScreen extends GameScreenAdapter {
             }, 3);
             timerCard.stop();
         }
-        if(monopoly.getClient().getNextTurnMessage() != null) {
+        if (monopoly.getClient().getNextTurnMessage() != null) {
             if (monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() != playerOperation.getCurrentPlayer().getId()) {
-//                screenOutput = monopoly.getClient().getPlayerOperation().nextPlayer();
-                for(Player player : playerList){
-                    if(monopoly.getClient().getNextTurnMessage().getId() == player.getId()){
+                for (Player player : playerList) {
+                    if (monopoly.getClient().getNextTurnMessage().getId() == player.getId()) {
                         player.setPosition(monopoly.getClient().getNextTurnMessage().getPosition());
                         player.setNumOfTrainstaitions(monopoly.getClient().getNextTurnMessage().getNumOfTrainstations());
                         player.setBankBalance(monopoly.getClient().getNextTurnMessage().getBankBalance());
                         player.setMyProperties(monopoly.getClient().getNextTurnMessage().getMyProperties());
                     }
                 }
-//                playerOperation ;
-
-//                playerOperation.getCurrentPlayer().setId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
+                playerOperation.setCurrentPlayerId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
             }
         }
         batch.end();
@@ -360,16 +357,11 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public boolean clientIsCurrentPlayer() {
-        System.out.println("client ID: " + monopoly.getClient().getPlayer().getPlayer().getId());
-        System.out.println("PlayerOP ID: " + playerOperation.getCurrentPlayer().getId());
-//        return playerOperation.getCurrentPlayer().getId() == monopoly.getClient().getPlayer().getPlayer().getId();
-        if(monopoly.getClient().getNextTurnMessage() == null){
+        if (monopoly.getClient().getNextTurnMessage() == null) {
             return monopoly.getClient().getPlayer().getCurrentPlayerID() == monopoly.getClient().getPlayer().getPlayer().getId();
-        }else{
+        } else {
             return monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() == monopoly.getClient().getPlayer().getPlayer().getId();
-
         }
-
     }
 
 }

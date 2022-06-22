@@ -173,4 +173,8 @@ public class PlayerOperation {
     public void setBought(boolean bought) {
         this.bought = bought;
     }
+
+    public void setCurrentPlayerId(int currentPlayerId) {
+        this.currentPlayerId = currentPlayerId;
+    }
 }
