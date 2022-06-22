@@ -12,6 +12,7 @@ public class NextTurnMessage {
     private int numOfTrainstations;
     private int nextTurnPlayerID;
     private Vector3 graphicalPosition;
+    private int potAmount;
 
 
     public int getId() {
@@ -68,5 +69,13 @@ public class NextTurnMessage {
 
     public void setGraphicalPosition(Vector3 graphicalPosition) {
         this.graphicalPosition = graphicalPosition;
+    }
+
+    public int getPotAmount() {
+        return potAmount;
+    }
+
+    public void setPotAmount(int potAmount) {
+        this.potAmount = potAmount;
     }
 }

@@ -21,7 +21,6 @@ public class Player {
     private int NumOfTrainstaitions;
     private Color color;
     ModelInstance modInstance;
-    private Vector3 fieldPos;
     private boolean prison;
     private boolean isNotAlone;
     private int prisoncount = 0;
@@ -49,7 +48,6 @@ public class Player {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);
         modInstance.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
-        fieldPos = new Vector3(0, 3.2f, 0);
         graphicalPosition = new Vector3(0, 3.2f, 0);
 //        modInstance.transform.translate(fieldPos);
         modInstance.transform.translate(graphicalPosition);
@@ -71,7 +69,6 @@ public class Player {
     }
 
     public void move(Vector3 vector3) {
-        this.fieldPos = vector3;
         this.graphicalPosition = vector3;
         modInstance.transform.setTranslation(vector3);
     }

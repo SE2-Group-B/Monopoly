@@ -124,6 +124,7 @@ public class ClientFoundation {
         System.out.println("Client received from server: " + object.getNextTurnPlayerID());
         System.out.println("Client received from server: " + object.getBankBalance());
         System.out.println("Client received from server: " + object.getPosition());
+        System.out.println("Client received from server: " + object.getGraphicalPosition());
     }
 
 

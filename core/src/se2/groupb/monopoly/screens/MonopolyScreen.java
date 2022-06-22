@@ -145,7 +145,6 @@ public class MonopolyScreen extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if (Gdx.input.justTouched() && diceRoll.getOnTurn() && clientIsCurrentPlayer()) {
-                    System.out.println("SSSsssssss " + playerOperation.getCurrentPlayer().getId());
                     int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
                     ArrayList<Texture> l = diceRoll.getDiceTextures();
                     dice1 = l.get(0);
@@ -167,7 +166,7 @@ public class MonopolyScreen extends GameScreenAdapter {
 
                     if (!diceRoll.getOnTurn()) {
 
-                        monopoly.getClient().getPlayer().setPlayer(playerOperation.getCurrentPlayer());
+//                        monopoly.getClient().getPlayer().setPlayer(playerOperation.getCurrentPlayer());
 
                         diceRoll.reset();
                         NextTurnMessage ntm = new NextTurnMessage();
@@ -177,6 +176,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                         ntm.setPosition(playerOperation.getCurrentPlayer().getPosition());
                         ntm.setNumOfTrainstations(playerOperation.getCurrentPlayer().getNumOfTrainstaitions());
                         ntm.setGraphicalPosition(playerOperation.getCurrentPlayer().getGraphicalPosition());
+                        ntm.setPotAmount(moneyPot.getAmount());
                         monopoly.getClient().getClient().sendTCP(ntm);
                         screenOutput = playerOperation.nextPlayer();
 //                        screenOutput = playerOperation.nextPlayer(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
@@ -283,6 +283,7 @@ public class MonopolyScreen extends GameScreenAdapter {
                         player.move(monopoly.getClient().getNextTurnMessage().getGraphicalPosition());
                     }
                 }
+                moneyPot.setAmount(monopoly.getClient().getNextTurnMessage().getPotAmount());
                 playerOperation.setCurrentPlayerId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
             }
         }
