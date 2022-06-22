@@ -29,24 +29,24 @@ public class CardTest {
 
     @Test
     public void testGetId(){
-        Assert.assertEquals(card1.getId(), 1);
+        Assert.assertEquals(1, card1.getId());
     }
 
     @Test
     public void testSetId(){
         card1.setId(8);
-        Assert.assertEquals(card1.getId(),8);
+        Assert.assertEquals(8, card1.getId());
     }
 
     @Test
     public void testGetName(){
-        Assert.assertEquals(card2.getName(),"Karte2");
+        Assert.assertEquals("Karte2", card2.getName());
     }
 
     @Test
     public void testSetName(){
         card2.setName("Neuer Name");
-        Assert.assertEquals(card2.getName(), "Neuer Name");
+        Assert.assertEquals("Neuer Name", card2.getName());
     }
 
 
