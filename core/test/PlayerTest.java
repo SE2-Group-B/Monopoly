@@ -251,7 +251,8 @@ public class PlayerTest {
     /*
     @Test
     public void testZieheKarteCase1(){
-        Assert.assertNotNull(rot.drawCard(ereigniskarten));
+        Texture tx=rot.drawCard(ereigniskarten);
+        Assert.assertNotNull(tx);
     }
 
     /*
@@ -263,6 +264,7 @@ public class PlayerTest {
         Assert.assertEquals(rot.zieheKarte(ereigniskarten), kartenbild);
         Assert.assertEquals(rot.getPosition(),0);
     }
+    /*
     @Test
     public void testZieheKarteCase3(){
         Texture kartenbild=new Texture("images/KartenImages/Karte3.png");
