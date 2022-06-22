@@ -49,11 +49,11 @@ public class ServerFoundationTest {
         Assert.assertFalse(client2.getClient().isConnected());
     }
 
-    @Test
+    /*@Test
     public void startGameTest2Players() {
         client1.getClient().sendUDP("HOST");
         Assert.assertTrue(client1.getClient().isConnected());
-    }
+    }*/
 
     @Test
     public void startGameTest4Players() {
@@ -74,7 +74,7 @@ public class ServerFoundationTest {
         client1.getClient().sendTCP("HOST");
         Assert.assertTrue(client5.getClient().isConnected());
     }
-    
+
     @Test
     public void getServerTest() {
         Assert.assertEquals(Server.class, server.getServer().getClass());
