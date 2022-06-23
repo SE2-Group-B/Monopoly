@@ -1,7 +1,9 @@
 package se2.groupb.monopoly.screens;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -60,6 +62,7 @@ public class MonopolyScreen extends GameScreenAdapter {
     private CreateGameField gameField;
     private boolean moreThanOnePlayerOnField;
     private boolean minigame;
+
 
     //Alen
     private BitmapFont moneyfont;

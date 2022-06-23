@@ -22,17 +22,17 @@ import se2.groupb.monopoly.screens.GameScreenAdapter;
 
 public class CreateGameField extends GameScreenAdapter {
 
-    private SpriteBatch spriteBatch;
-    private Environment environment;
-    private OrthographicCamera camera;
-    private ModelBatch modelBatch;
+    private final SpriteBatch spriteBatch;
+    private final Environment environment;
+    private final OrthographicCamera camera;
+    private final ModelBatch modelBatch;
     private BitmapFont moneyfont;
-    private Stage stage;
-    private Field[] fields;
-    private ArrayList<Player> players;
-    private int playerCount;
-    private PlayerOperation pO;
-    private ArrayList<Player> playersToPosition = new ArrayList<>();
+    private final Stage stage;
+    private final Field[] fields;
+    private final ArrayList<Player> players;
+    private final int playerCount;
+    private final PlayerOperation pO;
+    private final ArrayList<Player> playersToPosition = new ArrayList<>();
 
 
 
@@ -149,7 +149,7 @@ public class CreateGameField extends GameScreenAdapter {
             pO.getCurrentPlayer().setAlone(false);
             player.setAlone(false);
         }
-        player.setAlone(true);
+//        player.setAlone(true);
 
 //        movePlayers(playersToPosition.size(), playersToPosition);
     }

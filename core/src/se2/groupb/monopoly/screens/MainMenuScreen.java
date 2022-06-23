@@ -2,6 +2,7 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -13,6 +14,7 @@ import se2.groupb.monopoly.Monopoly;
 public class MainMenuScreen extends GameScreenAdapter {
 
     private Stage stage;
+    private Music music;
 
 
     /**
@@ -37,6 +39,8 @@ public class MainMenuScreen extends GameScreenAdapter {
         ImageButton joinBtn = drawImageButton("images/MenuButtons/join.png", xPosButtons, yPosInitialButtons + yPosOffsetButtons, buttonSize);
         ImageButton exitBtn = drawImageButton("images/MenuButtons/exit.png", xPosButtons, yPosInitialButtons + 2 * yPosOffsetButtons, buttonSize);
         ImageButton offlineButton = drawImageButton("images/MenuButtons/switch_view.png", xPosButtons, yPosInitialButtons + 3 * yPosOffsetButtons, buttonSize);
+
+        music = music = Gdx.audio.newMusic(Gdx.files.internal("OkLetsGOOO.mp3"));
 
 
         stage = new Stage(new ScreenViewport());
@@ -85,6 +89,7 @@ public class MainMenuScreen extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if (Gdx.input.justTouched()) {
+                    music.play();
                     monopoly.setOfflineGame(true);
                     monopoly.setScreen(new MonopolyScreen(monopoly));
                     return true;

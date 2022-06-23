@@ -2,6 +2,8 @@ package se2.groupb.monopoly.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -41,6 +43,9 @@ public class HostGameScreen extends GameScreenAdapter {
     private ImageButton connectBtn;
     private ImageButton startBtn;
 
+    private Music music;
+
+
 
     private float yPosInitialButtons;
     private float yPosOffsetButtons;
@@ -66,6 +71,7 @@ public class HostGameScreen extends GameScreenAdapter {
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() / 20D);
         yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
+
     }
 
     @Override
@@ -78,6 +84,9 @@ public class HostGameScreen extends GameScreenAdapter {
         // Buttons for connecting to Server and starting the game
         connectBtn = drawImageButton("images/MenuButtons/connect.png", xPosButtons, yPosInitialButtons, buttonSize);
         startBtn = drawImageButton("images/MenuButtons/start_game.png", xPosButtons, yPosInitialButtons - yPosOffsetButtons, buttonSize);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("OkLetsGOOO.mp3"));
+
 
         stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
         stage.addActor(connectBtn); //Add the button to the stage to perform rendering and take input.
@@ -125,6 +134,8 @@ public class HostGameScreen extends GameScreenAdapter {
                     client.getClient().sendUDP("HOST");
 
                     buttonPressed = true;
+
+                    music.play();
                     // draw rectangle above old text since it does not vanish when loading the game
 
                     // might want to redo later again, timer to wait for message
