@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -56,6 +57,8 @@ public class MonopolyScreen extends GameScreenAdapter {
 
     //Andy
     private CreateGameField gameField;
+    private boolean moreThanOnePlayerOnField;
+    private boolean minigame;
 
     //Alen
     private BitmapFont moneyfont;
@@ -135,15 +138,28 @@ public class MonopolyScreen extends GameScreenAdapter {
             @Override
             public boolean handle(Event event) {
                 if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
-                    int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
-                    ArrayList<Texture> l = diceRoll.getDiceTextures();
-                    dice1 = l.get(0);
-                    dice2 = l.get(1);
-                    playerOperation.getCurrentPlayer().move(dice);
-                    playerOperation.setMoneyPotForOperation(moneyPot);
-                    screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
-                    playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
-//                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
+                    if (!playerOperation.getCurrentPlayer().isAlone()) {
+//                        gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
+//                        playerOperation.getCurrentPlayer().setAlone(true);
+                        gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
+                        minigame();
+
+                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
+                        playerOperation.setMoneyPotForOperation(moneyPot);
+                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                    } else {
+                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
+                        playerOperation.getCurrentPlayer().move(dice);
+                        playerOperation.setMoneyPotForOperation(moneyPot);
+                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                        playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                    }
                 }
                 return true;
             }
@@ -260,18 +276,23 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public void initOfflinePlayer() {
-        player1 = new Player(1, "Blue", 2000, player1Propertylist, 0, Color.BLUE);
+        player1 = new Player(1, "Blue", 2000, player1Propertylist, 0, Color.BLUE, false);
         player1.createSpielfigur();
-        player2 = new Player(2, "Red", 2000, player2Propertylist, 0, Color.RED);
+        player2 = new Player(2, "Red", 2000, player2Propertylist, 0, Color.RED, false);
         player2.createSpielfigur();
-        player3 = new Player(3, "Yellow", 2000, player3Propertylist, 0, Color.YELLOW);
+        player3 = new Player(3, "Yellow", 2000, player3Propertylist, 0, Color.YELLOW, false);
         player3.createSpielfigur();
-        player4 = new Player(4, "Green", 2000, player4Propertylist, 0, Color.GREEN);
+        player4 = new Player(4, "Green", 2000, player4Propertylist, 0, Color.GREEN, false);
         player4.createSpielfigur();
         playerList.add(player1);
         playerList.add(player2);
         playerList.add(player3);
         playerList.add(player4);
+//        player1.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, color));
+
+
+
+
     }
 
     public void initOnlinePlayer() {
@@ -310,4 +331,49 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerOperation.setCommunityCards(communityCards);
         playerOperation.setEventCards(eventCards);
     }
-}
+
+    public void minigame() {
+        if (!playerOperation.getCurrentPlayer().isAlone()) {
+            int[] minigameRolls = new int[gameField.getPlayersToPosition().size()];
+            minigame = true;
+            System.out.println(playerOperation.getCurrentPlayer().isAlone());
+            System.out.println(minigame);
+            for (int i = 0; i < gameField.getPlayersToPosition().size(); i++) {
+                minigameRolls[i] = diceRoll.roll(gameField.getPlayersToPosition().get(i));
+            }
+            minigame = false;
+
+            int[] sorted;
+            int first = 0;
+            sorted = minigameRolls.clone();
+            bubbleSort(minigameRolls);
+            for (int i = 0; i < minigameRolls.length; i++) {
+                if (sorted[0] == minigameRolls[i]) {
+                    first = i;
+                }
+            }
+            for (int i = 0; i < sorted.length; i++) {
+                if (i != first) {
+                    playerOperation.getPlayerById(i).payToOtherPlayer(playerOperation.getPlayerById(i), 200);
+                }
+            }
+        }
+    }
+
+    public int[] bubbleSort(int[] minigame) {
+            int k;
+            for (int i = 0; i < minigame.length - 1; i++) {
+                if (minigame[i] < minigame[i + 1]) {
+                    continue;
+                }
+                k = minigame[i];
+                minigame[i] = minigame[i + 1];
+                minigame[i + 1] = k;
+                bubbleSort(minigame);
+            }
+            return minigame;
+        }
+    }
+
+
+
