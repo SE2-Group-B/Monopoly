@@ -68,18 +68,18 @@ public class PlayerOperation {
     }
 
     public boolean isEnemyProperty(int position) {
-        for(Player player : playerList){
-            if(player.getId() != getCurrentPlayer().getId()){
-                for(Property p : player.getMyProperties()){
-                    if(p.getName().equals(logicalGameField.getGameField()[position].getName())){
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-//        return (isSomeonesProperty(position) && (getCurrentPlayer().getId() != getPropertyOwner(position).getId()));
+//        for(Player player : playerList){
+//            if(player.getId() != getCurrentPlayer().getId()){
+//                for(Property p : player.getMyProperties()){
+//                    if(p.getName().equals(logicalGameField.getGameField()[position].getName())){
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//
+//        return false;
+        return (isSomeonesProperty(position) && (getCurrentPlayer().getId() != getPropertyOwner(position).getId()));
     }
 
     public String checkSoleProperty(Property property) {

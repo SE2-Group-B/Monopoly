@@ -138,48 +138,79 @@ public class MonopolyScreen extends GameScreenAdapter {
         diceButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched() && diceRoll.getOnTurn() && clientIsCurrentPlayer()) {
-                    int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
-                    ArrayList<Texture> l = diceRoll.getDiceTextures();
-                    dice1 = l.get(0);
-                    dice2 = l.get(1);
-                    playerOperation.getCurrentPlayer().move(dice);
-                    playerOperation.setMoneyPotForOperation(moneyPot);
-                    screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
-                    playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                if (!monopoly.isOfflineGame()) {
+                    if (Gdx.input.justTouched() && diceRoll.getOnTurn() && clientIsCurrentPlayer()) {
+                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
+                        playerOperation.getCurrentPlayer().move(dice);
+                        playerOperation.setMoneyPotForOperation(moneyPot);
+                        playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
+                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                        playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                    }
+                } else {
+                    if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
+                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
+                        playerOperation.getCurrentPlayer().move(dice);
+                        playerOperation.setMoneyPotForOperation(moneyPot);
+                        playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
+                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                        playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                    }
                 }
+                return true;
             }
-            return true;
         });
 
         nextButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
-                    if (!diceRoll.getOnTurn()) {
-                        diceRoll.reset();
-                        NextTurnMessage ntm = new NextTurnMessage();
-                        ntm.setBankBalance(playerOperation.getCurrentPlayer().getBankBalance());
-                        ntm.setId(playerOperation.getCurrentPlayer().getId());
-                        ntm.setMyProperties(playerOperation.getCurrentPlayer().getMyProperties());
-                        ntm.setPosition(playerOperation.getCurrentPlayer().getPosition());
-                        ntm.setNumOfTrainstations(playerOperation.getCurrentPlayer().getNumOfTrainstaitions());
-                        ntm.setGraphicalPosition(playerOperation.getCurrentPlayer().getGraphicalPosition());
-                        ntm.setPotAmount(moneyPot.getAmount());
-                        monopoly.getClient().getClient().sendTCP(ntm);
-                    } else {
-                        screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
+                if (!monopoly.isOfflineGame()) {
+                    if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
+                        if (!diceRoll.getOnTurn()) {
+                            diceRoll.reset();
+                            NextTurnMessage ntm = new NextTurnMessage();
+                            ntm.setBankBalance(playerOperation.getCurrentPlayer().getBankBalance());
+                            ntm.setId(playerOperation.getCurrentPlayer().getId());
+                            ntm.setMyProperties(playerOperation.getCurrentPlayer().getMyProperties());
+                            ntm.setPosition(playerOperation.getCurrentPlayer().getPosition());
+                            ntm.setNumOfTrainstations(playerOperation.getCurrentPlayer().getNumOfTrainstaitions());
+                            ntm.setGraphicalPosition(playerOperation.getCurrentPlayer().getGraphicalPosition());
+                            ntm.setPotAmount(moneyPot.getAmount());
+                            monopoly.getClient().getClient().sendTCP(ntm);
+                        } else {
+                            screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
+                        }
+                    }
+                } else {
+                    if (Gdx.input.justTouched()) {
+                        if (!diceRoll.getOnTurn()) {
+                            screenOutput = playerOperation.nextPlayer();
+                            diceRoll.reset();
+                        } else {
+                            screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
+                        }
                     }
                 }
+
+                return true;
             }
-            return true;
         });
 
         cheatButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (!clientIsCurrentPlayer()) {
-                    diceRoll.reportCheat(monopoly.getClient().getPlayer().getPlayer());
+                if (!monopoly.isOfflineGame()) {
+                    if (!clientIsCurrentPlayer()) {
+                        diceRoll.reportCheat(monopoly.getClient().getPlayer().getPlayer());
+                    }
+                } else {
+                    diceRoll.reportCheat(player1);
                 }
                 return true;
             }
@@ -188,11 +219,21 @@ public class MonopolyScreen extends GameScreenAdapter {
         buyButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
-                    //winning();
-                    screenOutput = playerOperation.buying();
-                    if (playerOperation.isBought()) {
-                        gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                if (!monopoly.isOfflineGame()) {
+                    if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
+                        //winning();
+                        screenOutput = playerOperation.buying();
+                        if (playerOperation.isBought()) {
+                            gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                        }
+                    }
+                } else {
+                    if (Gdx.input.justTouched()) {
+                        //winning();
+                        screenOutput = playerOperation.buying();
+                        if (playerOperation.isBought()) {
+                            gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                        }
                     }
                 }
                 return true;
@@ -252,21 +293,24 @@ public class MonopolyScreen extends GameScreenAdapter {
             }, 4);
             timerCard.stop();
         }
-        if (monopoly.getClient().getNextTurnMessage() != null) {
-            if (monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() != playerOperation.getCurrentPlayer().getId()) {
-                for (Player player : playerList) {
-                    if (monopoly.getClient().getNextTurnMessage().getId() == player.getId()) {
-                        player.setPosition(monopoly.getClient().getNextTurnMessage().getPosition());
-                        player.setNumOfTrainstaitions(monopoly.getClient().getNextTurnMessage().getNumOfTrainstations());
-                        player.setBankBalance(monopoly.getClient().getNextTurnMessage().getBankBalance());
-                        player.setMyProperties(monopoly.getClient().getNextTurnMessage().getMyProperties());
-                        player.move(monopoly.getClient().getNextTurnMessage().getGraphicalPosition());
-                        moneyPot.setAmount(monopoly.getClient().getNextTurnMessage().getPotAmount());
+        if (!monopoly.isOfflineGame()) {
+            if (monopoly.getClient().getNextTurnMessage() != null) {
+                if (monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() != playerOperation.getCurrentPlayer().getId()) {
+                    for (Player player : playerList) {
+                        if (monopoly.getClient().getNextTurnMessage().getId() == player.getId()) {
+                            player.setPosition(monopoly.getClient().getNextTurnMessage().getPosition());
+                            player.setNumOfTrainstaitions(monopoly.getClient().getNextTurnMessage().getNumOfTrainstations());
+                            player.setBankBalance(monopoly.getClient().getNextTurnMessage().getBankBalance());
+                            player.setMyProperties(monopoly.getClient().getNextTurnMessage().getMyProperties());
+                            player.move(monopoly.getClient().getNextTurnMessage().getGraphicalPosition());
+                            moneyPot.setAmount(monopoly.getClient().getNextTurnMessage().getPotAmount());
+                        }
                     }
+                    playerOperation.setCurrentPlayerId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
                 }
-                playerOperation.setCurrentPlayerId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
             }
         }
+
         batch.end();
     }
 
@@ -300,8 +344,6 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerList.add(player3);
         playerList.add(player4);
 //        player1.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, color));
-
-
 
 
     }
@@ -353,7 +395,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         }
     }
 
-}
+
     public void minigame() {
         if (!playerOperation.getCurrentPlayer().isAlone()) {
             int[] minigameRolls = new int[gameField.getPlayersToPosition().size()];
@@ -383,19 +425,19 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public int[] bubbleSort(int[] minigame) {
-            int k;
-            for (int i = 0; i < minigame.length - 1; i++) {
-                if (minigame[i] < minigame[i + 1]) {
-                    continue;
-                }
-                k = minigame[i];
-                minigame[i] = minigame[i + 1];
-                minigame[i + 1] = k;
-                bubbleSort(minigame);
+        int k;
+        for (int i = 0; i < minigame.length - 1; i++) {
+            if (minigame[i] < minigame[i + 1]) {
+                continue;
             }
-            return minigame;
+            k = minigame[i];
+            minigame[i] = minigame[i + 1];
+            minigame[i + 1] = k;
+            bubbleSort(minigame);
         }
+        return minigame;
     }
+}
 
 
 
