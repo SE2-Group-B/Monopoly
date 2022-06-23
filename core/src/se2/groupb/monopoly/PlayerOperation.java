@@ -121,25 +121,31 @@ public class PlayerOperation {
         String output = playerString + " bought ";
         if (!isSomeonesProperty(playerPosition)) {
             if (p instanceof Street) {
-                bought = true;
-                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
-                output += p.getName() + " for " + ((Street) p).getPrice() + "€";
-                getCurrentPlayer().changeMoney(-((Street) p).getPrice());
-
+                if(((Street)p).getPrice() < getCurrentPlayer().getBankBalance()) {
+                    bought = true;
+                    logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                    output += p.getName() + " for " + ((Street) p).getPrice() + "€";
+                    getCurrentPlayer().changeMoney(-((Street) p).getPrice());
+                }else{
+                    output += "nothing because he is too poor for that building";
+                }
             } else if (p instanceof Trainstation) {
-                bought = true;
-                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
-                getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
-                output += p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
-
-                getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
-            } else if(getCurrentPlayer().getId() == p.getOwnerId()) {
-            output = "Du hast was zugekauft";
-            ((Street) p).buyhouse();
-        } else {
+                if(((Trainstation)p).getPrice() < getCurrentPlayer().getBankBalance()) {
+                    bought = true;
+                    logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                    getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
+                    output += p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
+                    getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
+                }else{
+                    output += "nothing because you have no money for this station";
+                }
+            } else {
                 bought = false;
                 output = "You can't buy this Property";
             }
+        } else if(getCurrentPlayer().getId() == p.getOwnerId()) {
+            output = "Du hast was zugekauft";
+            ((Street) p).buyhouse();
         } else {
             bought = false;
             output = "You can't buy this Property";
