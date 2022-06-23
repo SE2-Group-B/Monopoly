@@ -80,17 +80,17 @@ public class ServerFoundation {
     private void initPlayers(int countPlayers) {
         ArrayList<PlayerInformation> players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
-            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<>(), 0, Color.BLUE, false));
-            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<>(), 0, Color.RED, false));
+            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<>(), 0, Color.BLUE));
+            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<>(), 0, Color.RED));
             players.add(player1);
             players.add(player2);
         }
         if (countPlayers >= 3 && countPlayers <= 4) {
-            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<>(), 0, Color.YELLOW, false));
+            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<>(), 0, Color.YELLOW));
             players.add(player3);
         }
         if (countPlayers >= 4) {
-            this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<>(), 0, Color.GREEN, false));
+            this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<>(), 0, Color.GREEN));
             players.add(player4);
         }
 
