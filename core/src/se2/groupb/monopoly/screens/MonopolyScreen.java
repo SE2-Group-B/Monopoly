@@ -247,13 +247,13 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public void initOfflinePlayer() {
-        player1 = new Player(1, "Blue", 2000, player1Propertylist, 0, Color.BLUE, false);
+        player1 = new Player(1, "Blue", 2000, player1Propertylist, 0, Color.BLUE);
         player1.createSpielfigur();
-        player2 = new Player(2, "Red", 2000, player2Propertylist, 0, Color.RED, false);
+        player2 = new Player(2, "Red", 2000, player2Propertylist, 0, Color.RED);
         player2.createSpielfigur();
-        player3 = new Player(3, "Yellow", 2000, player3Propertylist, 0, Color.YELLOW, false);
+        player3 = new Player(3, "Yellow", 2000, player3Propertylist, 0, Color.YELLOW);
         player3.createSpielfigur();
-        player4 = new Player(4, "Green", 2000, player4Propertylist, 0, Color.GREEN, false);
+        player4 = new Player(4, "Green", 2000, player4Propertylist, 0, Color.GREEN);
         player4.createSpielfigur();
         playerList.add(player1);
         playerList.add(player2);
