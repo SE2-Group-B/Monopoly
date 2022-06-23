@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import se2.groupb.monopoly.Trainstation;
 
-public class trainstationTest {
+public class TrainstationTest {
     Trainstation nordbahnhof;
 
     @Before
@@ -36,30 +36,23 @@ public class trainstationTest {
 
     @Test
     public void testGetKaufpreis(){
-        Assert.assertEquals(nordbahnhof.getPrice(), 500);
+        Assert.assertEquals(500, nordbahnhof.getPrice());
     }
 
     @Test
     public void testSetKaufpreis(){
         nordbahnhof.setPrice(100);
-        Assert.assertEquals(nordbahnhof.getPrice(), 100);
+        Assert.assertEquals(100, nordbahnhof.getPrice());
     }
 
     @Test
     public void testGetMiete(){
-        Assert.assertEquals(nordbahnhof.getRent(), 200);
+        Assert.assertEquals(200, nordbahnhof.getRent());
     }
 
     @Test
     public void testSetMiete(){
         nordbahnhof.setRent(111);
-        Assert.assertEquals(nordbahnhof.getRent(), 111);
+        Assert.assertEquals(111, nordbahnhof.getRent());
     }
-
-    @Test
-    public void testincreaseRent(){
-        nordbahnhof.increaseRent();
-        Assert.assertEquals(200, nordbahnhof.getRent());
-    }
-
 }

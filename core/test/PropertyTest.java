@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import se2.groupb.monopoly.Property;
 
-public class propertyTest {
+public class PropertyTest {
 
     Property g;
 
@@ -27,23 +27,23 @@ public class propertyTest {
     }
     @Test
     public void testGetName(){
-        Assert.assertEquals(g.getName(), "Grundstück");
+        Assert.assertEquals("Grundstück", g.getName());
     }
 
     @Test
     public void testSetName(){
         g.setName("Neues Grundstück");
-        Assert.assertEquals(g.getName(), "Neues Grundstück");
+        Assert.assertEquals("Neues Grundstück", g.getName());
     }
     @Test
     public void testGetOwnerID(){
-        Assert.assertEquals(g.getOwnerId(), 0);
+        Assert.assertEquals(0, g.getOwnerId());
     }
 
     @Test
     public void testSetOwnerID(){
         g.setOwnerId(2);
-        Assert.assertEquals(g.getOwnerId(), 2);
+        Assert.assertEquals(2, g.getOwnerId());
     }
 
 }

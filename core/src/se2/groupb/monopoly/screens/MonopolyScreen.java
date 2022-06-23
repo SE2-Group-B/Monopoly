@@ -33,10 +33,8 @@ public class MonopolyScreen extends GameScreenAdapter {
     private ImageButton cheatButton;
     private ImageButton nextButton;
     private int buttonSizeX;
-    private int buttonSizeY;
     private float buttonsize;
     private float yPosInitialButtons;
-    private float yPosOffsetButtons;
     private float xPosButtons;
 
     //Players
@@ -81,11 +79,9 @@ public class MonopolyScreen extends GameScreenAdapter {
 
         //InitButtons
         buttonSizeX = Gdx.graphics.getWidth() / 3;
-        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
         buttonsize = (float) (Gdx.graphics.getWidth() / 3D);
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
-        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
         //init Marko
         screenOutput = "";
@@ -128,79 +124,54 @@ public class MonopolyScreen extends GameScreenAdapter {
         buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons - 45, buttonsize / 2);
         diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
         cheatButton = drawImageButton("images/MenuButtons/report_cheat.png", xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
-        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90, 50, buttonsize / 5);
+        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90f, 50, buttonsize / 5);
 
         gameField = new CreateGameField(monopoly, playerList);
         playerOperation = new PlayerOperation(playerList);
         initCardDeck();
 
-        diceButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
-                    if (!playerOperation.getCurrentPlayer().isAlone()) {
-//                        gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
-//                        playerOperation.getCurrentPlayer().setAlone(true);
-                        gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
-                        minigame();
+        diceButton.addListener(event -> {
+            if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
+                int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                ArrayList<Texture> l = diceRoll.getDiceTextures();
+                dice1 = l.get(0);
+                dice2 = l.get(1);
+                playerOperation.getCurrentPlayer().move(dice);
+                playerOperation.setMoneyPotForOperation(moneyPot);
+                playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
+                screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+//                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
+            }
+            return true;
+        });
 
-                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
-                        ArrayList<Texture> l = diceRoll.getDiceTextures();
-                        dice1 = l.get(0);
-                        dice2 = l.get(1);
-                        playerOperation.setMoneyPotForOperation(moneyPot);
-                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
-                    } else {
-                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
-                        ArrayList<Texture> l = diceRoll.getDiceTextures();
-                        dice1 = l.get(0);
-                        dice2 = l.get(1);
-                        playerOperation.getCurrentPlayer().move(dice);
-                        playerOperation.setMoneyPotForOperation(moneyPot);
-                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
-                        playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
-                    }
+        nextButton.addListener(event -> {
+            if (Gdx.input.justTouched()) {
+                if (!diceRoll.getOnTurn()) {
+                    screenOutput = playerOperation.nextPlayer();
+                    diceRoll.reset();
+                } else {
+                    screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
                 }
-                return true;
             }
+            return true;
         });
 
-        nextButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (Gdx.input.justTouched()) {
-                    if (!diceRoll.getOnTurn()) {
-                        screenOutput = playerOperation.nextPlayer();
-                        diceRoll.reset();
-                    } else {
-                        screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
-                    }
-                }
-                return true;
-            }
+        cheatButton.addListener(event -> {
+            diceRoll.reportCheat();
+            return true;
         });
 
-        cheatButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                diceRoll.reportCheat();
-                return true;
-            }
-        });
-
-        buyButton.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (Gdx.input.justTouched()) {
-                    //winning();
-                    screenOutput = playerOperation.buying();
-                    if (playerOperation.isBought()) {
-                        gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
-                    }
-                }
-                return true;
-            }
-        });
+         buyButton.addListener(event -> {
+             if (Gdx.input.justTouched()) {
+                 screenOutput = playerOperation.buying();
+                 if (playerOperation.isBought()) {
+                     gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                 }
+             }
+             return true;
+         });
 
         stage.addActor(buyButton);
         stage.addActor(diceButton);
@@ -233,26 +204,26 @@ public class MonopolyScreen extends GameScreenAdapter {
         drawDice(dice1, dice2);
 
         if (player1 != null && player2 != null) {
-            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
-            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
+            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 100f));
+            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 150f));
         }
         if (player3 != null) {
-            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
+            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 200f));
         }
         if (player4 != null) {
-            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
+            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 250f));
         }
-        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250f);
-        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400f);
+        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75f), yPosInitialButtons + 250);
+        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
 
         if (playerOperation.getCardBoolean()) {
-            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2) - 100.f, (Gdx.graphics.getHeight() / 3) - 200.f, 600, 750);
+            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2f) - 100f, (Gdx.graphics.getHeight() / 3f) - 200.f, 600, 750);
             timerCard.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     playerOperation.setCardBoolean(false);
                 }
-            }, 3);
+            }, 4);
             timerCard.stop();
         }
 

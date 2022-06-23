@@ -15,6 +15,7 @@ public class GameFieldUnits {
     public void createField(String n){
         switch("monopoly"){
             case "monopoly": createStandardFieldArray();
+            default: break;
         }
     }
 
