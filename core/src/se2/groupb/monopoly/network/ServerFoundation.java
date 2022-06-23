@@ -93,20 +93,20 @@ public class ServerFoundation {
     private void initPlayers(int countPlayers) {
         players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
-            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<>(), 0, Color.BLUE));
-            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<>(), 0, Color.RED));
+            this.player1 = new PlayerInformation(new Player(1, "Blue", 2000, new ArrayList<>(), 0, Color.BLUE));
+            this.player2 = new PlayerInformation(new Player(2, "Red", 2000, new ArrayList<>(), 0, Color.RED));
             this.player1.setCurrentPlayerID(this.currentPlayerID);
             this.player2.setCurrentPlayerID(this.currentPlayerID);
             players.add(player1);
             players.add(player2);
         }
         if (countPlayers >= 3 && countPlayers <= 4) {
-            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<>(), 0, Color.YELLOW));
+            this.player3 = new PlayerInformation(new Player(3, "Yellow", 2000, new ArrayList<>(), 0, Color.YELLOW));
             this.player3.setCurrentPlayerID(this.currentPlayerID);
             players.add(player3);
         }
         if (countPlayers >= 4) {
-            this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<>(), 0, Color.GREEN));
+            this.player4 = new PlayerInformation(new Player(4, "Green", 2000, new ArrayList<>(), 0, Color.GREEN));
             this.player4.setCurrentPlayerID(this.currentPlayerID);
             players.add(player4);
         }
@@ -241,22 +241,20 @@ public class ServerFoundation {
 
     // method to increment the currentPlayerID after a player has finished the move
     public void incrementCurrentPlayer(int countPlayers) {
-        if (countPlayers == 2) {
-            checkPlayerIDForMoves(countPlayers);
-        }
-        if (countPlayers == 3) {
-            checkPlayerIDForMoves(countPlayers);
-        }
-        if (countPlayers == 4) {
-            checkPlayerIDForMoves(countPlayers);
-        }
-    }
-
-    public void checkPlayerIDForMoves(int countPlayers) {
         if (this.currentPlayerID == countPlayers) {
             this.currentPlayerID = 1;
-        } else this.currentPlayerID++;
+        } else {
+            this.currentPlayerID++;
+        }
     }
+//
+//    public void checkPlayerIDForMoves(int countPlayers) {
+//        if (this.currentPlayerID == countPlayers) {
+//            this.currentPlayerID = 1;
+//        } else {
+//            this.currentPlayerID++;
+//        }
+//    }
 
     public int getCurrentPlayerID() {
         return currentPlayerID;

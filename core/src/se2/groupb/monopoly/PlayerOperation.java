@@ -67,7 +67,18 @@ public class PlayerOperation {
     }
 
     public boolean isEnemyProperty(int position) {
-        return (isSomeonesProperty(position) && (getCurrentPlayer().getId() != getPropertyOwner(position).getId()));
+        for(Player player : playerList){
+            if(player.getId() != getCurrentPlayer().getId()){
+                for(Property p : player.getMyProperties()){
+                    if(p.getName().equals(logicalGameField.getGameField()[position].getName())){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+//        return (isSomeonesProperty(position) && (getCurrentPlayer().getId() != getPropertyOwner(position).getId()));
     }
 
     public String checkSoleProperty(Property property) {
@@ -127,11 +138,13 @@ public class PlayerOperation {
         if (!isSomeonesProperty(playerPosition)) {
             if (p instanceof Street) {
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                getCurrentPlayer().getMyProperties().add(p);
                 output += " bought " + p.getName() + " for " + ((Street) p).getPrice() + "€";
                 getCurrentPlayer().changeMoney(-((Street) p).getPrice());
                 bought = true;
             } else if (p instanceof Trainstation) {
                 logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                getCurrentPlayer().getMyProperties().add(p);
                 getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
                 output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
 

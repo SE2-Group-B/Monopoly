@@ -100,14 +100,13 @@ public class DiceRoll {
         }
     }
 
-    public void reportCheat(){
+    public void reportCheat(Player p){
         if(Gdx.input.justTouched() && !reported){
             if (cheatActivated) {
-//                player.changeMoney(-200);
-//                player.changeMoney(100);
-                player.changeMoney(100);
+                player.changeMoney(-200);
+                p.changeMoney(100);
             } else {
-                player.changeMoney(-100);
+                p.changeMoney(-100);
             }
             reported = true;
         }
