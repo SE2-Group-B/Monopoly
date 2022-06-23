@@ -4,6 +4,11 @@ public class Property {
     private String name;
     private int ownerId;
 
+    public Property(){
+        /**
+         * not used
+         */
+    }
 
     public Property(String name) {
         this.name = name;

@@ -29,7 +29,13 @@ public class DiceRoll {
 
     private Player player;
 
-    public DiceRoll() {
+    public DiceRoll(){
+        /**
+         * not used
+         */
+    }
+    public DiceRoll(Player player){
+        this.player = player;
         this.onTurn = true;
     }
 
@@ -88,12 +94,13 @@ public class DiceRoll {
         }
     }
 
-    public void reportCheat() {
-        if (Gdx.input.justTouched() && !reported) {
+    public void reportCheat(Player p){
+        if(Gdx.input.justTouched() && !reported){
             if (cheatActivated) {
-                player.changeMoney(100);
+                player.changeMoney(-200);
+                p.changeMoney(100);
             } else {
-                player.changeMoney(-100);
+                p.changeMoney(-100);
             }
             reported = true;
         }

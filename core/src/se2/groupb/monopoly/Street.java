@@ -9,6 +9,12 @@ public class Street extends Property {
     private int rent;
     private int housePrice;
 
+    public Street(){
+        /**
+         * not used
+         */
+    }
+
     public Street(String name, int price, boolean sold, int house, int hotel, int rent, int housePrice) {
         super(name);
         this.price = price;
