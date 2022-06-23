@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 
@@ -36,15 +34,12 @@ public class MinigameScreen extends GameScreenAdapter{
     @Override
     public void show() {
         stage = new Stage();
-        clicker = drawImageButton("images/MenuButtons/clicker.png", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, (float) (Gdx.graphics.getWidth()/3D));
+        clicker = drawImageButton("images/MenuButtons/clicker.png", Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, (float) (Gdx.graphics.getWidth()/3D));
 
-        clicker.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if(Gdx.input.justTouched()){
-                    counter++;
-                }return true;
-            }
+        clicker.addListener(event -> {
+            if(Gdx.input.justTouched()){
+                counter++;
+            }return true;
         });
         stage.addActor(clicker);
 
@@ -54,6 +49,8 @@ public class MinigameScreen extends GameScreenAdapter{
         waitingText = new GlyphLayout(font, text);
     }
 
+    //GameScreenAdapter requires that
+    /** If Sonarcloud won't accept that*/
     @Override
     public void switchScreenDelayed(GameScreenAdapter screen, float delay) {
 

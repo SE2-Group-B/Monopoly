@@ -11,15 +11,11 @@ public class DiceRoll {
 
     private Random random = new Random();
 
-    private boolean AccelerometerActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
-
-    private float xAccel;
-    private float yAccel;
-    private float zAccel;
+    private boolean accelerometerActive = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
 
     private boolean cheatActivated;
     private boolean shakeCheatActivated;
-    private boolean onTurn = true;
+    private boolean onTurn;
     private boolean reported;
     private boolean keyVolumeUp;
 
@@ -40,10 +36,11 @@ public class DiceRoll {
     }
     public DiceRoll(Player player){
         this.player = player;
+        this.onTurn = true;
     }
 
     public int roll(Player player) {
-        this.player=player;
+        this.player = player;
         firstDice = random.nextInt(6) + 1;
         secondDice = 0;
         chechForPach();
@@ -53,7 +50,7 @@ public class DiceRoll {
         return firstDice + secondDice;
     }
 
-    public ArrayList<Texture> getDiceTextures(){
+    public ArrayList<Texture> getDiceTextures() {
         ArrayList<Texture> list = new ArrayList<>();
         list.add(this.dice1);
         list.add(this.dice2);
@@ -82,20 +79,17 @@ public class DiceRoll {
         if (pachCount > 2) {
             onTurn = false;
             player.goToJail();
-//            player.move(positions[player.getPosition()]);
         }
     }
 
-    public void checkForShakeCheat(){
-        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated) {
-            if (AccelerometerActive) {
-                xAccel = Gdx.input.getAccelerometerX();
-                yAccel = Gdx.input.getAccelerometerY();
-                zAccel = Gdx.input.getAccelerometerZ();
-                if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
-                    player.changeMoney(100);
-                    cheatActivated = shakeCheatActivated = true;
-                }
+    public void checkForShakeCheat() {
+        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_DOWN) && !shakeCheatActivated && accelerometerActive) {
+            float xAccel = Gdx.input.getAccelerometerX();
+            float yAccel = Gdx.input.getAccelerometerY();
+            float zAccel = Gdx.input.getAccelerometerZ();
+            if (xAccel < -15 || xAccel > 15 || yAccel < -15 || yAccel > 15 || zAccel < -15 || zAccel > 15) {
+                player.changeMoney(100);
+                cheatActivated = shakeCheatActivated = true;
             }
         }
     }
@@ -140,25 +134,25 @@ public class DiceRoll {
         return new Texture(path);
     }
 
-    public void checkManualPachCount(){
-        if(Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)){
-            if(!keyVolumeUp){
+    public void checkManualPachCount() {
+        if (Gdx.input.isKeyPressed(Input.Keys.VOLUME_UP)) {
+            if (!keyVolumeUp) {
                 keyVolumeUp = true;
                 cheatDice++;
             }
-        }else{
+        } else {
             keyVolumeUp = false;
         }
     }
 
-    public void reset () {
+    public void reset() {
         cheatActivated = shakeCheatActivated = reported = false;
         onTurn = true;
         cheatDice = 0;
         pachCount = 0;
     }
 
-    public boolean getOnTurn(){
+    public boolean getOnTurn() {
         return this.onTurn;
     }
 }

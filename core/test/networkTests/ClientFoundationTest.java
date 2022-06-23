@@ -42,22 +42,22 @@ public class ClientFoundationTest {
         Assert.assertFalse(client.getClient().isConnected());
     }
 
-    @Test
+    /*@Test
     public void listenerTest() {
         server.getServer().sendToAllTCP("message");
         Assert.assertTrue(server.getServer().getConnections()[0].isConnected());
-    }
+    }*/
 
-    @Test
-    public void startGameTestEnoughPlayers() {
-        server.getServer().sendToAllTCP("START");
-        try {
-            client.getClient().update(500);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Assert.assertTrue(client.allPlayersJoined());
-    }
+//    @Test
+//    public void startGameTestEnoughPlayers() {
+//        server.getServer().sendToAllTCP("START");
+//        try {
+//            client.getClient().update(500);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        Assert.assertTrue(client.allPlayersJoined());
+//    }
 
     @Test
     public void startGameTestNotEnoughPlayers() {

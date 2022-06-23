@@ -1,7 +1,6 @@
 package se2.groupb.monopoly;
 
 import com.badlogic.gdx.graphics.Texture;
-
 import java.util.ArrayList;
 
 public class PlayerOperation {
@@ -15,6 +14,7 @@ public class PlayerOperation {
     private Deck eventCards;
     private boolean showCard;
     private boolean bought;
+    private String playerString;
 
     public PlayerOperation(){
         /**
@@ -27,6 +27,7 @@ public class PlayerOperation {
         logicalGameField = new LogicalGameField();
         currentPlayerId = 1;
         this.playerCount = playerList.size();
+        this.playerString = "Player "+getCurrentPlayer().getName();
     }
 
     public boolean isSomeonesProperty(int position) {
@@ -48,7 +49,7 @@ public class PlayerOperation {
     public String checkCurrentProperty(Player player) {
         int playerPosition = player.getPosition();
         Property p = logicalGameField.getGameField()[playerPosition];
-        String output = "Player " + player.getName() + " is on " + p.getName();
+        String output = playerString + " is on " + p.getName();
         if (p instanceof Street) {
             if (isEnemyProperty(playerPosition)) {
                 output = getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition), ((Street) p).getRent());
@@ -82,19 +83,19 @@ public class PlayerOperation {
     }
 
     public String checkSoleProperty(Property property) {
-        String output = "Player " + getCurrentPlayer().getName();
+        String output = playerString;
         switch (property.getName()) {
             case "Los":
                 getCurrentPlayer().changeMoney(400);
-                output += " landed directly on GO and earned 400€";
+                output += " landed directly on GO and earned 400$";
                 break;
             case "Gemeinschaftsfeld":
-                output += " stepped on a Gemeinschaftsfeld.";
+                output += " stepped on a community field";
                 cardBackground = getCurrentPlayer().drawCard(communityCards);
                 showCard = true;
                 break;
             case "Ereignisfeld":
-                output += " stepped on a Ereignisfeld.";
+                output += " stepped on an event field";
                 cardBackground = getCurrentPlayer().drawCard(eventCards);
                 showCard = true;
                 break;
@@ -113,6 +114,8 @@ public class PlayerOperation {
                 getCurrentPlayer().goToJail();
                 output += " went to prison";
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + property.getName());
         }
         return output;
     }
@@ -134,26 +137,36 @@ public class PlayerOperation {
     public String buying() {
         int playerPosition = getCurrentPlayer().getPosition();
         Property p = logicalGameField.getGameField()[playerPosition];
-        String output = "Player " + getCurrentPlayer().getName();
+        String output = playerString + " bought ";
         if (!isSomeonesProperty(playerPosition)) {
             if (p instanceof Street) {
-                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
-                getCurrentPlayer().getMyProperties().add(p);
-                output += " bought " + p.getName() + " for " + ((Street) p).getPrice() + "€";
-                getCurrentPlayer().changeMoney(-((Street) p).getPrice());
-                bought = true;
+                if(((Street)p).getPrice() < getCurrentPlayer().getBankBalance()) {
+                    bought = true;
+                    logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                    output += p.getName() + " for " + ((Street) p).getPrice() + "€";
+                    getCurrentPlayer().changeMoney(-((Street) p).getPrice());
+                }else{
+                    output += "nothing because he is too poor for that building";
+                }
             } else if (p instanceof Trainstation) {
-                logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
-                getCurrentPlayer().getMyProperties().add(p);
-                getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
-                output += " bought " + p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
-
-                getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
-                bought = true;
+                if(((Trainstation)p).getPrice() < getCurrentPlayer().getBankBalance()) {
+                    bought = true;
+                    logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                    getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
+                    output += p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
+                    getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
+                }else{
+                    output += "nothing because you have no money for this station";
+                }
             } else {
+                bought = false;
                 output = "You can't buy this Property";
             }
+        } else if(getCurrentPlayer().getId() == p.getOwnerId()) {
+            output = "Du hast was zugekauft";
+            ((Street) p).buyhouse();
         } else {
+            bought = false;
             output = "You can't buy this Property";
         }
         return output;

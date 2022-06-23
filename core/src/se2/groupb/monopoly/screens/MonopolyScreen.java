@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -37,10 +36,8 @@ public class MonopolyScreen extends GameScreenAdapter {
     private ImageButton cheatButton;
     private ImageButton nextButton;
     private int buttonSizeX;
-    private int buttonSizeY;
     private float buttonsize;
     private float yPosInitialButtons;
-    private float yPosOffsetButtons;
     private float xPosButtons;
 
     //Players
@@ -61,6 +58,8 @@ public class MonopolyScreen extends GameScreenAdapter {
 
     //Andy
     private CreateGameField gameField;
+    private boolean moreThanOnePlayerOnField;
+    private boolean minigame;
 
     //Alen
     private BitmapFont moneyfont;
@@ -73,9 +72,6 @@ public class MonopolyScreen extends GameScreenAdapter {
     private ArrayList<Property> player4Propertylist;
 
     //Vivi
-    private Deck communityCards;
-    private Deck eventCards;
-    public boolean showCard;
     private Timer timerCard;
 
     private SpriteBatch batch;
@@ -86,11 +82,9 @@ public class MonopolyScreen extends GameScreenAdapter {
 
         //InitButtons
         buttonSizeX = Gdx.graphics.getWidth() / 3;
-        buttonSizeY = (int) (Gdx.graphics.getHeight() / (4.545454 * 2));
         buttonsize = (float) (Gdx.graphics.getWidth() / 3D);
         xPosButtons = (float) (Gdx.graphics.getWidth() / 2D - buttonSizeX / 2D);
         yPosInitialButtons = (float) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 4D);
-        yPosOffsetButtons = (float) (-Gdx.graphics.getWidth() / 8D);
 
         //init Marko
         screenOutput = "";
@@ -133,7 +127,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         buyButton = drawImageButton("images/MenuButtons/buy_building.png", 180, yPosInitialButtons - 45, buttonsize / 2);
         diceButton = drawImageButton("images/MenuButtons/roll.png", xPosButtons + 500, yPosInitialButtons - 500, buttonsize);
         cheatButton = drawImageButton("images/MenuButtons/report_cheat.png", xPosButtons + 500, yPosInitialButtons - 700, buttonsize);
-        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90, 50, buttonsize / 5);
+        nextButton = drawImageButton("images/MenuButtons/nextbutton.png", Gdx.graphics.getWidth() - 90f, 50, buttonsize / 5);
 
         gameField = new CreateGameField(monopoly, playerList);
         playerOperation = new PlayerOperation(playerList);
@@ -154,8 +148,8 @@ public class MonopolyScreen extends GameScreenAdapter {
                     screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
                     playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
                 }
-                return true;
             }
+            return true;
         });
 
         nextButton.addListener(new EventListener() {
@@ -177,8 +171,8 @@ public class MonopolyScreen extends GameScreenAdapter {
                         screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
                     }
                 }
-                return true;
             }
+            return true;
         });
 
         cheatButton.addListener(new EventListener() {
@@ -236,26 +230,26 @@ public class MonopolyScreen extends GameScreenAdapter {
         drawDice(dice1, dice2);
 
         if (player1 != null && player2 != null) {
-            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, Gdx.graphics.getHeight() - 100);
-            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, Gdx.graphics.getHeight() - 150);
+            moneyfont.draw(batch, player1.getName() + ": " + player1.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 100f));
+            moneyfont.draw(batch, player2.getName() + ": " + player2.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 150f));
         }
         if (player3 != null) {
-            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, Gdx.graphics.getHeight() - 200);
+            moneyfont.draw(batch, player3.getName() + ": " + player3.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 200f));
         }
         if (player4 != null) {
-            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, Gdx.graphics.getHeight() - 250);
+            moneyfont.draw(batch, player4.getName() + ": " + player4.getBankBalance(), 0, (float) (Gdx.graphics.getHeight() - 250f));
         }
-        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75), yPosInitialButtons + 250f);
-        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400f);
+        moneyfont.draw(batch, screenOutput, (float) (Gdx.graphics.getWidth() / 3.75f), yPosInitialButtons + 250);
+        moneyfont.draw(batch, "Pot: " + moneyPot.getAmount(), 0, Gdx.graphics.getHeight() - 400);
 
         if (playerOperation.getCardBoolean()) {
-            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 3) - 200, 600, 750);
+            batch.draw(playerOperation.getCardTexture(), (Gdx.graphics.getWidth() / 2f) - 100f, (Gdx.graphics.getHeight() / 3f) - 200.f, 600, 750);
             timerCard.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     playerOperation.setCardBoolean(false);
                 }
-            }, 3);
+            }, 4);
             timerCard.stop();
         }
         if (monopoly.getClient().getNextTurnMessage() != null) {
@@ -305,6 +299,11 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerList.add(player2);
         playerList.add(player3);
         playerList.add(player4);
+//        player1.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, color));
+
+
+
+
     }
 
     public void initOnlinePlayer() {
@@ -314,11 +313,9 @@ public class MonopolyScreen extends GameScreenAdapter {
             player1.createSpielfigur();
 
             playerList.add(player1);
-            if (monopoly.getClient().getOtherPlayers().size() > 0) {
-                player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
-                player2.createSpielfigur();
-                playerList.add(player2);
-            }
+            player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
+            player2.createSpielfigur();
+            playerList.add(player2);
             if (monopoly.getClient().getOtherPlayers().size() > 1) {
                 player3 = monopoly.getClient().getOtherPlayers().get(1).getPlayer();
                 player3.createSpielfigur();
@@ -338,10 +335,10 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     private void initCardDeck() {
-        communityCards = new Deck();
+        Deck communityCards = new Deck();
         communityCards.initializeGemeinschaftskartenStapel();
         communityCards.shuffle();
-        eventCards = new Deck();
+        Deck eventCards = new Deck();
         eventCards.initializeEreigniskartenStapel();
         eventCards.shuffle();
         playerOperation.setCommunityCards(communityCards);
@@ -357,3 +354,48 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
 }
+    public void minigame() {
+        if (!playerOperation.getCurrentPlayer().isAlone()) {
+            int[] minigameRolls = new int[gameField.getPlayersToPosition().size()];
+            minigame = true;
+            System.out.println(playerOperation.getCurrentPlayer().isAlone());
+            System.out.println(minigame);
+            for (int i = 0; i < gameField.getPlayersToPosition().size(); i++) {
+                minigameRolls[i] = diceRoll.roll(gameField.getPlayersToPosition().get(i));
+            }
+            minigame = false;
+
+            int[] sorted;
+            int first = 0;
+            sorted = minigameRolls.clone();
+            bubbleSort(minigameRolls);
+            for (int i = 0; i < minigameRolls.length; i++) {
+                if (sorted[0] == minigameRolls[i]) {
+                    first = i;
+                }
+            }
+            for (int i = 0; i < sorted.length; i++) {
+                if (i != first) {
+                    playerOperation.getPlayerById(i).payToOtherPlayer(playerOperation.getPlayerById(i), 200);
+                }
+            }
+        }
+    }
+
+    public int[] bubbleSort(int[] minigame) {
+            int k;
+            for (int i = 0; i < minigame.length - 1; i++) {
+                if (minigame[i] < minigame[i + 1]) {
+                    continue;
+                }
+                k = minigame[i];
+                minigame[i] = minigame[i + 1];
+                minigame[i + 1] = k;
+                bubbleSort(minigame);
+            }
+            return minigame;
+        }
+    }
+
+
+

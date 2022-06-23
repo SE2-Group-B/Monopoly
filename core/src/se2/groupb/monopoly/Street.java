@@ -88,12 +88,12 @@ public class Street extends Property {
 
     public void increasemiete() {
         int miete1 = getRent();
-        int haus = getHouse();
-        int hotel = getHotel();
+        house = getHouse();
+        hotel = getHotel();
 
-        if(haus == 1 && hotel == 0) {
+        if(house == 1 && hotel == 0) {
             miete1 = (int) (miete1 * 1.2);
-        }else if(haus == 2 && hotel == 0){
+        }else if(house == 2 && hotel == 0){
             miete1 = (int) ((miete1 / 1.2) * 1.4);
         }else if(hotel == 1){
             miete1 = (int) ((miete1 / 1.4) * 1.8);
