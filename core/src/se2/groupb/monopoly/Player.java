@@ -23,9 +23,11 @@ public class Player {
     ModelInstance modInstance;
     Vector3 fieldPos;
     private boolean prison;
-    private boolean isNotAlone;
     private int prisoncount = 0;
-    private String buildingPath = "Spielfeld\\char.g3dj";
+    private boolean isAlone;
+
+    private String buildingPath = "Spielfeld\\char_update_v4.g3dj";
+    private CreateGameField field;
     private Pot pot;
 
     public Player() {
@@ -39,6 +41,7 @@ public class Player {
         this.numOfTrainstaitions = numOfTrainstaitions;
         this.position = 0;
         this.color = color;
+        this.isAlone = false;
     }
 
     public void createSpielfigur() { //Methode noch nicht getestet
@@ -331,12 +334,12 @@ public class Player {
         return kartenbild;
     }
 
-    public boolean isNotAlone() {
-        return isNotAlone;
+    public boolean isAlone() {
+        return isAlone;
     }
 
-    public void setNotAlone(boolean notAlone) {
-        isNotAlone = notAlone;
+    public void setAlone(boolean notAlone) {
+        isAlone = notAlone;
     }
 
     public void setMoneyPotForPlayer(Pot pot) {

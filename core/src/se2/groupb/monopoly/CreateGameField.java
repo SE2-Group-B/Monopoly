@@ -32,10 +32,9 @@ public class CreateGameField extends GameScreenAdapter {
     private ArrayList<Player> players;
     private int playerCount;
     private PlayerOperation pO;
-    private boolean p1 = false;
-    private boolean p2 = false;
-    private boolean p3 = false;
-    private boolean p4 = false;
+    private ArrayList<Player> playersToPosition = new ArrayList<>();
+
+
 
 
     // private CameraInputController cameraController;
@@ -124,67 +123,89 @@ public class CreateGameField extends GameScreenAdapter {
 
         camera.update();
 
+
 //        cameraController = new CameraInputController(camera);
 //        Gdx.input.setInputProcessor(cameraController);
     }
 
-//    public void checkIfPlayerIsAlone(Player player) {
-//        for (int i = 0; i < players.size(); i++) {
-//            if (player.getId() != players.get(i).getId() && player.getPosition() == players.get(i).getPosition()) {
-//                if(players.get(i).isNotAlone()) {
-//                    players.get(i).setNotAlone(false);
-//                } else players.get(i).setNotAlone(true);
+    public void checkIfPlayerIsAlone(Player player) {
+        if (player.getPosition() == pO.getPlayerById(1).getPosition() && player != pO.getPlayerById(1)) {
+            playersToPosition.add(pO.getPlayerById(1));
+            pO.getCurrentPlayer().setAlone(false);
+            player.setAlone(false);
+        }
+        if (player.getPosition() == pO.getPlayerById(2).getPosition() && player != pO.getPlayerById(2)) {
+            playersToPosition.add(pO.getPlayerById(2));
+            pO.getCurrentPlayer().setAlone(false);
+            player.setAlone(false);
+        }
+        if (player.getPosition() == pO.getPlayerById(3).getPosition() && player != pO.getPlayerById(3)) {
+            playersToPosition.add(pO.getPlayerById(3));
+            pO.getCurrentPlayer().setAlone(false);
+            player.setAlone(false);
+        }
+        if (player.getPosition() == pO.getPlayerById(4).getPosition() && player != pO.getPlayerById(4)) {
+            playersToPosition.add(pO.getPlayerById(4));
+            pO.getCurrentPlayer().setAlone(false);
+            player.setAlone(false);
+        }
+        player.setAlone(true);
+
+//        movePlayers(playersToPosition.size(), playersToPosition);
+    }
 //
-//                player.setNotAlone(true);
-//                players.get(i).setNotAlone(true);
-//            }
-//
-//        }
-//        setMultiplePlayersOnField();
-//    }
-//
-//    public void setMultiplePlayersOnField() {
+//    public Vector3[] changeNewPos(int playerID, int posX, int posY) {
 //        Vector3[] newPos = positions.clone();
-//
-//        for (int i = 0; i < players.size(); i++) {
-//            if (players.get(i).isNotAlone() && newPos != positions) {
-//                switch (i) {
-//                    case 0:
-//                        newPos[players.get(i).getPosition()].x -= 2;
-//                        newPos[players.get(i).getPosition()].z += 2;
-//                        players.get(i).move(newPos[players.get(i).getPosition()]);
-////                        players.get(i).setNotAlone(false);
-//
-//                        break;
-//                    case 1:
-//                        newPos[players.get(i).getPosition()].x += 2;
-//                        newPos[players.get(i).getPosition()].z += 2;
-//                        players.get(i).move(newPos[players.get(i).getPosition()]);
-////                        players.get(i).setNotAlone(false);
-//
-//                        break;
-//                    case 2:
-//                        newPos[players.get(i).getPosition()].x -= 2;
-//                        newPos[players.get(i).getPosition()].z -= 2;
-//                        players.get(i).move(newPos[players.get(i).getPosition()]);
-////                        players.get(i).setNotAlone(false);
-//
-//                        break;
-//                    case 3:
-//                        newPos[players.get(i).getPosition()].x += 2;
-//                        newPos[players.get(i).getPosition()].z -= 2;
-//                        players.get(i).move(newPos[players.get(i).getPosition()]);
-////                        players.get(i).setNotAlone(false);
-//
-//                        break;
-//                    default:
-//                        throw new IllegalArgumentException("ERROR");
-//                }
-//            }
-//            newPos = positions.clone();
-//        }
-//
+//        newPos[players.get(playerID).getPosition()].x += posX;
+//        newPos[players.get(playerID).getPosition()].z += posY;
+//        players.get(playerID).move(newPos[players.get(playerID).getPosition()]);
+//        return newPos;
 //    }
+//
+//    public void movePlayers(int numberOfPlayers, ArrayList<Player> playersToPosition) {
+//        int distance = 2;
+//        Vector3[] newPos;
+//        switch (numberOfPlayers) {
+//            case 0:
+//                break;
+//
+//            case 1:
+//                break;
+//
+//            case 2:
+//                newPos = changeNewPos(0, -distance, distance);
+//                playersToPosition.get(0).move(newPos[playersToPosition.get(0).getPosition()]);
+//                newPos = changeNewPos(1, distance, distance);
+//                playersToPosition.get(1).move(newPos[playersToPosition.get(1).getPosition()]);
+//                break;
+//
+//            case 3:
+//                newPos = changeNewPos(0, -distance, distance);
+//                playersToPosition.get(0).move(newPos[playersToPosition.get(0).getPosition()]);
+//                newPos = changeNewPos(1, +distance, distance);
+//                playersToPosition.get(1).move(newPos[playersToPosition.get(1).getPosition()]);
+//                newPos = changeNewPos(2, -distance, -distance);
+//                playersToPosition.get(2).move(newPos[playersToPosition.get(2).getPosition()]);
+//                break;
+//
+//            case 4:
+//                newPos = changeNewPos(0, -distance, distance);
+//                playersToPosition.get(0).move(newPos[playersToPosition.get(0).getPosition()]);
+//                newPos = changeNewPos(1, distance, distance);
+//                playersToPosition.get(1).move(newPos[playersToPosition.get(1).getPosition()]);
+//                newPos = changeNewPos(2, -distance, -distance);
+//                playersToPosition.get(2).move(newPos[playersToPosition.get(2).getPosition()]);
+//                newPos = changeNewPos(3, +distance, -distance);
+//                playersToPosition.get(3).move(newPos[playersToPosition.get(3).getPosition()]);
+//                break;
+//
+//            default:
+//                System.out.println(numberOfPlayers);
+//                throw new IllegalArgumentException("ERROR can't position players");
+//        }
+//    }
+
+
 
 
     @Override
@@ -291,6 +312,10 @@ public class CreateGameField extends GameScreenAdapter {
         pO.setBought(false);
         fieldModInstance[field].materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, color));
 
+    }
+
+    public ArrayList<Player> getPlayersToPosition() {
+        return playersToPosition;
     }
 }
 

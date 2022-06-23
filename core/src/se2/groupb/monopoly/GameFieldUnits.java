@@ -8,7 +8,9 @@ import com.badlogic.gdx.utils.JsonReader;
 
 public class GameFieldUnits {
     private String buildingPath = "Spielfeld\\field.g3dj";
+    private String cornerFields = "Speilfeld\\wideField.g3dj";
     private Field[] fields;
+    private int corner = 40;
 
     public void createField(String n){
         switch("monopoly"){
@@ -20,6 +22,9 @@ public class GameFieldUnits {
     private void createStandardFieldArray() {
         Field fields[] = new Field[40];
 
+//        if(corner % 10 == 0) {
+//            Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(cornerFields));
+//        }
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         //Bot Side of Board
         //Color.Cyan = Corner -> debugging
