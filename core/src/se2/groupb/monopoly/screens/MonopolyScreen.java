@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,6 +26,8 @@ import se2.groupb.monopoly.Player;
 import se2.groupb.monopoly.PlayerOperation;
 import se2.groupb.monopoly.Pot;
 import se2.groupb.monopoly.Property;
+import se2.groupb.monopoly.network.messages.NextTurnMessage;
+import se2.groupb.monopoly.network.messages.PlayerInformation;
 
 public class MonopolyScreen extends GameScreenAdapter {
     //Buttons
@@ -46,7 +49,7 @@ public class MonopolyScreen extends GameScreenAdapter {
     //Marko
     private Pot moneyPot;
     private DiceRoll diceRoll;
-    private int currentPlayerId;
+    //    private int currentPlayerId;
     private String screenOutput;
     private Texture dice1;
     private Texture dice2;
@@ -88,7 +91,7 @@ public class MonopolyScreen extends GameScreenAdapter {
         dice1 = new Texture("images/Dice/dice_0.png");
         dice2 = new Texture("images/Dice/dice_0.png");
         moneyPot = new Pot();
-        diceRoll = new DiceRoll();
+
         playerList = new ArrayList<>();
 
         //init Alen
@@ -128,50 +131,114 @@ public class MonopolyScreen extends GameScreenAdapter {
 
         gameField = new CreateGameField(monopoly, playerList);
         playerOperation = new PlayerOperation(playerList);
+        diceRoll = new DiceRoll(playerOperation.getCurrentPlayer());
         initCardDeck();
 
-        diceButton.addListener(event -> {
-            if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
-                int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
-                ArrayList<Texture> l = diceRoll.getDiceTextures();
-                dice1 = l.get(0);
-                dice2 = l.get(1);
-                playerOperation.getCurrentPlayer().move(dice);
-                playerOperation.setMoneyPotForOperation(moneyPot);
-                playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
-                screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
-                playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
-//                    gameField.checkIfPlayerIsAlone(playerOperation.getCurrentPlayer());
-            }
-            return true;
-        });
 
-        nextButton.addListener(event -> {
-            if (Gdx.input.justTouched()) {
-                if (!diceRoll.getOnTurn()) {
-                    screenOutput = playerOperation.nextPlayer();
-                    diceRoll.reset();
+        diceButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (!monopoly.isOfflineGame()) {
+                    if (Gdx.input.justTouched() && diceRoll.getOnTurn() && clientIsCurrentPlayer()) {
+                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
+                        playerOperation.getCurrentPlayer().move(dice);
+                        playerOperation.setMoneyPotForOperation(moneyPot);
+                        playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
+                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                        playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                    }
                 } else {
-                    screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
+                    if (Gdx.input.justTouched() && diceRoll.getOnTurn()) {
+                        int dice = diceRoll.roll(playerOperation.getCurrentPlayer());
+                        ArrayList<Texture> l = diceRoll.getDiceTextures();
+                        dice1 = l.get(0);
+                        dice2 = l.get(1);
+                        playerOperation.getCurrentPlayer().move(dice);
+                        playerOperation.setMoneyPotForOperation(moneyPot);
+                        playerOperation.getCurrentPlayer().setMoneyPotForPlayer(moneyPot);
+                        screenOutput = playerOperation.checkCurrentProperty(playerOperation.getCurrentPlayer());
+                        playerOperation.getCurrentPlayer().move(gameField.positions[playerOperation.getCurrentPlayer().getPosition()]);
+                    }
                 }
+                return true;
             }
-            return true;
         });
 
-        cheatButton.addListener(event -> {
-            diceRoll.reportCheat();
-            return true;
+        nextButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (!monopoly.isOfflineGame()) {
+                    if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
+                        if (!diceRoll.getOnTurn()) {
+                            diceRoll.reset();
+                            NextTurnMessage ntm = new NextTurnMessage();
+                            ntm.setBankBalance(playerOperation.getCurrentPlayer().getBankBalance());
+                            ntm.setId(playerOperation.getCurrentPlayer().getId());
+                            ntm.setMyProperties(playerOperation.getCurrentPlayer().getMyProperties());
+                            ntm.setPosition(playerOperation.getCurrentPlayer().getPosition());
+                            ntm.setNumOfTrainstations(playerOperation.getCurrentPlayer().getNumOfTrainstaitions());
+                            ntm.setGraphicalPosition(playerOperation.getCurrentPlayer().getGraphicalPosition());
+                            ntm.setPotAmount(moneyPot.getAmount());
+                            monopoly.getClient().getClient().sendTCP(ntm);
+                        } else {
+                            screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
+                        }
+                    }
+                } else {
+                    if (Gdx.input.justTouched()) {
+                        if (!diceRoll.getOnTurn()) {
+                            screenOutput = playerOperation.nextPlayer();
+                            diceRoll.reset();
+                        } else {
+                            screenOutput = "It's still " + playerOperation.getCurrentPlayer().getName() + "'s turn";
+                        }
+                    }
+                }
+
+                return true;
+            }
         });
 
-         buyButton.addListener(event -> {
-             if (Gdx.input.justTouched()) {
-                 screenOutput = playerOperation.buying();
-                 if (playerOperation.isBought()) {
-                     gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
-                 }
-             }
-             return true;
-         });
+        cheatButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (!monopoly.isOfflineGame()) {
+                    if (!clientIsCurrentPlayer()) {
+                        diceRoll.reportCheat(monopoly.getClient().getPlayer().getPlayer());
+                    }
+                } else {
+                    diceRoll.reportCheat(player1);
+                }
+                return true;
+            }
+        });
+
+        buyButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (!monopoly.isOfflineGame()) {
+                    if (Gdx.input.justTouched() && clientIsCurrentPlayer()) {
+                        //winning();
+                        screenOutput = playerOperation.buying();
+                        if (playerOperation.isBought()) {
+                            gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                        }
+                    }
+                } else {
+                    if (Gdx.input.justTouched()) {
+                        //winning();
+                        screenOutput = playerOperation.buying();
+                        if (playerOperation.isBought()) {
+                            gameField.changeColor(playerOperation.getCurrentPlayer().getPosition(), playerOperation.getCurrentPlayer().getColor());
+                        }
+                    }
+                }
+                return true;
+            }
+        });
 
         stage.addActor(buyButton);
         stage.addActor(diceButton);
@@ -226,6 +293,23 @@ public class MonopolyScreen extends GameScreenAdapter {
             }, 4);
             timerCard.stop();
         }
+        if (!monopoly.isOfflineGame()) {
+            if (monopoly.getClient().getNextTurnMessage() != null) {
+                if (monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() != playerOperation.getCurrentPlayer().getId()) {
+                    for (Player player : playerList) {
+                        if (monopoly.getClient().getNextTurnMessage().getId() == player.getId()) {
+                            player.setPosition(monopoly.getClient().getNextTurnMessage().getPosition());
+                            player.setNumOfTrainstaitions(monopoly.getClient().getNextTurnMessage().getNumOfTrainstations());
+                            player.setBankBalance(monopoly.getClient().getNextTurnMessage().getBankBalance());
+                            player.setMyProperties(monopoly.getClient().getNextTurnMessage().getMyProperties());
+                            player.move(monopoly.getClient().getNextTurnMessage().getGraphicalPosition());
+                            moneyPot.setAmount(monopoly.getClient().getNextTurnMessage().getPotAmount());
+                        }
+                    }
+                    playerOperation.setCurrentPlayerId(monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID());
+                }
+            }
+        }
 
         batch.end();
     }
@@ -262,14 +346,14 @@ public class MonopolyScreen extends GameScreenAdapter {
 //        player1.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, color));
 
 
-
-
     }
 
     public void initOnlinePlayer() {
+        new Vector3(0, 3.5f, 0);
         if (!monopoly.getClient().getOtherPlayers().isEmpty()) {
             player1 = monopoly.getClient().getPlayer().getPlayer();
             player1.createSpielfigur();
+
             playerList.add(player1);
             player2 = monopoly.getClient().getOtherPlayers().get(0).getPlayer();
             player2.createSpielfigur();
@@ -303,6 +387,15 @@ public class MonopolyScreen extends GameScreenAdapter {
         playerOperation.setEventCards(eventCards);
     }
 
+    public boolean clientIsCurrentPlayer() {
+        if (monopoly.getClient().getNextTurnMessage() == null) {
+            return monopoly.getClient().getPlayer().getCurrentPlayerID() == monopoly.getClient().getPlayer().getPlayer().getId();
+        } else {
+            return monopoly.getClient().getNextTurnMessage().getNextTurnPlayerID() == monopoly.getClient().getPlayer().getPlayer().getId();
+        }
+    }
+
+
     public void minigame() {
         if (!playerOperation.getCurrentPlayer().isAlone()) {
             int[] minigameRolls = new int[gameField.getPlayersToPosition().size()];
@@ -332,19 +425,19 @@ public class MonopolyScreen extends GameScreenAdapter {
     }
 
     public int[] bubbleSort(int[] minigame) {
-            int k;
-            for (int i = 0; i < minigame.length - 1; i++) {
-                if (minigame[i] < minigame[i + 1]) {
-                    continue;
-                }
-                k = minigame[i];
-                minigame[i] = minigame[i + 1];
-                minigame[i + 1] = k;
-                bubbleSort(minigame);
+        int k;
+        for (int i = 0; i < minigame.length - 1; i++) {
+            if (minigame[i] < minigame[i + 1]) {
+                continue;
             }
-            return minigame;
+            k = minigame[i];
+            minigame[i] = minigame[i + 1];
+            minigame[i + 1] = k;
+            bubbleSort(minigame);
         }
+        return minigame;
     }
+}
 
 
 

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import se2.groupb.monopoly.Player;
+import se2.groupb.monopoly.PlayerOperation;
+import se2.groupb.monopoly.network.messages.NextTurnMessage;
 import se2.groupb.monopoly.network.messages.PlayerInformation;
 import se2.groupb.monopoly.network.messages.RoundCounter;
 
@@ -25,15 +27,20 @@ public class ServerFoundation {
     private PlayerInformation player2;
     private PlayerInformation player3;
     private PlayerInformation player4;
+    private ArrayList<PlayerInformation> players;
 
     private int countPlayers;
+
+    // send the player who is allowed to move to clients
+    private int currentPlayerID;
 
     private RoundCounter roundcount = new RoundCounter();
     // public int minigamecount;
 
     public ServerFoundation() {
-        countPlayers = 0;
-        random = new Random();
+        this.currentPlayerID = 1;
+        this.countPlayers = 0;
+        this.random = new Random();
         System.setProperty("java.net.preferIPv4Stack", "true");
         this.server = new Server(1_000_000, 1_000_000);
 
@@ -72,25 +79,35 @@ public class ServerFoundation {
                         server.sendToAllTCP("FINISH");
                     }
                 }
+                if (object instanceof PlayerInformation) {
+                    handlePlayerInformationMessage((PlayerInformation) object);
+                }
+                if(object instanceof NextTurnMessage){
+                    handleNextTurnMessage((NextTurnMessage) object);
+                }
             }
         });
     }
 
     // server initializes the players and sends information to client
     private void initPlayers(int countPlayers) {
-        ArrayList<PlayerInformation> players = new ArrayList<>();
+        players = new ArrayList<>();
         if (countPlayers >= 2 && countPlayers <= 4) {
-            this.player1 = new PlayerInformation(new Player(1, "Blue", 1000, new ArrayList<>(), 0, Color.BLUE));
-            this.player2 = new PlayerInformation(new Player(2, "Red", 1000, new ArrayList<>(), 0, Color.RED));
+            this.player1 = new PlayerInformation(new Player(1, "Blue", 2000, new ArrayList<>(), 0, Color.BLUE));
+            this.player2 = new PlayerInformation(new Player(2, "Red", 2000, new ArrayList<>(), 0, Color.RED));
+            this.player1.setCurrentPlayerID(this.currentPlayerID);
+            this.player2.setCurrentPlayerID(this.currentPlayerID);
             players.add(player1);
             players.add(player2);
         }
         if (countPlayers >= 3 && countPlayers <= 4) {
-            this.player3 = new PlayerInformation(new Player(3, "Yellow", 1000, new ArrayList<>(), 0, Color.YELLOW));
+            this.player3 = new PlayerInformation(new Player(3, "Yellow", 2000, new ArrayList<>(), 0, Color.YELLOW));
+            this.player3.setCurrentPlayerID(this.currentPlayerID);
             players.add(player3);
         }
         if (countPlayers >= 4) {
-            this.player4 = new PlayerInformation(new Player(4, "Green", 1000, new ArrayList<>(), 0, Color.GREEN));
+            this.player4 = new PlayerInformation(new Player(4, "Green", 2000, new ArrayList<>(), 0, Color.GREEN));
+            this.player4.setCurrentPlayerID(this.currentPlayerID);
             players.add(player4);
         }
 
@@ -112,6 +129,7 @@ public class ServerFoundation {
             for (int i = 0; i < players.size(); i++) {
                 players.get(i).setIsPlayer(true);
                 server.sendToTCP(i + 1, players.get(i));
+                System.out.println("server sends currentPlayer: " + players.get(i).getCurrentPlayerID() + " to client");
                 for (int j = 0; j < players.size(); j++) {
                     if (j != i) {
                         players.get(i).setIsPlayer(false);
@@ -123,6 +141,7 @@ public class ServerFoundation {
     }
 
     private void handleStringMessage(String object) {
+        System.out.println("server got message: " + object);
         if (object.equals("HOST")) {
             // start game when 2-4 Players are connected
             if (server.getConnections().length >= 2 && server.getConnections().length <= 4) {
@@ -133,6 +152,60 @@ public class ServerFoundation {
             } else { // wait for players if not all connected
                 server.sendToAllTCP("WAITFORPLAYER");
             }
+        }
+    }
+
+    private void handleNextTurnMessage(NextTurnMessage object){
+        System.out.println("server received message: " + object.getId());
+        System.out.println("server received message: " + object.getBankBalance());
+        System.out.println("server received message: " + object.getPosition());
+        incrementCurrentPlayer(countPlayers);
+        object.setNextTurnPlayerID(getCurrentPlayerID());
+        System.out.println("CurrentPlayerID: " + object.getNextTurnPlayerID());
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).getPlayer().getId() == object.getId()){
+                players.get(i).getPlayer().setBankBalance(object.getBankBalance());
+                players.get(i).getPlayer().setNumOfTrainstaitions(object.getNumOfTrainstations());
+                players.get(i).getPlayer().setPosition(object.getPosition());
+                players.get(i).getPlayer().setMyProperties(object.getMyProperties());
+            }
+        }
+
+        server.sendToAllTCP(object);
+    }
+
+    private void handlePlayerInformationMessage(PlayerInformation object) {
+        System.out.println("server received message: " + object.getMessageType());
+        if (object.getMessageType().equals("NEXTTURN")) {
+            System.out.println("server got message :" + object.getPlayer().getName());
+            incrementCurrentPlayer(countPlayers);
+            if (countPlayers > 1 && countPlayers <= 4) {
+                if (object.getPlayer().getId() == player1.getPlayer().getId()) {
+                    player1 = object;
+                    player1.setCurrentPlayerID(getCurrentPlayerID());
+                    player1.setMessageType("STARTNEXTTURN");
+                }
+                if (object.getPlayer().getId() == player2.getPlayer().getId()) {
+                    player2 = object;
+                    player2.setCurrentPlayerID(getCurrentPlayerID());
+                    player2.setMessageType("STARTNEXTTURN");
+                }
+            }
+            if (countPlayers > 2 && countPlayers <= 4) {
+                if (object.getPlayer().getId() == player3.getPlayer().getId()) {
+                    player3 = object;
+                    player3.setCurrentPlayerID(getCurrentPlayerID());
+                    player3.setMessageType("STARTNEXTTURN");
+                }
+            }
+            if (countPlayers > 3 && countPlayers <= 4) {
+                if (object.getPlayer().getId() == player4.getPlayer().getId()) {
+                    player4 = object;
+                    player4.setCurrentPlayerID(getCurrentPlayerID());
+                    player4.setMessageType("STARTNEXTTURN");
+                }
+            }
+            server.sendToAllTCP(object);
         }
     }
 
@@ -164,6 +237,27 @@ public class ServerFoundation {
 
     public int getUdpPort() {
         return udpPort;
+    }
+
+    // method to increment the currentPlayerID after a player has finished the move
+    public void incrementCurrentPlayer(int countPlayers) {
+        if (this.currentPlayerID == countPlayers) {
+            this.currentPlayerID = 1;
+        } else {
+            this.currentPlayerID++;
+        }
+    }
+//
+//    public void checkPlayerIDForMoves(int countPlayers) {
+//        if (this.currentPlayerID == countPlayers) {
+//            this.currentPlayerID = 1;
+//        } else {
+//            this.currentPlayerID++;
+//        }
+//    }
+
+    public int getCurrentPlayerID() {
+        return currentPlayerID;
     }
 
     /************ Players ************/

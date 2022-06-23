@@ -5,6 +5,12 @@ public class Card {
     int id;
     String name;
 
+    public Card(){
+        /**
+         * not used
+         */
+    }
+
     public Card(int id, String name) {
         this.id = id;
         this.name = name;

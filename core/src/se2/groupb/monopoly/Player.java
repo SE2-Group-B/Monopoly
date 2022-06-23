@@ -21,11 +21,10 @@ public class Player {
     private int numOfTrainstaitions;
     private Color color;
     ModelInstance modInstance;
-    Vector3 fieldPos;
     private boolean prison;
     private int prisoncount = 0;
+    private Vector3 graphicalPosition;
     private boolean isAlone;
-
     private String buildingPath = "Spielfeld\\char_update_v4.g3dj";
     private CreateGameField field;
     private Pot pot;
@@ -48,8 +47,9 @@ public class Player {
         Model model = new G3dModelLoader(new JsonReader()).loadModel(Gdx.files.internal(buildingPath));
         modInstance = new ModelInstance(model);
         modInstance.materials.get(0).set(new ColorAttribute(ColorAttribute.Diffuse, getColor()));
-        fieldPos = new Vector3(0, 3.2f, 0);
-        modInstance.transform.translate(fieldPos);
+        graphicalPosition = new Vector3(0, 3.2f, 0);
+//        modInstance.transform.translate(fieldPos);
+        modInstance.transform.translate(graphicalPosition);
     }
 
     public String payToOtherPlayer(Player p, int value){
@@ -68,7 +68,7 @@ public class Player {
     }
 
     public void move(Vector3 vector3) {
-        this.fieldPos = vector3;
+        this.graphicalPosition = vector3;
         modInstance.transform.setTranslation(vector3);
     }
 
@@ -344,5 +344,13 @@ public class Player {
 
     public void setMoneyPotForPlayer(Pot pot) {
         this.pot = pot;
+    }
+
+    public Vector3 getGraphicalPosition() {
+        return graphicalPosition;
+    }
+
+    public void setGraphicalPosition(Vector3 graphicalPosition) {
+        this.graphicalPosition = graphicalPosition;
     }
 }

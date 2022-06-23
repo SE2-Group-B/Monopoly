@@ -3,6 +3,11 @@ package se2.groupb.monopoly;
 public class PenaltyField extends Property {
     private int penalty;
 
+    public PenaltyField(){
+        /**
+         * not used
+         */
+    }
 
     public PenaltyField(String name, int strafe) {
         super(name);

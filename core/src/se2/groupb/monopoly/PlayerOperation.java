@@ -16,6 +16,12 @@ public class PlayerOperation {
     private boolean bought;
     private String playerString;
 
+    public PlayerOperation(){
+        /**
+         * not used
+         */
+    }
+
     public PlayerOperation(ArrayList<Player> playerList) {
         this.playerList = playerList;
         logicalGameField = new LogicalGameField();
@@ -54,6 +60,7 @@ public class PlayerOperation {
             }
         } else if (p instanceof PenaltyField) {
             output = moneyPot.donateToPot(getCurrentPlayer(), ((PenaltyField) p).getPenalty());
+            System.out.println(output);
         } else {
             output = checkSoleProperty(p);
         }
@@ -61,6 +68,17 @@ public class PlayerOperation {
     }
 
     public boolean isEnemyProperty(int position) {
+//        for(Player player : playerList){
+//            if(player.getId() != getCurrentPlayer().getId()){
+//                for(Property p : player.getMyProperties()){
+//                    if(p.getName().equals(logicalGameField.getGameField()[position].getName())){
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//
+//        return false;
         return (isSomeonesProperty(position) && (getCurrentPlayer().getId() != getPropertyOwner(position).getId()));
     }
 
@@ -108,6 +126,7 @@ public class PlayerOperation {
         } else {
             currentPlayerId++;
         }
+
         return "It's " + getCurrentPlayer().getName() + "'s turn now";
     }
 
@@ -179,5 +198,9 @@ public class PlayerOperation {
 
     public void setBought(boolean bought) {
         this.bought = bought;
+    }
+
+    public void setCurrentPlayerId(int currentPlayerId) {
+        this.currentPlayerId = currentPlayerId;
     }
 }
