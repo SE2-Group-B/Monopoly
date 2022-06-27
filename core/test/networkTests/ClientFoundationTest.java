@@ -172,5 +172,6 @@ public class ClientFoundationTest {
         Assert.assertEquals("Blue", client4.getOtherPlayers().get(0).getPlayer().getName());
         Assert.assertEquals("Red", client4.getOtherPlayers().get(1).getPlayer().getName());
         Assert.assertEquals("Yellow", client4.getOtherPlayers().get(2).getPlayer().getName());
-    }*/
+    }
+     */
 }
