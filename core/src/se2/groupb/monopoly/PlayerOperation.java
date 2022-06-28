@@ -1,6 +1,7 @@
 package se2.groupb.monopoly;
 
 import com.badlogic.gdx.graphics.Texture;
+
 import java.util.ArrayList;
 
 public class PlayerOperation {
@@ -16,7 +17,7 @@ public class PlayerOperation {
     private boolean bought;
     private String playerString;
 
-    public PlayerOperation(){
+    public PlayerOperation() {
         /**
          * not used
          */
@@ -27,7 +28,7 @@ public class PlayerOperation {
         logicalGameField = new LogicalGameField();
         currentPlayerId = 1;
         this.playerCount = playerList.size();
-        this.playerString = "Player "+getCurrentPlayer().getName();
+        this.playerString = "Player " + getCurrentPlayer().getName();
     }
 
     public boolean isSomeonesProperty(int position) {
@@ -140,29 +141,41 @@ public class PlayerOperation {
         String output = playerString + " bought ";
         if (!isSomeonesProperty(playerPosition)) {
             if (p instanceof Street) {
-                if(((Street)p).getPrice() < getCurrentPlayer().getBankBalance()) {
+                if (((Street) p).getPrice() < getCurrentPlayer().getBankBalance()) {
                     bought = true;
                     logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
                     output += p.getName() + " for " + ((Street) p).getPrice() + "€";
                     getCurrentPlayer().changeMoney(-((Street) p).getPrice());
-                }else{
+                } else {
                     output += "nothing because he is too poor for that building";
                 }
             } else if (p instanceof Trainstation) {
-                if(((Trainstation)p).getPrice() < getCurrentPlayer().getBankBalance()) {
+                if (((Trainstation) p).getPrice() < getCurrentPlayer().getBankBalance()) {
                     bought = true;
                     logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
                     getCurrentPlayer().setNumOfTrainstaitions(getCurrentPlayer().getNumOfTrainstaitions() + 1);
                     output += p.getName() + " for " + ((Trainstation) p).getPrice() + "€";
                     getCurrentPlayer().changeMoney(-((Trainstation) p).getPrice());
-                }else{
+                } else {
                     output += "nothing because you have no money for this station";
                 }
             } else {
                 bought = false;
                 output = "You can't buy this Property";
             }
-        } else if(getCurrentPlayer().getId() == p.getOwnerId()) {
+        } else if(isSomeonesProperty(playerPosition)){
+            if (p instanceof Street) {
+                if (((Street) p).getPrice() < getCurrentPlayer().getBankBalance()) {
+                    bought = true;
+                    int price = ((Street) p).getHouse() * ((Street) p).getHousePrice();
+                    getCurrentPlayer().payToOtherPlayer(getPropertyOwner(playerPosition),-((Street) p).getPrice()+ price);
+                    logicalGameField.getGameField()[playerPosition].setOwnerId(getCurrentPlayer().getId());
+                    output += p.getName() + " for " + ((Street) p).getPrice() + "€";
+                } else {
+                    output += "nothing because he is too poor for that building";
+                }
+            }
+        } else if (getCurrentPlayer().getId() == p.getOwnerId()) {
             output = "Du hast was zugekauft";
             ((Street) p).buyhouse();
         } else {
@@ -172,26 +185,26 @@ public class PlayerOperation {
         return output;
     }
 
-    public void setCommunityCards(Deck communityCards){
+    public void setCommunityCards(Deck communityCards) {
         this.communityCards = communityCards;
     }
 
-    public void setEventCards(Deck eventCards){
+    public void setEventCards(Deck eventCards) {
         this.eventCards = eventCards;
     }
 
-    public Texture getCardTexture(){
+    public Texture getCardTexture() {
         return this.cardBackground;
     }
 
-    public boolean getCardBoolean(){
+    public boolean getCardBoolean() {
         return this.showCard;
     }
 
-    public void setCardBoolean(boolean showCard){
+    public void setCardBoolean(boolean showCard) {
         this.showCard = showCard;
     }
-    
+
     public boolean isBought() {
         return bought;
     }
